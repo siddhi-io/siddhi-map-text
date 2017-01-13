@@ -26,7 +26,6 @@ import java.util.Map;
 
 public class TextOutputMapper extends OutputMapper {
     StreamDefinition streamDefinition;
-    //todo: where should we maintain mapping constants?
     public static final String EVENT_ATTRIBUTE_SEPARATOR = ",";
     public static final String EVENT_ATTRIBUTE_VALUE_SEPARATOR = ":";
 
@@ -42,9 +41,10 @@ public class TextOutputMapper extends OutputMapper {
         for (int i = 0; i < data.length; i++) {
             String attributeName = streamDefinition.getAttributeNameArray()[i];
             Object attributeValue = data[i];
-            eventText.append("\n").append(attributeName).append(EVENT_ATTRIBUTE_VALUE_SEPARATOR).append(attributeValue.toString()).append(EVENT_ATTRIBUTE_SEPARATOR);
+            eventText.append(attributeName).append(EVENT_ATTRIBUTE_VALUE_SEPARATOR).append(attributeValue.toString()).append(EVENT_ATTRIBUTE_SEPARATOR).append("\n");
         }
         eventText.deleteCharAt(eventText.lastIndexOf(EVENT_ATTRIBUTE_SEPARATOR));
+        eventText.deleteCharAt(eventText.lastIndexOf("\n"));
 
         // Get arbitrary data from event
         Map<String, Object> arbitraryDataMap = event.getArbitraryDataMap();
@@ -55,7 +55,9 @@ public class TextOutputMapper extends OutputMapper {
                 eventText.append("\n" + entry.getKey() + EVENT_ATTRIBUTE_SEPARATOR + entry.getValue() + EVENT_ATTRIBUTE_SEPARATOR);
             }
             eventText.deleteCharAt(eventText.lastIndexOf(EVENT_ATTRIBUTE_SEPARATOR));
+            eventText.deleteCharAt(eventText.lastIndexOf("\n"));
         }
+
         return eventText.toString();
     }
 
@@ -64,9 +66,11 @@ public class TextOutputMapper extends OutputMapper {
         StringBuilder eventText = new StringBuilder();
         for (int i = 0; i < mappedAttributes.length; i++) {
             String mappedAttribute = mappedAttributes[i];
-            eventText.append("\n").append(mappedAttribute).append(EVENT_ATTRIBUTE_SEPARATOR);
+            eventText.append(mappedAttribute).append(EVENT_ATTRIBUTE_SEPARATOR).append("\n");
         }
         eventText.deleteCharAt(eventText.lastIndexOf(EVENT_ATTRIBUTE_SEPARATOR));
+        eventText.deleteCharAt(eventText.lastIndexOf("\n"));
+
         return eventText.toString();
     }
 }
