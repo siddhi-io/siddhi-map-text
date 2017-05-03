@@ -26,15 +26,15 @@ import org.wso2.siddhi.core.ExecutionPlanRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.exception.NoSuchAttributeException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
-import org.wso2.siddhi.core.stream.output.sink.InMemoryOutputTransport;
+import org.wso2.siddhi.core.stream.output.sink.InMemorySink;
 import org.wso2.siddhi.core.util.transport.InMemoryBroker;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TextOutputMapperWithSiddhiQLTestCase {
-    static final Logger log = Logger.getLogger(TextOutputMapperWithSiddhiQLTestCase.class);
+public class TextSinkMapperWithSiddhiQLTestCase {
+    static final Logger log = Logger.getLogger(TextSinkMapperWithSiddhiQLTestCase.class);
     private AtomicInteger wso2Count = new AtomicInteger(0);
     private AtomicInteger ibmCount = new AtomicInteger(0);
 
@@ -49,7 +49,7 @@ public class TextOutputMapperWithSiddhiQLTestCase {
     //    publish inMemory options ("topic", "{{symbol}}")
     //    map text
     @Test
-    public void testTextOutputMapperDefaultMappingWithSiddhiQL() throws InterruptedException {
+    public void testTextSinkmapperDefaultMappingWithSiddhiQL() throws InterruptedException {
         log.info("Test default text mapping with SiddhiQL");
 
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
@@ -92,7 +92,7 @@ public class TextOutputMapperWithSiddhiQLTestCase {
                 "insert into BarStream; ";
 
         SiddhiManager siddhiManager = new SiddhiManager();
-        siddhiManager.setExtension("outputtransport:inMemory", InMemoryOutputTransport.class);
+        siddhiManager.setExtension("sink:inMemory", InMemorySink.class);
         ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(streams + query);
         InputHandler stockStream = executionPlanRuntime.getInputHandler("FooStream");
 
@@ -164,7 +164,7 @@ public class TextOutputMapperWithSiddhiQLTestCase {
                 "insert into BarStream; ";
 
         SiddhiManager siddhiManager = new SiddhiManager();
-        siddhiManager.setExtension("outputtransport:inMemory", InMemoryOutputTransport.class);
+        siddhiManager.setExtension("sink:inMemory", InMemorySink.class);
         ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(streams + query);
         InputHandler stockStream = executionPlanRuntime.getInputHandler("FooStream");
 
@@ -212,7 +212,7 @@ public class TextOutputMapperWithSiddhiQLTestCase {
                 "insert into BarStream; ";
 
         SiddhiManager siddhiManager = new SiddhiManager();
-        siddhiManager.setExtension("outputtransport:inMemory", InMemoryOutputTransport.class);
+        siddhiManager.setExtension("sink:inMemory", InMemorySink.class);
         ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(streams + query);
         InputHandler stockStream = executionPlanRuntime.getInputHandler("FooStream");
 

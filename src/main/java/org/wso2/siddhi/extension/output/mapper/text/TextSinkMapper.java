@@ -21,8 +21,9 @@ package org.wso2.siddhi.extension.output.mapper.text;
 import org.wso2.siddhi.annotation.Extension;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
-import org.wso2.siddhi.core.stream.output.sink.OutputMapper;
-import org.wso2.siddhi.core.stream.output.sink.OutputTransportListener;
+import org.wso2.siddhi.core.stream.output.sink.SinkMapper;
+import org.wso2.siddhi.core.stream.output.sink.SinkListener;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.core.util.transport.DynamicOptions;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
 import org.wso2.siddhi.core.util.transport.TemplateBuilder;
@@ -31,10 +32,10 @@ import org.wso2.siddhi.query.api.definition.StreamDefinition;
 
 @Extension(
         name = "text",
-        namespace = "outputmapper",
+        namespace = "sinkMapper",
         description = "Event to Text output mapper."
 )
-public class TextOutputMapper extends OutputMapper {
+public class TextSinkMapper extends SinkMapper {
     private static final String EVENT_ATTRIBUTE_SEPARATOR = ",";
     private static final String EVENT_ATTRIBUTE_VALUE_SEPARATOR = ":";
     private StreamDefinition streamDefinition;
@@ -47,43 +48,43 @@ public class TextOutputMapper extends OutputMapper {
 
     /**
      * Initialize the mapper and the mapping configurations
-     *
-     * @param streamDefinition       The stream definition
+     *  @param streamDefinition       The stream definition
      * @param optionHolder           Unmapped dynamic options
      * @param payloadTemplateBuilder
+     * @param mapperConfigReader
      */
     @Override
     public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, TemplateBuilder
-            payloadTemplateBuilder) {
+            payloadTemplateBuilder, ConfigReader mapperConfigReader) {
         this.streamDefinition = streamDefinition;
         this.payloadTemplateBuilder = payloadTemplateBuilder;
     }
 
     @Override
     public void mapAndSend(Event[] events, OptionHolder optionHolder, TemplateBuilder payloadTemplateBuilder,
-                           OutputTransportListener outputTransportListener, DynamicOptions dynamicOptions)
+                           SinkListener sinkListener, DynamicOptions dynamicOptions)
             throws ConnectionUnavailableException {
         updateEventIds(events);
         if (this.payloadTemplateBuilder != null) {
             for (Event event : events) {
-                outputTransportListener.publish(payloadTemplateBuilder.build(event), dynamicOptions);
+                sinkListener.publish(payloadTemplateBuilder.build(event), dynamicOptions);
             }
         } else {
             for (Event event : events) {
-                outputTransportListener.publish(constructDefaultMapping(event), dynamicOptions);
+                sinkListener.publish(constructDefaultMapping(event), dynamicOptions);
             }
         }
     }
 
     @Override
     public void mapAndSend(Event event, OptionHolder optionHolder, TemplateBuilder payloadTemplateBuilder,
-                           OutputTransportListener outputTransportListener, DynamicOptions dynamicOptions)
+                           SinkListener sinkListener, DynamicOptions dynamicOptions)
             throws ConnectionUnavailableException {
         updateEventId(event);
         if (this.payloadTemplateBuilder != null) {
-            outputTransportListener.publish(payloadTemplateBuilder.build(event), dynamicOptions);
+            sinkListener.publish(payloadTemplateBuilder.build(event), dynamicOptions);
         } else {
-            outputTransportListener.publish(constructDefaultMapping(event), dynamicOptions);
+            sinkListener.publish(constructDefaultMapping(event), dynamicOptions);
         }
     }
 
