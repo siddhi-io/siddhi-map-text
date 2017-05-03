@@ -21,8 +21,9 @@ package org.wso2.siddhi.extension.output.mapper.text;
 import org.wso2.siddhi.annotation.Extension;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
-import org.wso2.siddhi.core.stream.output.sink.OutputMapper;
+import org.wso2.siddhi.core.stream.output.sink.SinkMapper;
 import org.wso2.siddhi.core.stream.output.sink.OutputTransportListener;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.core.util.transport.DynamicOptions;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
 import org.wso2.siddhi.core.util.transport.TemplateBuilder;
@@ -34,7 +35,7 @@ import org.wso2.siddhi.query.api.definition.StreamDefinition;
         namespace = "outputmapper",
         description = "Event to Text output mapper."
 )
-public class TextOutputMapper extends OutputMapper {
+public class TextSinkMapper extends SinkMapper {
     private StreamDefinition streamDefinition;
     private TemplateBuilder payloadTemplateBuilder;
     private static final String EVENT_ATTRIBUTE_SEPARATOR = ",";
@@ -47,13 +48,13 @@ public class TextOutputMapper extends OutputMapper {
 
     /**
      * Initialize the mapper and the mapping configurations
-     *
-     * @param streamDefinition       The stream definition
+     *  @param streamDefinition       The stream definition
      * @param optionHolder           Unmapped dynamic options
      * @param payloadTemplateBuilder
+     * @param mapperConfigReader
      */
     @Override
-    public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, TemplateBuilder payloadTemplateBuilder) {
+    public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, TemplateBuilder payloadTemplateBuilder, ConfigReader mapperConfigReader) {
         this.streamDefinition = streamDefinition;
         this.payloadTemplateBuilder = payloadTemplateBuilder;
     }
