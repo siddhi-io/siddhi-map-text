@@ -24,10 +24,11 @@ import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.exception.ExecutionPlanRuntimeException;
 import org.wso2.siddhi.core.query.output.callback.OutputCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
-import org.wso2.siddhi.core.stream.input.source.InputMapper;
-import org.wso2.siddhi.core.stream.input.source.InputTransport;
+import org.wso2.siddhi.core.stream.input.source.Source;
+import org.wso2.siddhi.core.stream.input.source.SourceMapper;
 import org.wso2.siddhi.core.util.AttributeConverter;
 import org.wso2.siddhi.core.stream.AttributeMapping;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
 import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.definition.StreamDefinition;
@@ -42,15 +43,15 @@ import java.util.regex.Pattern;
  */
 @Extension(
         name = "text",
-        namespace = "inputmapper",
+        namespace = "sourcemapper",
         description = ""
 )
-public class TextInputMapper extends InputMapper {
+public class TextSourceMapper extends SourceMapper {
 
     /**
      * Logger to log the events.
      */
-    private static final Logger log = Logger.getLogger(TextInputMapper.class);
+    private static final Logger log = Logger.getLogger(TextSourceMapper.class);
 
     /**
      * Default regex assumes that the attributes in the text are separated by comma in order.
@@ -76,13 +77,13 @@ public class TextInputMapper extends InputMapper {
 
     /**
      * Initialize the mapper and the mapping configurations.
-     *
-     * @param streamDefinition     the  StreamDefinition
+     *  @param streamDefinition     the  StreamDefinition
      * @param optionHolder         mapping options
      * @param attributeMappingList list of attributes mapping
+     * @param configReader
      */
     @Override
-    public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, List<AttributeMapping> attributeMappingList) {
+    public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, List<AttributeMapping> attributeMappingList, ConfigReader configReader) {
         attributeConverter = new AttributeConverter();
         this.streamDefinition = streamDefinition;
         this.streamAttributes = this.streamDefinition.getAttributeList();
@@ -130,7 +131,7 @@ public class TextInputMapper extends InputMapper {
 
 
     /**
-     * Receive TEXT string from {@link InputTransport}, convert to {@link ComplexEventChunk} and send to the
+     * Receive TEXT string from {@link Source}, convert to {@link ComplexEventChunk} and send to the
      * {@link OutputCallback}.
      *
      * @param eventObject  the TEXT string
@@ -155,7 +156,7 @@ public class TextInputMapper extends InputMapper {
         // Validate the event
         // Validate the event
         if (eventObject == null) {
-            throw new ExecutionPlanRuntimeException("Null object received from the InputTransport to TextInputMapper");
+            throw new ExecutionPlanRuntimeException("Null object received from the Source to TextSourceMapper");
         }
 
         if (!(eventObject instanceof String)) {

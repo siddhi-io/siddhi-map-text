@@ -31,8 +31,8 @@ import org.wso2.siddhi.core.util.transport.InMemoryBroker;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TextInputMapperTestCase {
-    static final Logger log = Logger.getLogger(TextInputMapperTestCase.class);
+public class TextSourceMapperTestCase {
+    static final Logger log = Logger.getLogger(TextSourceMapperTestCase.class);
 
     private AtomicInteger count = new AtomicInteger();
 
@@ -46,8 +46,8 @@ public class TextInputMapperTestCase {
      * WSO2,56.75,5
      */
     @Test
-    public void testTextInputMapper1() throws InterruptedException {
-        log.info("test TextInputMapper1");
+    public void testTextSourcemapper1() throws InterruptedException {
+        log.info("test TextSourcemapper1");
 
         String streams = "" +
                 "@Plan:name('TestExecutionPlan')" +
@@ -115,7 +115,7 @@ public class TextInputMapperTestCase {
 //        executionPlan.addSubscription(subscription);
 //
 //        SiddhiManager siddhiManager = new SiddhiManager();
-//        siddhiManager.setExtension("inputtransport:inMemory", InMemoryInputTransport.class);
+//        siddhiManager.setExtension("source:inMemory", InMemorySource.class);
 //        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(executionPlan);
 //        executionPlanRuntime.addCallback("FooStream", new StreamCallback() {
 //            @Override
@@ -155,7 +155,7 @@ public class TextInputMapperTestCase {
 //        executionPlan.addSubscription(subscription);
 //
 //        SiddhiManager siddhiManager = new SiddhiManager();
-//        siddhiManager.setExtension("inputtransport:inMemory", InMemoryInputTransport.class);
+//        siddhiManager.setExtension("source:inMemory", InMemorySource.class);
 //        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.createExecutionPlanRuntime(executionPlan);
 //        executionPlanRuntime.addCallback("FooStream", new StreamCallback() {
 //            @Override
