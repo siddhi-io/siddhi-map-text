@@ -89,9 +89,9 @@
     </properties>
 
     <scm>
-        <url>https://github.com/wso2-extensions/siddhi-map-xml.git</url>
-        <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-map-xml.git</developerConnection>
-        <connection>scm:git:https://github.com/wso2-extensions/siddhi-map-xml.git</connection>
+        <url>https://github.com/wso2-extensions/siddhi-map-text.git</url>
+        <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-map-text.git</developerConnection>
+        <connection>scm:git:https://github.com/wso2-extensions/siddhi-map-text.git</connection>
         <tag>HEAD</tag>
     </scm>
 
