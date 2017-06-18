@@ -1,0 +1,4 @@
+org/wso2/extension/siddhi/map/text/sourcemapper/TextSourceMapper$MappingPositionData.class
+org/wso2/extension/siddhi/map/text/sourcemapper/TextSourceMapper.class
+org/wso2/extension/siddhi/map/text/sinkmapper/TextSinkMapper.class
+META-INF/annotations/org.wso2.siddhi.annotation.Extension
