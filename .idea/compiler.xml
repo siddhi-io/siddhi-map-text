@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="siddhi-map-text" />
+        <module name="siddhi-map-text-input" />
+        <module name="siddhi-map-text-output" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="siddhi-map-text" target="1.8" />
+      <module name="siddhi-map-text-input" target="1.8" />
+      <module name="siddhi-map-text-output" target="1.8" />
+      <module name="siddhi-map-text-parent" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

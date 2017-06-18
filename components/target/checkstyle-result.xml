@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.11.2">
+<file name="/home/yasara/Desktop/siddhi-map-text/components/src/main/java/org/wso2/extension/siddhi/map/text/sourcemapper/TextSourceMapper.java">
+</file>
+<file name="/home/yasara/Desktop/siddhi-map-text/components/src/main/java/org/wso2/extension/siddhi/map/text/sinkmapper/TextSinkMapper.java">
+</file>
+<file name="/home/yasara/Desktop/siddhi-map-text/components/src/test/java/org/wso2/extension/siddhi/map/text/sourcemapper/TextSourceMapperTestCase.java">
+</file>
+<file name="/home/yasara/Desktop/siddhi-map-text/components/src/test/java/org/wso2/extension/siddhi/map/text/sinkmapper/TextSinkMapperWithSiddhiQueryAPITestCase.java">
+</file>
+<file name="/home/yasara/Desktop/siddhi-map-text/components/src/test/java/org/wso2/extension/siddhi/map/text/sinkmapper/TextSinkMapperWithSiddhiQLTestCase.java">
+</file>
+<file name="/home/yasara/Desktop/siddhi-map-text/components/src/test/resources/log4j.properties">
+</file>
+</checkstyle>
