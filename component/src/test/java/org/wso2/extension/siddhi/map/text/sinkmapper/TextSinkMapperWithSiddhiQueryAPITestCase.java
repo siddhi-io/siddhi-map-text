@@ -26,6 +26,7 @@ import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.sink.InMemorySink;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
 import org.wso2.siddhi.core.util.transport.InMemoryBroker;
 import org.wso2.siddhi.query.api.SiddhiApp;
 import org.wso2.siddhi.query.api.annotation.Annotation;
@@ -47,6 +48,8 @@ public class TextSinkMapperWithSiddhiQueryAPITestCase {
     private static final Logger log = Logger.getLogger(TextSinkMapperWithSiddhiQueryAPITestCase.class);
     private AtomicInteger wso2Count = new AtomicInteger(0);
     private AtomicInteger ibmCount = new AtomicInteger(0);
+    private int waitTime = 50;
+    private int timeout = 30000;
 
     @BeforeMethod
     public void init() {
@@ -124,7 +127,8 @@ public class TextSinkMapperWithSiddhiQueryAPITestCase {
         stockStream.send(new Object[]{"WSO2", 55.6f, 100L});
         stockStream.send(new Object[]{"IBM", 75.6f, 100L});
         stockStream.send(new Object[]{"WSO2", 57.6f, 100L});
-        Thread.sleep(100);
+        SiddhiTestHelper.waitForEvents(waitTime, 2, wso2Count, timeout);
+        SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
 
         //assert event count
         Assert.assertEquals(wso2Count.get(), 2);
@@ -211,7 +215,8 @@ public class TextSinkMapperWithSiddhiQueryAPITestCase {
         stockStream.send(new Object[]{"WSO2", 55.6f, 100L});
         stockStream.send(new Object[]{"IBM", 75.6f, 100L});
         stockStream.send(new Object[]{"WSO2", 57.6f, 100L});
-        Thread.sleep(100);
+        SiddhiTestHelper.waitForEvents(waitTime, 2, wso2Count, timeout);
+        SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
 
         //assert event count
         Assert.assertEquals(wso2Count.get(), 2);

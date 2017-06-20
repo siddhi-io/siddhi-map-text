@@ -26,6 +26,7 @@ import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
 import org.wso2.siddhi.core.util.transport.InMemoryBroker;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,7 +40,8 @@ import static org.testng.Assert.fail;
  */
 public class TextSourceMapperTestCase {
     private static final Logger log = Logger.getLogger(TextSourceMapperTestCase.class);
-
+    private int waitTime = 50;
+    private int timeout = 30000;
     private AtomicInteger count = new AtomicInteger();
 
     @BeforeMethod
@@ -92,8 +94,7 @@ public class TextSourceMapperTestCase {
 
         InMemoryBroker.publish("stock", "WSO2,55.6,100");
         InMemoryBroker.publish("stock", "IBM,75.6,10");
-        Thread.sleep(100);
-
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
         //assert event count
         assertEquals(count.get(), 2);
         siddhiAppRuntime.shutdown();
