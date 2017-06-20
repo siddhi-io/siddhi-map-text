@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.extension.siddhi.map.text</groupId>
         <artifactId>siddhi-map-text-parent</artifactId>
-        <version>4.0.0</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
