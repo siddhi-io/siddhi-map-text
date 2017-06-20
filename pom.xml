@@ -23,7 +23,7 @@
         <groupId>org.wso2</groupId>
         <version>5</version>
     </parent>
-    <modelVersion>1.0.0</modelVersion>
+    <modelVersion>1.0.0-SNAPSHOT</modelVersion>
     <packaging>pom</packaging>
 
     <groupId>org.wso2.extension.siddhi.map.text</groupId>
