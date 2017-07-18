@@ -1,0 +1,244 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "siddhi-map-text\n\n\n======================================\n\n\nNew version of Siddhi v4.0.0 is built in Java 8.\n\n\nLatest Released Version v4.0.0-m18.\n\n\nThis extension provides converts canonical events of the server in the WSO2Event format to any text message format \nand convert events of any text format to the server's canonical event format (WSO2Event) for processing.\n\n\nFeatures Supported\n\n\nThis extension uses used to convert Text message to/from Siddhi events. \n\n\n\n\nText source mapper :Text source mapping allows user to convert events of any text format to the server's canonical event format (WSO2Event) for processing.\n\n\nText sink mapper : Text sink mapping converts canonical events of the server in the WSO2Event format to any text message format. A sample mapping configuration is shown below.\n\n\n\n\nPrerequisites for using the feature\n\n\n\n\nSiddhi Stream should be defined\n\n\n\n\nDeploying the feature\n\n\nFeature can be deploy as a OSGI bundle by putting jar file of component to DAS_HOME/lib directory of DAS 4.0.0 pack. \n\n\nExample Siddhi Queries\n\n\nDefault Mapping\n\n\n  - @source(type='inMemory', topic='home', @map(type='text'))\n    define stream UsageStream (houseId int, maxVal float, minVal float, avgVal double);\n\n  - @sink(type='inMemory', topic='home', @map(type='text'))\n    define stream InMemorySmartHomeInputData (houseId int, maxVal float, minVal float, avgVal double);\n\n\n\nCustom Mapping\n\n\n   -@source(type='inMemory', topic='home', @map(type='text' , regex.A='houseId:([-,.0-9E]+),\\nmaxVal:([-,.0-9E]+),\\nminVal:([-,.0-9E]+),\\navgVal:([-,.0-9E]+)', \n    @attributes(houseId = 'A[1]', maxVal = 'A[2]', minVal = 'A[3]' ,avgVal='A[4]')))\n    define stream UsageStream2 (houseId int, maxVal float, minVal float, avgVal double);\n\n   -@sink(type='inMemory', topic='home', @map(type='text', \n    @payload(\"\"\"houseId:{{houseId}},\n    maxVal:{{maxVal}},\n    minVal:{{minVal}},\n    avgVal:{{avgVal}}\"\"\")))\n    define stream InMemorySmartHomeInputData2 (houseId int, maxVal float, minVal float, avgVal double);\n\n\n\nHow to Contribute\n\n\n\n\nSend your bug fixes pull requests to [master branch] (https://github.com/wso2-extensions/siddhi-map-text/tree/master) \n\n\n\n\nContact us\n\n\nSiddhi developers can be contacted via the mailing lists:\n\n\n\n\nCarbon Developers List : dev@wso2.org\n\n\nCarbon Architecture List : architecture@wso2.org\n\n\n\n\nWe welcome your feedback and contribution.\n\n\nAPI Docs:\n\n\n\n\n1.0.0-SNAPSHOT", 
+            "title": "Welcome to WSO2 Siddhi IO TCP"
+        }, 
+        {
+            "location": "/#siddhi-map-text", 
+            "text": "", 
+            "title": "siddhi-map-text"
+        }, 
+        {
+            "location": "/#_1", 
+            "text": "", 
+            "title": "======================================"
+        }, 
+        {
+            "location": "/#new-version-of-siddhi-v400-is-built-in-java-8", 
+            "text": "", 
+            "title": "New version of Siddhi v4.0.0 is built in Java 8."
+        }, 
+        {
+            "location": "/#latest-released-version-v400-m18", 
+            "text": "This extension provides converts canonical events of the server in the WSO2Event format to any text message format \nand convert events of any text format to the server's canonical event format (WSO2Event) for processing.", 
+            "title": "Latest Released Version v4.0.0-m18."
+        }, 
+        {
+            "location": "/#features-supported", 
+            "text": "This extension uses used to convert Text message to/from Siddhi events.    Text source mapper :Text source mapping allows user to convert events of any text format to the server's canonical event format (WSO2Event) for processing.  Text sink mapper : Text sink mapping converts canonical events of the server in the WSO2Event format to any text message format. A sample mapping configuration is shown below.", 
+            "title": "Features Supported"
+        }, 
+        {
+            "location": "/#prerequisites-for-using-the-feature", 
+            "text": "Siddhi Stream should be defined", 
+            "title": "Prerequisites for using the feature"
+        }, 
+        {
+            "location": "/#deploying-the-feature", 
+            "text": "Feature can be deploy as a OSGI bundle by putting jar file of component to DAS_HOME/lib directory of DAS 4.0.0 pack.", 
+            "title": "Deploying the feature"
+        }, 
+        {
+            "location": "/#example-siddhi-queries", 
+            "text": "", 
+            "title": "Example Siddhi Queries"
+        }, 
+        {
+            "location": "/#default-mapping", 
+            "text": "- @source(type='inMemory', topic='home', @map(type='text'))\n    define stream UsageStream (houseId int, maxVal float, minVal float, avgVal double);\n\n  - @sink(type='inMemory', topic='home', @map(type='text'))\n    define stream InMemorySmartHomeInputData (houseId int, maxVal float, minVal float, avgVal double);", 
+            "title": "Default Mapping"
+        }, 
+        {
+            "location": "/#custom-mapping", 
+            "text": "-@source(type='inMemory', topic='home', @map(type='text' , regex.A='houseId:([-,.0-9E]+),\\nmaxVal:([-,.0-9E]+),\\nminVal:([-,.0-9E]+),\\navgVal:([-,.0-9E]+)', \n    @attributes(houseId = 'A[1]', maxVal = 'A[2]', minVal = 'A[3]' ,avgVal='A[4]')))\n    define stream UsageStream2 (houseId int, maxVal float, minVal float, avgVal double);\n\n   -@sink(type='inMemory', topic='home', @map(type='text', \n    @payload(\"\"\"houseId:{{houseId}},\n    maxVal:{{maxVal}},\n    minVal:{{minVal}},\n    avgVal:{{avgVal}}\"\"\")))\n    define stream InMemorySmartHomeInputData2 (houseId int, maxVal float, minVal float, avgVal double);", 
+            "title": "Custom Mapping"
+        }, 
+        {
+            "location": "/#how-to-contribute", 
+            "text": "Send your bug fixes pull requests to [master branch] (https://github.com/wso2-extensions/siddhi-map-text/tree/master)", 
+            "title": "How to Contribute"
+        }, 
+        {
+            "location": "/#contact-us", 
+            "text": "Siddhi developers can be contacted via the mailing lists:   Carbon Developers List : dev@wso2.org  Carbon Architecture List : architecture@wso2.org", 
+            "title": "Contact us"
+        }, 
+        {
+            "location": "/#we-welcome-your-feedback-and-contribution", 
+            "text": "", 
+            "title": "We welcome your feedback and contribution."
+        }, 
+        {
+            "location": "/#api-docs", 
+            "text": "1.0.0-SNAPSHOT", 
+            "title": "API Docs:"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/", 
+            "text": "API Docs\n\n\nSourcemapper\n\n\ntext \n(Source Mapper)\n\n\nText to siddhi event source mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either onEventHandler a pre-defined text format where event conversion will happen without any configs or can use regex to map from a custom text message.\n\n\n\nSyntax\n\n\n@source(..., @map(type=\ntext\n, regex.groupid=\nSTRING\n, fail.on.missing.attribute=\nBOOL\n, event.grouping.enabled=\nBOOL\n, delimiter=\nSTRING\n, new.line.character=\nSTRING\n)\n\n\n\n\nQuery Parameters\n\n\n\n    \n\n        \nName\n\n        \nDescription\n\n        \nDefault Value\n\n        \nPossible Data Types\n\n        \nOptional\n\n        \nDynamic\n\n    \n\n    \n\n        \nregex.groupid\n\n        \nUsed to specify regular expression group. Here groupid can be any capital letter such as regex.A,regex.B .. etc. User can specify any number of regular expression groups and in attribute section,user need to map particular attributes to the regular expression group with the matching group index at the attribute section. If user need to enable custom mapping, it is mandatory to specify matching group for each and every attribute.\n\n        \n\n        \nSTRING\n\n        \nNo\n\n        \nNo\n\n    \n\n    \n\n        \nfail.on.missing.attribute\n\n        \nThis can either have value 'true' or 'false'. By default it will be true. This attribute allows user to handle unknown attributes. By default if an regex execution fails or attribute is not present in event, SP will drop that message. However setting this property to false will prompt DAS to onEventHandler and event with 'null' value to Siddhi.\n\n        \ntrue\n\n        \nBOOL\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \nevent.grouping.enabled\n\n        \nThis attribute is used to specify weather event group is enabled or not. if user need to receive group of events together and generate multiple siddhi event user can enable this by specifying true.\n\n        \nfalse\n\n        \nBOOL\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \ndelimiter\n\n        \nThis attribute indicate the delimiter of grouped event which is expected to receive. This should be whole line and cannot be single character.\n\n        \n~~~~~~~~~~\n\n        \nSTRING\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \nnew.line.character\n\n        \nThis attribute indicate the new line character of event which is expected to receive. This is used mostly when communication between 2 types of operating systems. As example Linux use '\n' is it's end of line character while windows use '\n\n' for that.\n\n        \n\n\n\n        \nSTRING\n\n        \nYes\n\n        \nNo\n\n    \n\n\n\n\n\nExamples\n\n\nExample 1\n\n\n@source(type='inMemory', topic='stock', @map(type='text'))\ndefine stream FooStream (symbol string, price float, volume long);\n\n\n\n\n\nAbove configuration will do a default text input mapping. Expected input will look like below.symbol:\"WSO2\",\nprice:55.6,\nvolume:100ORsymbol:'WSO2',\nprice:55.6,\nvolume:100If group events is enabled then input will look like below.symbol:'WSO2',\nprice:55.6,\nvolume:100\n~~~~~~~~~~\nsymbol:'WSO2',\nprice:55.6,\nvolume:100\n\n\n\nExample 2\n\n\n@source(type='inMemory', topic='stock', @map(type='text', fail.on.unknown.attribute = 'true', regex.A='(\\w+)\\s([-0-9]+)',regex.B='volume\\s([-0-9]+)', @attributes(symbol = 'A[1]',price = 'A[2]',volume = 'B' )\n\n\n\n\nAbove configuration will perform a custom text mapping. Expected input will look like below.wos2 550 volume 100\n\n\n\nSinkmapper\n\n\ntext \n(Sink Mapper)\n\n\nText to Event input mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either use  a pre-defined text format where event conversion will happen without any configs or use placehosders to map from a custom text message.\n\n\n\nSyntax\n\n\n@sink(..., @map(type=\ntext\n, event.grouping.enabled=\nBOOL\n, delimiter=\nSTRING\n, new.line.character=\nSTRING\n)\n\n\n\n\nQuery Parameters\n\n\n\n    \n\n        \nName\n\n        \nDescription\n\n        \nDefault Value\n\n        \nPossible Data Types\n\n        \nOptional\n\n        \nDynamic\n\n    \n\n    \n\n        \nevent.grouping.enabled\n\n        \nThis attribute is used to specify whether event group is enabled or not. If user needs to publish group of events together user can enable this by specifying 'true'.\n\n        \nfalse\n\n        \nBOOL\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \ndelimiter\n\n        \nThis attribute indicate the delimiter of grouped event which is expected to receive. This should be whole line cannot be single character.\n\n        \n~~~~~~~~~~\n\n        \nSTRING\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \nnew.line.character\n\n        \nThis attribute indicate the new line character of event which is expected to receive. This is used mostly when communication between 2 types of operating systems. As example Linux use '\n' is it's end of line character while windows use '\n\n' for that.\n\n        \n\n\n\n        \nSTRING\n\n        \nYes\n\n        \nNo\n\n    \n\n\n\n\n\nExamples\n\n\nExample 1\n\n\n@sink(type='inMemory', topic='stock', @map(type='text'))\ndefine stream FooStream (symbol string, price float, volume long);\n\n\n\n\n\nAbove configuration will do a default text input mapping. Expected input is siddhi event and output will look like below.symbol:\"WSO2\",\nprice:55.6,\nvolume:100orsymbol:'WSO2',\nprice:55.6,\nvolume:100If group events is enabled then output will look like below.symbol:'WSO2',\nprice:55.6,\nvolume:100\n~~~~~~~~~~\nsymbol:'WSO2',\nprice:55.6,\nvolume:100\n\n\n\nExample 2\n\n\n@sink(type='inMemory', topic='stock', @map(type='text',  @payload(SensorID : {{symbol}}/{{Volume}},\nSensorPrice : Rs{{price}}/=,\nValue : {{Volume}}ml\u201d)))\n\n\n\n\nAbove configuration will perform a custom text mapping. Produce output will look like below.SensorID : wso2/100,\nSensorPrice : Rs1000/=,\nValue : 100mlfor below siddhi event.{wso2,1000,100}", 
+            "title": "2.0.0-SNAPSHOT"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#api-docs", 
+            "text": "", 
+            "title": "API Docs"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#sourcemapper", 
+            "text": "", 
+            "title": "Sourcemapper"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#text-source-mapper", 
+            "text": "Text to siddhi event source mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either onEventHandler a pre-defined text format where event conversion will happen without any configs or can use regex to map from a custom text message.", 
+            "title": "text (Source Mapper)"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#syntax", 
+            "text": "@source(..., @map(type= text , regex.groupid= STRING , fail.on.missing.attribute= BOOL , event.grouping.enabled= BOOL , delimiter= STRING , new.line.character= STRING )", 
+            "title": "Syntax"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#query-parameters", 
+            "text": "Name \n         Description \n         Default Value \n         Possible Data Types \n         Optional \n         Dynamic \n     \n     \n         regex.groupid \n         Used to specify regular expression group. Here groupid can be any capital letter such as regex.A,regex.B .. etc. User can specify any number of regular expression groups and in attribute section,user need to map particular attributes to the regular expression group with the matching group index at the attribute section. If user need to enable custom mapping, it is mandatory to specify matching group for each and every attribute. \n         \n         STRING \n         No \n         No \n     \n     \n         fail.on.missing.attribute \n         This can either have value 'true' or 'false'. By default it will be true. This attribute allows user to handle unknown attributes. By default if an regex execution fails or attribute is not present in event, SP will drop that message. However setting this property to false will prompt DAS to onEventHandler and event with 'null' value to Siddhi. \n         true \n         BOOL \n         Yes \n         No \n     \n     \n         event.grouping.enabled \n         This attribute is used to specify weather event group is enabled or not. if user need to receive group of events together and generate multiple siddhi event user can enable this by specifying true. \n         false \n         BOOL \n         Yes \n         No \n     \n     \n         delimiter \n         This attribute indicate the delimiter of grouped event which is expected to receive. This should be whole line and cannot be single character. \n         ~~~~~~~~~~ \n         STRING \n         Yes \n         No \n     \n     \n         new.line.character \n         This attribute indicate the new line character of event which is expected to receive. This is used mostly when communication between 2 types of operating systems. As example Linux use ' ' is it's end of line character while windows use ' ' for that. \n          \n         STRING \n         Yes \n         No", 
+            "title": "Query Parameters"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#examples", 
+            "text": "", 
+            "title": "Examples"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#example-1", 
+            "text": "@source(type='inMemory', topic='stock', @map(type='text'))\ndefine stream FooStream (symbol string, price float, volume long);  Above configuration will do a default text input mapping. Expected input will look like below.symbol:\"WSO2\", price:55.6, volume:100ORsymbol:'WSO2', price:55.6, volume:100If group events is enabled then input will look like below.symbol:'WSO2', price:55.6, volume:100 ~~~~~~~~~~ symbol:'WSO2', price:55.6, volume:100", 
+            "title": "Example 1"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#example-2", 
+            "text": "@source(type='inMemory', topic='stock', @map(type='text', fail.on.unknown.attribute = 'true', regex.A='(\\w+)\\s([-0-9]+)',regex.B='volume\\s([-0-9]+)', @attributes(symbol = 'A[1]',price = 'A[2]',volume = 'B' )  Above configuration will perform a custom text mapping. Expected input will look like below.wos2 550 volume 100", 
+            "title": "Example 2"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#sinkmapper", 
+            "text": "", 
+            "title": "Sinkmapper"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#text-sink-mapper", 
+            "text": "Text to Event input mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either use  a pre-defined text format where event conversion will happen without any configs or use placehosders to map from a custom text message.", 
+            "title": "text (Sink Mapper)"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#syntax_1", 
+            "text": "@sink(..., @map(type= text , event.grouping.enabled= BOOL , delimiter= STRING , new.line.character= STRING )", 
+            "title": "Syntax"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#query-parameters_1", 
+            "text": "Name \n         Description \n         Default Value \n         Possible Data Types \n         Optional \n         Dynamic \n     \n     \n         event.grouping.enabled \n         This attribute is used to specify whether event group is enabled or not. If user needs to publish group of events together user can enable this by specifying 'true'. \n         false \n         BOOL \n         Yes \n         No \n     \n     \n         delimiter \n         This attribute indicate the delimiter of grouped event which is expected to receive. This should be whole line cannot be single character. \n         ~~~~~~~~~~ \n         STRING \n         Yes \n         No \n     \n     \n         new.line.character \n         This attribute indicate the new line character of event which is expected to receive. This is used mostly when communication between 2 types of operating systems. As example Linux use ' ' is it's end of line character while windows use ' ' for that. \n          \n         STRING \n         Yes \n         No", 
+            "title": "Query Parameters"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#examples_1", 
+            "text": "", 
+            "title": "Examples"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#example-1_1", 
+            "text": "@sink(type='inMemory', topic='stock', @map(type='text'))\ndefine stream FooStream (symbol string, price float, volume long);  Above configuration will do a default text input mapping. Expected input is siddhi event and output will look like below.symbol:\"WSO2\", price:55.6, volume:100orsymbol:'WSO2', price:55.6, volume:100If group events is enabled then output will look like below.symbol:'WSO2', price:55.6, volume:100 ~~~~~~~~~~ symbol:'WSO2', price:55.6, volume:100", 
+            "title": "Example 1"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#example-2_1", 
+            "text": "@sink(type='inMemory', topic='stock', @map(type='text',  @payload(SensorID : {{symbol}}/{{Volume}},\nSensorPrice : Rs{{price}}/=,\nValue : {{Volume}}ml\u201d)))  Above configuration will perform a custom text mapping. Produce output will look like below.SensorID : wso2/100, SensorPrice : Rs1000/=, Value : 100mlfor below siddhi event.{wso2,1000,100}", 
+            "title": "Example 2"
+        }, 
+        {
+            "location": "/license/", 
+            "text": "Copyright (c) 2017 WSO2 Inc. (\nhttp://www.wso2.org\n) All Rights Reserved.\n\n\nWSO2 Inc. licenses this file to you under the Apache License,\nVersion 2.0 (the \"License\"); you may not use this file except\nin compliance with the License.\nYou may obtain a copy of the License at\n\n\nhttp://www.apache.org/licenses/LICENSE-2.0\n\n\nUnless required by applicable law or agreed to in writing,\nsoftware distributed under the License is distributed on an\n\"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\nKIND, either express or implied.  See the License for the\nspecific language governing permissions and limitations\nunder the License.\n\n\n-------------------------------------------------------------------------\n                              Apache License\n                        Version 2.0, January 2004\n                     http://www.apache.org/licenses/\n\n\nTERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n1. Definitions.\n\n   \nLicense\n shall mean the terms and conditions for use, reproduction,\n   and distribution as defined by Sections 1 through 9 of this document.\n\n   \nLicensor\n shall mean the copyright owner or entity authorized by\n   the copyright owner that is granting the License.\n\n   \nLegal Entity\n shall mean the union of the acting entity and all\n   other entities that control, are controlled by, or are under common\n   control with that entity. For the purposes of this definition,\n   \ncontrol\n means (i) the power, direct or indirect, to cause the\n   direction or management of such entity, whether by contract or\n   otherwise, or (ii) ownership of fifty percent (50%) or more of the\n   outstanding shares, or (iii) beneficial ownership of such entity.\n\n   \nYou\n (or \nYour\n) shall mean an individual or Legal Entity\n   exercising permissions granted by this License.\n\n   \nSource\n form shall mean the preferred form for making modifications,\n   including but not limited to software source code, documentation\n   source, and configuration files.\n\n   \nObject\n form shall mean any form resulting from mechanical\n   transformation or translation of a Source form, including but\n   not limited to compiled object code, generated documentation,\n   and conversions to other media types.\n\n   \nWork\n shall mean the work of authorship, whether in Source or\n   Object form, made available under the License, as indicated by a\n   copyright notice that is included in or attached to the work\n   (an example is provided in the Appendix below).\n\n   \nDerivative Works\n shall mean any work, whether in Source or Object\n   form, that is based on (or derived from) the Work and for which the\n   editorial revisions, annotations, elaborations, or other modifications\n   represent, as a whole, an original work of authorship. For the purposes\n   of this License, Derivative Works shall not include works that remain\n   separable from, or merely link (or bind by name) to the interfaces of,\n   the Work and Derivative Works thereof.\n\n   \nContribution\n shall mean any work of authorship, including\n   the original version of the Work and any modifications or additions\n   to that Work or Derivative Works thereof, that is intentionally\n   submitted to Licensor for inclusion in the Work by the copyright owner\n   or by an individual or Legal Entity authorized to submit on behalf of\n   the copyright owner. For the purposes of this definition, \nsubmitted\n\n   means any form of electronic, verbal, or written communication sent\n   to the Licensor or its representatives, including but not limited to\n   communication on electronic mailing lists, source code control systems,\n   and issue tracking systems that are managed by, or on behalf of, the\n   Licensor for the purpose of discussing and improving the Work, but\n   excluding communication that is conspicuously marked or otherwise\n   designated in writing by the copyright owner as \nNot a Contribution.\n\n\n   \nContributor\n shall mean Licensor and any individual or Legal Entity\n   on behalf of whom a Contribution has been received by Licensor and\n   subsequently incorporated within the Work.\n\n2. Grant of Copyright License. Subject to the terms and conditions of\n   this License, each Contributor hereby grants to You a perpetual,\n   worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n   copyright license to reproduce, prepare Derivative Works of,\n   publicly display, publicly perform, sublicense, and distribute the\n   Work and such Derivative Works in Source or Object form.\n\n3. Grant of Patent License. Subject to the terms and conditions of\n   this License, each Contributor hereby grants to You a perpetual,\n   worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n   (except as stated in this section) patent license to make, have made,\n   use, offer to sell, sell, import, and otherwise transfer the Work,\n   where such license applies only to those patent claims licensable\n   by such Contributor that are necessarily infringed by their\n   Contribution(s) alone or by combination of their Contribution(s)\n   with the Work to which such Contribution(s) was submitted. If You\n   institute patent litigation against any entity (including a\n   cross-claim or counterclaim in a lawsuit) alleging that the Work\n   or a Contribution incorporated within the Work constitutes direct\n   or contributory patent infringement, then any patent licenses\n   granted to You under this License for that Work shall terminate\n   as of the date such litigation is filed.\n\n4. Redistribution. You may reproduce and distribute copies of the\n   Work or Derivative Works thereof in any medium, with or without\n   modifications, and in Source or Object form, provided that You\n   meet the following conditions:\n\n   (a) You must give any other recipients of the Work or\n       Derivative Works a copy of this License; and\n\n   (b) You must cause any modified files to carry prominent notices\n       stating that You changed the files; and\n\n   (c) You must retain, in the Source form of any Derivative Works\n       that You distribute, all copyright, patent, trademark, and\n       attribution notices from the Source form of the Work,\n       excluding those notices that do not pertain to any part of\n       the Derivative Works; and\n\n   (d) If the Work includes a \nNOTICE\n text file as part of its\n       distribution, then any Derivative Works that You distribute must\n       include a readable copy of the attribution notices contained\n       within such NOTICE file, excluding those notices that do not\n       pertain to any part of the Derivative Works, in at least one\n       of the following places: within a NOTICE text file distributed\n       as part of the Derivative Works; within the Source form or\n       documentation, if provided along with the Derivative Works; or,\n       within a display generated by the Derivative Works, if and\n       wherever such third-party notices normally appear. The contents\n       of the NOTICE file are for informational purposes only and\n       do not modify the License. You may add Your own attribution\n       notices within Derivative Works that You distribute, alongside\n       or as an addendum to the NOTICE text from the Work, provided\n       that such additional attribution notices cannot be construed\n       as modifying the License.\n\n   You may add Your own copyright statement to Your modifications and\n   may provide additional or different license terms and conditions\n   for use, reproduction, or distribution of Your modifications, or\n   for any such Derivative Works as a whole, provided Your use,\n   reproduction, and distribution of the Work otherwise complies with\n   the conditions stated in this License.\n\n5. Submission of Contributions. Unless You explicitly state otherwise,\n   any Contribution intentionally submitted for inclusion in the Work\n   by You to the Licensor shall be under the terms and conditions of\n   this License, without any additional terms or conditions.\n   Notwithstanding the above, nothing herein shall supersede or modify\n   the terms of any separate license agreement you may have executed\n   with Licensor regarding such Contributions.\n\n6. Trademarks. This License does not grant permission to use the trade\n   names, trademarks, service marks, or product names of the Licensor,\n   except as required for reasonable and customary use in describing the\n   origin of the Work and reproducing the content of the NOTICE file.\n\n7. Disclaimer of Warranty. Unless required by applicable law or\n   agreed to in writing, Licensor provides the Work (and each\n   Contributor provides its Contributions) on an \nAS IS\n BASIS,\n   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n   implied, including, without limitation, any warranties or conditions\n   of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n   PARTICULAR PURPOSE. You are solely responsible for determining the\n   appropriateness of using or redistributing the Work and assume any\n   risks associated with Your exercise of permissions under this License.\n\n8. Limitation of Liability. In no event and under no legal theory,\n   whether in tort (including negligence), contract, or otherwise,\n   unless required by applicable law (such as deliberate and grossly\n   negligent acts) or agreed to in writing, shall any Contributor be\n   liable to You for damages, including any direct, indirect, special,\n   incidental, or consequential damages of any character arising as a\n   result of this License or out of the use or inability to use the\n   Work (including but not limited to damages for loss of goodwill,\n   work stoppage, computer failure or malfunction, or any and all\n   other commercial damages or losses), even if such Contributor\n   has been advised of the possibility of such damages.\n\n9. Accepting Warranty or Additional Liability. While redistributing\n   the Work or Derivative Works thereof, You may choose to offer,\n   and charge a fee for, acceptance of support, warranty, indemnity,\n   or other liability obligations and/or rights consistent with this\n   License. However, in accepting such obligations, You may act only\n   on Your own behalf and on Your sole responsibility, not on behalf\n   of any other Contributor, and only if You agree to indemnify,\n   defend, and hold each Contributor harmless for any liability\n   incurred by, or claims asserted against, such Contributor by reason\n   of your accepting any such warranty or additional liability.\n\nEND OF TERMS AND CONDITIONS", 
+            "title": "License"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/", 
+            "text": "API Docs\n\n\nSourcemapper\n\n\ntext \n(Source Mapper)\n\n\nText to siddhi event source mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either onEventHandler a pre-defined text format where event conversion will happen without any configs or can use regex to map from a custom text message.\n\n\n\nSyntax\n\n\n@source(..., @map(type=\ntext\n, regex.groupid=\nSTRING\n, fail.on.missing.attribute=\nBOOL\n, event.grouping.enabled=\nBOOL\n, delimiter=\nSTRING\n, new.line.character=\nSTRING\n)\n\n\n\n\nQuery Parameters\n\n\n\n    \n\n        \nName\n\n        \nDescription\n\n        \nDefault Value\n\n        \nPossible Data Types\n\n        \nOptional\n\n        \nDynamic\n\n    \n\n    \n\n        \nregex.groupid\n\n        \nUsed to specify regular expression group. Here groupid can be any capital letter such as regex.A,regex.B .. etc. User can specify any number of regular expression groups and in attribute section,user need to map particular attributes to the regular expression group with the matching group index at the attribute section. If user need to enable custom mapping, it is mandatory to specify matching group for each and every attribute.\n\n        \n\n        \nSTRING\n\n        \nNo\n\n        \nNo\n\n    \n\n    \n\n        \nfail.on.missing.attribute\n\n        \nThis can either have value 'true' or 'false'. By default it will be true. This attribute allows user to handle unknown attributes. By default if an regex execution fails or attribute is not present in event, SP will drop that message. However setting this property to false will prompt DAS to onEventHandler and event with 'null' value to Siddhi.\n\n        \ntrue\n\n        \nBOOL\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \nevent.grouping.enabled\n\n        \nThis attribute is used to specify weather event group is enabled or not. if user need to receive group of events together and generate multiple siddhi event user can enable this by specifying true.\n\n        \nfalse\n\n        \nBOOL\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \ndelimiter\n\n        \nThis attribute indicate the delimiter of grouped event which is expected to receive. This should be whole line and cannot be single character.\n\n        \n~~~~~~~~~~\n\n        \nSTRING\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \nnew.line.character\n\n        \nThis attribute indicate the new line character of event which is expected to receive. This is used mostly when communication between 2 types of operating systems. As example Linux use '\n' is it's end of line character while windows use '\n\n' for that.\n\n        \n\n\n\n        \nSTRING\n\n        \nYes\n\n        \nNo\n\n    \n\n\n\n\n\nExamples\n\n\nExample 1\n\n\n@source(type='inMemory', topic='stock', @map(type='text'))\ndefine stream FooStream (symbol string, price float, volume long);\n\n\n\n\n\nAbove configuration will do a default text input mapping. Expected input will look like below.symbol:\"WSO2\",\nprice:55.6,\nvolume:100ORsymbol:'WSO2',\nprice:55.6,\nvolume:100If group events is enabled then input will look like below.symbol:'WSO2',\nprice:55.6,\nvolume:100\n~~~~~~~~~~\nsymbol:'WSO2',\nprice:55.6,\nvolume:100\n\n\n\nExample 2\n\n\n@source(type='inMemory', topic='stock', @map(type='text', fail.on.unknown.attribute = 'true', regex.A='(\\w+)\\s([-0-9]+)',regex.B='volume\\s([-0-9]+)', @attributes(symbol = 'A[1]',price = 'A[2]',volume = 'B' )\n\n\n\n\nAbove configuration will perform a custom text mapping. Expected input will look like below.wos2 550 volume 100\n\n\n\nSinkmapper\n\n\ntext \n(Sink Mapper)\n\n\nText to Event input mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either use  a pre-defined text format where event conversion will happen without any configs or use placehosders to map from a custom text message.\n\n\n\nSyntax\n\n\n@sink(..., @map(type=\ntext\n, event.grouping.enabled=\nBOOL\n, delimiter=\nSTRING\n, new.line.character=\nSTRING\n)\n\n\n\n\nQuery Parameters\n\n\n\n    \n\n        \nName\n\n        \nDescription\n\n        \nDefault Value\n\n        \nPossible Data Types\n\n        \nOptional\n\n        \nDynamic\n\n    \n\n    \n\n        \nevent.grouping.enabled\n\n        \nThis attribute is used to specify whether event group is enabled or not. If user needs to publish group of events together user can enable this by specifying 'true'.\n\n        \nfalse\n\n        \nBOOL\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \ndelimiter\n\n        \nThis attribute indicate the delimiter of grouped event which is expected to receive. This should be whole line cannot be single character.\n\n        \n~~~~~~~~~~\n\n        \nSTRING\n\n        \nYes\n\n        \nNo\n\n    \n\n    \n\n        \nnew.line.character\n\n        \nThis attribute indicate the new line character of event which is expected to receive. This is used mostly when communication between 2 types of operating systems. As example Linux use '\n' is it's end of line character while windows use '\n\n' for that.\n\n        \n\n\n\n        \nSTRING\n\n        \nYes\n\n        \nNo\n\n    \n\n\n\n\n\nExamples\n\n\nExample 1\n\n\n@sink(type='inMemory', topic='stock', @map(type='text'))\ndefine stream FooStream (symbol string, price float, volume long);\n\n\n\n\n\nAbove configuration will do a default text input mapping. Expected input is siddhi event and output will look like below.symbol:\"WSO2\",\nprice:55.6,\nvolume:100orsymbol:'WSO2',\nprice:55.6,\nvolume:100If group events is enabled then output will look like below.symbol:'WSO2',\nprice:55.6,\nvolume:100\n~~~~~~~~~~\nsymbol:'WSO2',\nprice:55.6,\nvolume:100\n\n\n\nExample 2\n\n\n@sink(type='inMemory', topic='stock', @map(type='text',  @payload(SensorID : {{symbol}}/{{Volume}},\nSensorPrice : Rs{{price}}/=,\nValue : {{Volume}}ml\u201d)))\n\n\n\n\nAbove configuration will perform a custom text mapping. Produce output will look like below.SensorID : wso2/100,\nSensorPrice : Rs1000/=,\nValue : 100mlfor below siddhi event.{wso2,1000,100}", 
+            "title": "1.0.0-SNAPSHOT"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#api-docs", 
+            "text": "", 
+            "title": "API Docs"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#sourcemapper", 
+            "text": "", 
+            "title": "Sourcemapper"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#text-source-mapper", 
+            "text": "Text to siddhi event source mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either onEventHandler a pre-defined text format where event conversion will happen without any configs or can use regex to map from a custom text message.", 
+            "title": "text (Source Mapper)"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#syntax", 
+            "text": "@source(..., @map(type= text , regex.groupid= STRING , fail.on.missing.attribute= BOOL , event.grouping.enabled= BOOL , delimiter= STRING , new.line.character= STRING )", 
+            "title": "Syntax"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#query-parameters", 
+            "text": "Name \n         Description \n         Default Value \n         Possible Data Types \n         Optional \n         Dynamic \n     \n     \n         regex.groupid \n         Used to specify regular expression group. Here groupid can be any capital letter such as regex.A,regex.B .. etc. User can specify any number of regular expression groups and in attribute section,user need to map particular attributes to the regular expression group with the matching group index at the attribute section. If user need to enable custom mapping, it is mandatory to specify matching group for each and every attribute. \n         \n         STRING \n         No \n         No \n     \n     \n         fail.on.missing.attribute \n         This can either have value 'true' or 'false'. By default it will be true. This attribute allows user to handle unknown attributes. By default if an regex execution fails or attribute is not present in event, SP will drop that message. However setting this property to false will prompt DAS to onEventHandler and event with 'null' value to Siddhi. \n         true \n         BOOL \n         Yes \n         No \n     \n     \n         event.grouping.enabled \n         This attribute is used to specify weather event group is enabled or not. if user need to receive group of events together and generate multiple siddhi event user can enable this by specifying true. \n         false \n         BOOL \n         Yes \n         No \n     \n     \n         delimiter \n         This attribute indicate the delimiter of grouped event which is expected to receive. This should be whole line and cannot be single character. \n         ~~~~~~~~~~ \n         STRING \n         Yes \n         No \n     \n     \n         new.line.character \n         This attribute indicate the new line character of event which is expected to receive. This is used mostly when communication between 2 types of operating systems. As example Linux use ' ' is it's end of line character while windows use ' ' for that. \n          \n         STRING \n         Yes \n         No", 
+            "title": "Query Parameters"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#examples", 
+            "text": "", 
+            "title": "Examples"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#example-1", 
+            "text": "@source(type='inMemory', topic='stock', @map(type='text'))\ndefine stream FooStream (symbol string, price float, volume long);  Above configuration will do a default text input mapping. Expected input will look like below.symbol:\"WSO2\", price:55.6, volume:100ORsymbol:'WSO2', price:55.6, volume:100If group events is enabled then input will look like below.symbol:'WSO2', price:55.6, volume:100 ~~~~~~~~~~ symbol:'WSO2', price:55.6, volume:100", 
+            "title": "Example 1"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#example-2", 
+            "text": "@source(type='inMemory', topic='stock', @map(type='text', fail.on.unknown.attribute = 'true', regex.A='(\\w+)\\s([-0-9]+)',regex.B='volume\\s([-0-9]+)', @attributes(symbol = 'A[1]',price = 'A[2]',volume = 'B' )  Above configuration will perform a custom text mapping. Expected input will look like below.wos2 550 volume 100", 
+            "title": "Example 2"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#sinkmapper", 
+            "text": "", 
+            "title": "Sinkmapper"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#text-sink-mapper", 
+            "text": "Text to Event input mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either use  a pre-defined text format where event conversion will happen without any configs or use placehosders to map from a custom text message.", 
+            "title": "text (Sink Mapper)"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#syntax_1", 
+            "text": "@sink(..., @map(type= text , event.grouping.enabled= BOOL , delimiter= STRING , new.line.character= STRING )", 
+            "title": "Syntax"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#query-parameters_1", 
+            "text": "Name \n         Description \n         Default Value \n         Possible Data Types \n         Optional \n         Dynamic \n     \n     \n         event.grouping.enabled \n         This attribute is used to specify whether event group is enabled or not. If user needs to publish group of events together user can enable this by specifying 'true'. \n         false \n         BOOL \n         Yes \n         No \n     \n     \n         delimiter \n         This attribute indicate the delimiter of grouped event which is expected to receive. This should be whole line cannot be single character. \n         ~~~~~~~~~~ \n         STRING \n         Yes \n         No \n     \n     \n         new.line.character \n         This attribute indicate the new line character of event which is expected to receive. This is used mostly when communication between 2 types of operating systems. As example Linux use ' ' is it's end of line character while windows use ' ' for that. \n          \n         STRING \n         Yes \n         No", 
+            "title": "Query Parameters"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#examples_1", 
+            "text": "", 
+            "title": "Examples"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#example-1_1", 
+            "text": "@sink(type='inMemory', topic='stock', @map(type='text'))\ndefine stream FooStream (symbol string, price float, volume long);  Above configuration will do a default text input mapping. Expected input is siddhi event and output will look like below.symbol:\"WSO2\", price:55.6, volume:100orsymbol:'WSO2', price:55.6, volume:100If group events is enabled then output will look like below.symbol:'WSO2', price:55.6, volume:100 ~~~~~~~~~~ symbol:'WSO2', price:55.6, volume:100", 
+            "title": "Example 1"
+        }, 
+        {
+            "location": "/api/1.0.0-SNAPSHOT/#example-2_1", 
+            "text": "@sink(type='inMemory', topic='stock', @map(type='text',  @payload(SensorID : {{symbol}}/{{Volume}},\nSensorPrice : Rs{{price}}/=,\nValue : {{Volume}}ml\u201d)))  Above configuration will perform a custom text mapping. Produce output will look like below.SensorID : wso2/100, SensorPrice : Rs1000/=, Value : 100mlfor below siddhi event.{wso2,1000,100}", 
+            "title": "Example 2"
+        }
+    ]
+}
