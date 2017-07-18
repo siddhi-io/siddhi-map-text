@@ -20,237 +20,411 @@ package org.wso2.extension.siddhi.map.text.sourcemapper;
 import org.apache.log4j.Logger;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.util.DataType;
+import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.Event;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
-import org.wso2.siddhi.core.stream.AttributeMapping;
-import org.wso2.siddhi.core.stream.input.InputEventHandler;
+import org.wso2.siddhi.core.stream.input.source.AttributeMapping;
+import org.wso2.siddhi.core.stream.input.source.InputEventHandler;
 import org.wso2.siddhi.core.stream.input.source.SourceMapper;
 import org.wso2.siddhi.core.util.AttributeConverter;
 import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
+import org.wso2.siddhi.query.api.annotation.Annotation;
+import org.wso2.siddhi.query.api.annotation.Element;
 import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.definition.StreamDefinition;
+import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
+import org.wso2.siddhi.query.api.util.AnnotationHelper;
 
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//import org.wso2.siddhi.query.api.util.AnnotationHelper;
+
 /**
- * This mapper converts TEXT string input to {@link org.wso2.siddhi.core.event.ComplexEventChunk}.
- * This extension accepts optional regex mapping to select specific attributes from the stream.
+ * This mapper converts Text string input to {@link org.wso2.siddhi.core.event.ComplexEventChunk}. This extension
+ * accepts optional regex expressions to select specific attributes from the stream.
  */
 @Extension(
         name = "text",
         namespace = "sourceMapper",
-        description = "TBD",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "Text to siddhi event source mapper. Transports which accepts text messages can utilize this " +
+                "extension"
+                + "to convert the incoming text message to Siddhi event. Users can either onEventHandler a pre-defined "
+                + "text format where event conversion will happen without any configs or can use regex to map from a "
+                + "custom text message.",
+        parameters = {
+                @Parameter(name = "regex.groupid",
+                        description =
+                                "Used to specify regular expression group. Here groupid can be any capital letter " +
+                                        "such as regex.A,regex.B .. etc. User can specify any number of regular " +
+                                        "expression groups and in attribute section,user need to map particular " +
+                                        "attributes to the regular expression group with the matching group index " +
+                                        "at the attribute section. If user need to enable custom mapping, it is " +
+                                        "mandatory to specify matching group for each and every attribute.",
+                        type = {DataType.STRING}),
+
+                @Parameter(name = "fail.on.missing.attribute",
+                        description = "This can either have value 'true' or 'false'. By default it will be true. This "
+                                + "attribute allows user to handle unknown attributes. By default if an regex "
+                                + "execution fails or attribute is not present in event, SP will drop that message. " +
+                                "However setting this property to false will prompt DAS to onEventHandler and " +
+                                "event with 'null' value to Siddhi.",
+                        defaultValue = "true",
+                        optional = true,
+                        type = {DataType.BOOL}),
+
+                @Parameter(name = "event.grouping.enabled",
+                        description =
+                                "This attribute is used to specify weather event group is enabled or not. if user " +
+                                        "need to receive group of events together and generate multiple siddhi " +
+                                        "event user can enable this by specifying true.",
+                        type = {DataType.BOOL},
+                        optional = true,
+                        defaultValue = "false"),
+
+                @Parameter(name = "delimiter",
+                        description = "This attribute indicate the delimiter of grouped event which is expected to " +
+                                "receive. This should be whole line and cannot be single character.",
+                        type = {DataType.STRING},
+                        optional = true,
+                        defaultValue = "~~~~~~~~~~"),
+                @Parameter(name = "new.line.character",
+                        description = "This attribute indicate the new line character of event which is " +
+                                "expected to receive. This is used mostly when communication between 2 types of " +
+                                "operating systems. As example Linux use '\n' is it's end of line character while " +
+                                "windows use '\r\n' for that.",
+                        type = {DataType.STRING},
+                        optional = true,
+                        defaultValue = "\n")
+        },
+        examples = {
+                @Example(
+                        syntax = "@source(type='inMemory', topic='stock', @map(type='text'))\n"
+                                + "define stream FooStream (symbol string, price float, volume long);\n",
+                        description = "Above configuration will do a default text input mapping. Expected "
+                                + "input will look like below."
+
+                                + "symbol:\"WSO2\",\n"
+                                + "price:55.6,\n"
+                                + "volume:100"
+
+                                + "OR"
+
+                                + "symbol:'WSO2',\n"
+                                + "price:55.6,\n"
+                                + "volume:100"
+
+                                + "If group events is enabled then input will look like below."
+
+                                + "symbol:'WSO2',\n"
+                                + "price:55.6,\n"
+                                + "volume:100\n"
+                                + "~~~~~~~~~~\n"
+                                + "symbol:'WSO2',\n"
+                                + "price:55.6,\n"
+                                + "volume:100"
+                ),
+                @Example(
+                        syntax = "@source(type='inMemory', topic='stock', @map(type='text', fail.on.unknown.attribute" +
+                                " = 'true', regex.A='(\\w+)\\s([-0-9]+)',regex.B='volume\\s([-0-9]+)', @attributes(" +
+                                "symbol = 'A[1]'," +
+                                "price = 'A[2]'," +
+                                "volume = 'B' )",
+                        description = "Above configuration will perform a custom text mapping. Expected input will "
+                                + "look like below."
+                                + "wos2 550 volume 100")
+        }
 )
 public class TextSourceMapper extends SourceMapper {
-
-    /**
-     * Logger to log the events.
-     */
     private static final Logger log = Logger.getLogger(TextSourceMapper.class);
+    private static final String FAIL_ON_MISSING_ATTRIBUTE = "fail.on.missing.attribute";
+    private static final String OPTION_GROUP_EVENTS = "event.grouping.enabled";
+    private static final String OPTION_NEW_LINE = "new.line.character";
+    private static final String REGULAR_EXPRESSION_GROUP = "regex.";
+    private static final String OPTION_GROUP_EVENTS_DELIMITER = "delimiter";
+    private static final String DEFAULT_NEW_LINE = "\n";
+    private static final String DEFAULT_DELIMITER = "~~~~~~~~~~";
+    private static final String DEFAULT_EVENT_GROUP = "false";
+    private static final String DEFAULT_FALLON_MISSING_ATTRIBUTE = "true";
+    private static final String REGEX_GROUP_OPENING_ELEMENT = "[";
+    private static final String REGEX_GROUP_CLOSING_ELEMENT = "]";
+    private static final String KEY_VALUE_SEPARATOR = ":";
+    private static final String ATTRIBUTE_SEPARATOR = ",";
+    private static final String EMPTY_STRING = "";
+    private static final String REGEX_GROUP_SPLIT_REGEX_ELEMENT = "\\[";
+    private static final String STRING_ENCLOSING_ELEMENT = "\"";
+    private Map<String, Attribute.Type> attributeTypeMap = new HashMap<>();
+    private Map<String, Integer> attributePositionMap = new HashMap<>();
+    private Map<String, String> regexGroupMap = new HashMap<>();
 
-    /**
-     * Default regex assumes that the attributes in the text are separated by comma in order.
-     */
-    public static final String DEFAULT_MAPPING_REGEX = "([^,;]+)";
-
-    /**
-     * Output StreamDefinition of the input mapper.
-     */
-    private StreamDefinition streamDefinition;
-
-    /**
-     * Attributes of the output stream.
-     */
-    private List<Attribute> streamAttributes;
-
-    /**
-     * Array of information about event mapping.
-     */
-    private MappingPositionData[] mappingPositions;
+    private List<Element> attributeRegex;
+    private List<Attribute> attributeList;
     private AttributeConverter attributeConverter;
-
+    private Boolean isCustomMappingEnabled = false;
+    private Boolean eventGroupEnabled = false;
+    private Boolean failOnMissingAttribute;
+    private StreamDefinition streamDefinition;
+    private String eventDelimiter;
+    private String endOfLine;
+    private BitSet assignedPositionsBitSet;
 
     /**
      * Initialize the mapper and the mapping configurations.
-     *  @param streamDefinition     the  StreamDefinition
-     * @param optionHolder         mapping options
-     * @param attributeMappingList list of attributes mapping
-     * @param configReader
+     *
+     * @param streamDefinition the  StreamDefinition
+     * @param optionHolder     mapping options
+     * @param attributeMappingList             list of attributes mapping
+     * @param configReader     source config reader.
      */
     @Override
-    public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, List<AttributeMapping>
-            attributeMappingList, ConfigReader configReader) {
-        attributeConverter = new AttributeConverter();
+    public void init(StreamDefinition streamDefinition, OptionHolder optionHolder,
+                     List<AttributeMapping> attributeMappingList,
+                     ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
+        this.attributeConverter = new AttributeConverter();
         this.streamDefinition = streamDefinition;
-        this.streamAttributes = this.streamDefinition.getAttributeList();
-
-        int attributesSize = this.streamDefinition.getAttributeList().size();
-        this.mappingPositions = new MappingPositionData[attributesSize];
-
-        // Create the position regex arrays
-        if (attributeMappingList != null && attributeMappingList.size() > 0) {
-            // Custom regex parameters are given
-            for (int i = 0; i < attributeMappingList.size(); i++) {
-                // i represents the position of attributes as given by the user in mapping
-
-                AttributeMapping attributeMapping = attributeMappingList.get(i);
-
-                // The optional name given by the user in attribute mapping
-                String attributeName = attributeMapping.getRename();
-
-                // The position of the attribute in the output stream definition
-                int position;
-
-                if (attributeName != null) {
-                    // Use the name to determine the position
-                    position = this.streamDefinition.getAttributePosition(attributeName);
-                } else {
-                    // Use the same order as provided by the user
-                    position = i;
+        this.attributeList = streamDefinition.getAttributeList();
+        this.attributeTypeMap = new HashMap<>(attributeList.size());
+        this.attributePositionMap = new HashMap<>(attributeList.size());
+        this.eventGroupEnabled = Boolean.valueOf(optionHolder
+                .validateAndGetStaticValue(OPTION_GROUP_EVENTS, DEFAULT_EVENT_GROUP));
+        this.endOfLine = optionHolder.validateAndGetStaticValue(OPTION_NEW_LINE, DEFAULT_NEW_LINE);
+        this.eventDelimiter = optionHolder.validateAndGetStaticValue(OPTION_GROUP_EVENTS_DELIMITER,
+                DEFAULT_DELIMITER) + endOfLine;
+        this.failOnMissingAttribute = Boolean.parseBoolean(optionHolder.validateAndGetStaticValue
+                (FAIL_ON_MISSING_ATTRIBUTE,
+                        DEFAULT_FALLON_MISSING_ATTRIBUTE));
+        for (Attribute attribute : attributeList) {
+            attributeTypeMap.put(attribute.getName(), attribute.getType());
+            attributePositionMap.put(attribute.getName(), streamDefinition.getAttributePosition(attribute.getName()));
+        }
+        if (attributeMappingList != null && attributeMappingList.size() > 0) { //custom mapping scenario
+            this.isCustomMappingEnabled = true;
+            List<Annotation> sourceAnnotation = AnnotationHelper.getAnnotation("source", streamDefinition
+                    .getAnnotations()).getAnnotations();
+            List<Annotation> mapAnnotation = AnnotationHelper.getAnnotation("map", sourceAnnotation).getAnnotations();
+            Annotation attributeAnnotation = AnnotationHelper.getAnnotation("attributes", mapAnnotation);
+            this.attributeRegex = attributeAnnotation.getElements();
+            for (Element el : streamDefinition.getAnnotations().get(0).getAnnotations().get(0).getElements()) {
+                if (el.getKey().contains(REGULAR_EXPRESSION_GROUP)) {
+                    regexGroupMap.put(el.getKey()
+                            .replaceFirst(REGULAR_EXPRESSION_GROUP, EMPTY_STRING), el.getValue());
                 }
-                String[] mappingComponents = attributeMapping.getMapping().split("\\[");
-                String regex = optionHolder.validateAndGetStaticValue(mappingComponents[0]);
-                int index = Integer.parseInt(mappingComponents[1].substring(0, mappingComponents[1].length() - 1));
-                this.mappingPositions[i] = new MappingPositionData(position, regex, index);
             }
-        } else {
-            StringBuilder regexBuilder = new StringBuilder();
-            for (int i = 0; i < attributesSize; i++) {
-                regexBuilder.append(DEFAULT_MAPPING_REGEX).append(",?");
+            if (attributeRegex.size() != attributeMappingList.size()) {
+                throw new SiddhiAppValidationException("Stream: '" + streamDefinition.getId() + "' has "
+                        + streamDefinition.getAttributeList().size() + " attributes, but here we only found" +
+                        " below mapping." + attributeMappingList.toString() + "All the attributes should" +
+                        " have mapping.");
             }
-            //String regex = regexBuilder.toString();
-            for (int i = 0; i < attributesSize; i++) {
-                this.mappingPositions[i] = new MappingPositionData(i, regexBuilder.toString(), i + 1);
+            if (streamDefinition.getAttributeList().size() < attributeMappingList.size()) {
+                throw new SiddhiAppValidationException("Stream: '" + streamDefinition.getId() + "' has "
+                        + streamDefinition.getAttributeList().size() + " attributes, but " + attributeMappingList.size()
+                        + " attribute mappings found. Each attribute should have one and only one mapping.");
             }
         }
+        this.assignedPositionsBitSet = new BitSet(attributePositionMap.size());
     }
 
-
     /**
-     * Receive TEXT string from {@link org.wso2.siddhi.core.stream.input.source.Source}, convert to
-     * {@link org.wso2.siddhi.core.event.ComplexEventChunk} and send to the
-     * {@link org.wso2.siddhi.core.query.output.callback.OutputCallback}.
+     * Receives an event as an text string from {@link org.wso2.siddhi.core.stream.input.source.Source}, converts it to
+     * a {@link org.wso2.siddhi.core.event.ComplexEventChunk} and onEventHandler.
      *
-     * @param eventObject  the TEXT string
+     * @param eventObject                 the input event, given as an text string
+     * @param inputEventHandler input handler
      */
     @Override
     protected void mapAndProcess(Object eventObject, InputEventHandler inputEventHandler) throws InterruptedException {
-        if (eventObject != null) {
-            synchronized (this) {
-                Event event = convertToEvent(eventObject);
-                inputEventHandler.sendEvent(event);
+        if (!eventGroupEnabled) {
+            onEventHandler(inputEventHandler, eventObject);
+        } else {
+            String[] allEvents = String.valueOf(eventObject).split(eventDelimiter);
+            int i;
+            for (i = 0; i < allEvents.length - 1; i++) {
+                onEventHandler(inputEventHandler, allEvents[i].substring(0, allEvents[i].length() -
+                        endOfLine.length()));
             }
+            onEventHandler(inputEventHandler, allEvents[i]);
         }
     }
 
+    @Override
+    public Class[] getSupportedInputEventClasses() {
+        return new Class[]{String.class};
+    }
+
     /**
-     * Convert the given TEXT string to {@link Event}.
+     * Receives an event as an text string from {@link org.wso2.siddhi.core.stream.input.source.Source}, converts it to
+     * a {@link org.wso2.siddhi.core.event.ComplexEventChunk} and onEventHandler.
      *
-     * @param eventObject TEXT string
-     * @return the constructed Event object
+     * @param eventObject       the input event, given as an text string
+     * @param inputEventHandler input handler
      */
-    private Event convertToEvent(Object eventObject) {
-        // Validate the event
-        if (eventObject == null) {
-            throw new SiddhiAppRuntimeException("Null object received from the Source to TextsourceMapper");
+    private void onEventHandler(InputEventHandler inputEventHandler, Object eventObject) {
+        Event[] result;
+        try {
+            if (isCustomMappingEnabled) {
+                result = convertToCustomEvents(String.valueOf(eventObject));
+            } else {
+                result = convertToDefaultEvents(String.valueOf(eventObject));
+            }
+            if (result.length != 0) {
+                inputEventHandler.sendEvents(result);
+            }
+            //else  drop the null event
+        } catch (Throwable e) {
+            log.error("Exception occurred when converting Text message to Siddhi Event", e);
         }
-
-        if (!(eventObject instanceof String)) {
-            throw new SiddhiAppRuntimeException("Invalid TEXT object received. Expected String, but found " +
-                    eventObject.getClass()
-                            .getCanonicalName());
-        }
-
-        Event event = new Event(this.streamDefinition.getAttributeList().size());
-        String eventObj = (String) eventObject;
-        if (eventObj.contains("siddhiEventId:")) {
-            // siddhiEventId should be the first line of the message
-            event.setId(Long.parseLong(eventObj.split("\n")[0].split("siddhiEventId:")[1]));
-            eventObj = eventObj.replaceFirst(eventObj.split("\n")[0] + "\n", "");
-        }
-        Object[] data = event.getData();
-
-        for (MappingPositionData mappingPositionData : this.mappingPositions) {
-            int position = mappingPositionData.getPosition();
-            Attribute attribute = streamAttributes.get(position);
-            data[position] = attributeConverter.getPropertyValue(mappingPositionData.match(eventObj),
-                    attribute.getType());
-        }
-
-        return event;
     }
 
+    /**
+     * Match the given text against the regex and return the group defined by the group index.
+     *
+     * @param text the input text
+     * @return matched output
+     */
+    private String match(String text, int groupIndex, String regex) {
+        String matchedText;
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            matchedText = matcher.group(groupIndex);
+        } else {
+            matchedText = null;
+        }
+        return matchedText;
+    }
 
     /**
-     * A POJO class which holds the attribute position in output stream, regex mapping and gruping index.
+     * Converts an event from an text string to {@link Event}.
+     *
+     * @param eventObject The input event, given as an text string
+     * @return the constructed {@link Event} object
      */
-    private static class MappingPositionData {
-        /**
-         * Attribute position in the output stream.
-         */
-        private int position;
-
-        /**
-         * User defined regex value.
-         * It can be shared across multiple {@link MappingPositionData}.
-         */
-        private String regex;
-
-        /**
-         * The group index to be used for mapping in the given regex.
-         */
-        private int groupIndex;
-
-        public MappingPositionData(int position, String regex, int groupIndex) {
-            this.position = position;
-            this.regex = regex;
-            this.groupIndex = groupIndex;
-        }
-
-        public int getPosition() {
-            return position;
-        }
-
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
-        public String getRegex() {
-            return regex;
-        }
-
-        public void setRegex(String regex) {
-            this.regex = regex;
-        }
-
-        public int getGroupIndex() {
-            return groupIndex;
-        }
-
-        public void setGroupIndex(int groupIndex) {
-            this.groupIndex = groupIndex;
-        }
-
-        /**
-         * Match the given text against the regex and return the group defined by the group index.
-         *
-         * @param text the input text
-         * @return matched output
-         */
-        public String match(String text) {
-            String matchedText;
-            Pattern pattern = Pattern.compile(this.regex);
-            Matcher matcher = pattern.matcher(text);
-            if (matcher.find()) {
-                matchedText = matcher.group(this.groupIndex);
-            } else {
-                matchedText = null;
+    private Event[] convertToCustomEvents(Object eventObject) {
+        AtomicBoolean isValidEvent = new AtomicBoolean();
+        isValidEvent.set(true);
+        List<Event> eventList = new ArrayList<>();
+        Event event = new Event(this.streamDefinition.getAttributeList().size());
+        Object[] data = event.getData();
+        if (isCustomMappingEnabled) {   //custom mapping case
+            for (Element attr : attributeRegex) {
+                String matchText = null;
+                String attributeValue = attr.getValue();
+                String attributeKey = attr.getKey();
+                if (attributeValue.contains(REGEX_GROUP_OPENING_ELEMENT) && attributeValue.contains
+                        (REGEX_GROUP_CLOSING_ELEMENT)) { //symbol=A[1]
+                    String[] regexGroupElements = attr.getValue().replace(REGEX_GROUP_CLOSING_ELEMENT, EMPTY_STRING)
+                            .split(REGEX_GROUP_SPLIT_REGEX_ELEMENT, 2);
+                    String regexGroup = regexGroupElements[0];
+                    int regexPosition = Integer.parseInt(regexGroupElements[1]);
+                    String regex = regexGroupMap.get(regexGroup);
+                    if (regex != null) {
+                        try {
+                            matchText = match((String) eventObject,
+                                    regexPosition, regexGroupMap.get(regexGroup));
+                        } catch (IndexOutOfBoundsException e) {
+                            log.error("Could not find group for " + regexPosition, e);
+                            isValidEvent.set(false);
+                        }
+                    } else {
+                        log.error("Could not find machine regular expression group for " + regexGroup + " for " +
+                                "attribute " + attributeKey);
+                        isValidEvent.set(false);
+                    }
+                } else { //symbol=B
+                    String regex = regexGroupMap.get(attributeValue);
+                    if (regex != null) {
+                        try {
+                            matchText = match((String) eventObject,
+                                    1, regexGroupMap.get(attributeValue));
+                        } catch (IndexOutOfBoundsException e) {
+                            log.error("Could not find group for " + attributeValue, e);
+                            isValidEvent.set(false);
+                        }
+                    } else {
+                        log.error("Could not find machine regular expression group for " + attributeValue + " for " +
+                                "attribute " + attributeKey);
+                        isValidEvent.set(false);
+                    }
+                }
+                if (failOnMissingAttribute && (matchText == null)) { //if fail on missing attribute is enabled
+                    log.error("Invalid format of event " + eventObject + " for " +
+                            "attribute " + attr + " could not find proper value while fail on missing attribute is " +
+                            "'true'");
+                    isValidEvent.set(false);
+                }
+                int position = attributePositionMap.get(attributeKey);
+                if ((Attribute.Type.STRING != attributeTypeMap.get(attributeKey)) && (matchText != null)) {
+                    data[position] = attributeConverter.getPropertyValue(matchText.replaceAll(",", ""), attributeTypeMap
+                            .get(attributeKey));
+                } else {
+                    data[position] = matchText;
+                }
             }
-            return matchedText;
         }
+        eventList.add(event);
+        return eventList.toArray(new Event[0]);
+    }
+
+    private Event[] convertToDefaultEvents(String eventObject) {
+        AtomicBoolean isValidEvent = new AtomicBoolean();
+        isValidEvent.set(true);
+        List<Event> eventList = new ArrayList<>();
+        Event event = new Event(this.streamDefinition.getAttributeList().size());
+        Object[] data = event.getData();
+        String[] events = eventObject.split(ATTRIBUTE_SEPARATOR + endOfLine);
+        if ((events.length < attributeList.size()) && (failOnMissingAttribute)) {
+            log.error("Invalid format of event because some required attributes are missing in event " + eventObject
+                    + " while needed attributes are " + attributeList.toString());
+            isValidEvent.set(false);
+        }
+        for (String event1 : events) {
+            String[] eventObjects = event1.split(KEY_VALUE_SEPARATOR, 2);
+            //remove trim
+            if (eventObjects.length == 2) {
+                String key = eventObjects[0].trim();
+                String value = eventObjects[1].trim();
+                Integer position = attributePositionMap.get(key.trim());
+                //to get 1st mach only
+                if (position != null) {
+                    if (!assignedPositionsBitSet.get(position)) {
+                        try {
+                            Attribute.Type attributeType = attributeTypeMap.get(key.trim());
+                            if (attributeType != Attribute.Type.STRING) {
+                                data[position] = attributeConverter.getPropertyValue(value.replaceAll(","
+                                        , "").trim(), attributeType);
+                            } else {
+                                data[position] = value.trim().substring(STRING_ENCLOSING_ELEMENT.length(),
+                                        +value.length() - STRING_ENCLOSING_ELEMENT.length());
+                            }
+                        } catch (ClassCastException | NumberFormatException e) {
+                            log.error("Incompatible data format. Because value is " + value + " and attribute type is "
+                                    + attributeTypeMap.get(key.trim()).name());
+                            isValidEvent.set(false);
+                        }
+                        assignedPositionsBitSet.flip(position);
+                    }
+                }
+            }
+        }
+        if ((events.length > assignedPositionsBitSet.length()) && (assignedPositionsBitSet.length()
+                < attributeList.size()) && (failOnMissingAttribute)) {
+            log.error("Invalid format of event because some required attributes are missing while some un nessasary " +
+                    "mappings are present" + eventObject);
+            isValidEvent.set(false);
+        }
+        assignedPositionsBitSet.clear();
+        if (isValidEvent.get()) {
+            eventList.add(event);
+        }
+        return eventList.toArray(new Event[0]);
     }
 }
