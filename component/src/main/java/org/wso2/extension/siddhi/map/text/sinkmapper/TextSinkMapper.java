@@ -44,28 +44,28 @@ import java.util.List;
         namespace = "sinkMapper",
         description = "Text to Event input mapper. Transports which accepts text messages can utilize this extension"
                 + "to convert the incoming text message to Siddhi event. Users can either use  a pre-defined "
-                + "text format where event conversion will happen without any configs or use placehosders to map from" +
+                + "text format where event conversion will happen without any configs or use placeholders to map from" +
                 " a custom text message.",
         parameters = {
                 @Parameter(name = "event.grouping.enabled",
                         description =
-                                "This attribute is used to specify whether event group is enabled or not. If user " +
-                                        "needs to publish group of events together user can enable this by " +
-                                        "specifying 'true'.",
+                                "This attribute is used to specify whether the event grouping is enabled or not." +
+                                        " If user needs to publish a group of events together user can enable this " +
+                                        "by specifying 'true'.",
                         type = {DataType.BOOL},
                         optional = true,
                         defaultValue = "false"),
                 @Parameter(name = "delimiter",
-                        description = "This attribute indicate the delimiter of grouped event which is expected to " +
-                                "receive. This should be whole line cannot be single character.",
+                        description = "This attribute indicates the delimiter of the grouped event which is expected" +
+                                " to be received. This should be a whole line not a single character.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "~~~~~~~~~~"),
                 @Parameter(name = "new.line.character",
-                        description = "This attribute indicate the new line character of event which is " +
-                                "expected to receive. This is used mostly when communication between 2 types of " +
-                                "operating systems. As example Linux use '\n' is it's end of line character while " +
-                                "windows use '\r\n' for that.",
+                        description = "This attribute indicates the new line character ofthe event which is " +
+                                "expected to be received. This is used mostly when communication between 2 types of " +
+                                "operating systems is expected. For instance as the end of line character " +
+                                "linux uses '\n' while windows use '\r\n'.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "\n")
@@ -74,43 +74,43 @@ import java.util.List;
                 @Example(
                         syntax = "@sink(type='inMemory', topic='stock', @map(type='text'))\n"
                                 + "define stream FooStream (symbol string, price float, volume long);\n",
-                        description = "Above configuration will do a default text input mapping. Expected "
-                                + "input is siddhi event and output will look like below."
+                        description = "Above configuration will perform a default text input mapping. " +
+                                "Expected output would be as follows,"
 
-                                + "symbol:\"WSO2\",\n"
-                                + "price:55.6,\n"
-                                + "volume:100"
+                        + "symbol:\"WSO2\",\n"
+                        + "price:55.6,\n"
+                        + "volume:100"
 
-                                + "or"
+                        + "or"
 
-                                + "symbol:'WSO2',\n"
-                                + "price:55.6,\n"
-                                + "volume:100"
+                        + "symbol:'WSO2',\n"
+                        + "price:55.6,\n"
+                        + "volume:100"
 
-                                + "If group events is enabled then output will look like below."
+                        + "If group events is enabled then the output would be as follows,"
 
-                                + "symbol:'WSO2',\n"
-                                + "price:55.6,\n"
-                                + "volume:100\n"
-                                + "~~~~~~~~~~\n"
-                                + "symbol:'WSO2',\n"
-                                + "price:55.6,\n"
-                                + "volume:100"
+                        + "symbol:'WSO2',\n"
+                        + "price:55.6,\n"
+                        + "volume:100\n"
+                        + "~~~~~~~~~~\n"
+                        + "symbol:'WSO2',\n"
+                        + "price:55.6,\n"
+                        + "volume:100"
                 ),
                 @Example(
                         syntax = "@sink(type='inMemory', topic='stock', @map(type='text', " +
                                 " @payload(" +
-                                        "SensorID : {{symbol}}/{{Volume}},\n" +
-                                        "SensorPrice : Rs{{price}}/=,\n" +
-                                        "Value : {{Volume}}ml”)))",
-                        description = "Above configuration will perform a custom text mapping. Produce output will "
-                                + "look like below."
+                                "SensorID : {{symbol}}/{{Volume}},\n" +
+                                "SensorPrice : Rs{{price}}/=,\n" +
+                                "Value : {{Volume}}ml”)))",
+                        description = "Above configuration will perform a custom text mapping. The output will "
+                                + "be as follows,"
 
                                 + "SensorID : wso2/100,\n"
                                 + "SensorPrice : Rs1000/=,\n"
                                 + "Value : 100ml"
 
-                                + "for below siddhi event."
+                                + "for the following siddhi event."
 
                                 + "{wso2,1000,100}"
                 )

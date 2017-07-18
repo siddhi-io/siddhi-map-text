@@ -57,50 +57,50 @@ import java.util.regex.Pattern;
         namespace = "sourceMapper",
         description = "Text to siddhi event source mapper. Transports which accepts text messages can utilize this " +
                 "extension"
-                + "to convert the incoming text message to Siddhi event. Users can either onEventHandler a pre-defined "
-                + "text format where event conversion will happen without any configs or can use regex to map from a "
-                + "custom text message.",
+                + "to convert the incoming text message to Siddhi event. Users can either use the onEventHandler," +
+                " a pre-defined text format, where event conversion will happen without any configs or regex to " +
+                "map a text message using custom configs.",
         parameters = {
                 @Parameter(name = "regex.groupid",
                         description =
-                                "Used to specify regular expression group. Here groupid can be any capital letter " +
+                                "Used to specify a regular expression group. Here, groupid can be any capital letter " +
                                         "such as regex.A,regex.B .. etc. User can specify any number of regular " +
-                                        "expression groups and in attribute section,user need to map particular " +
-                                        "attributes to the regular expression group with the matching group index " +
-                                        "at the attribute section. If user need to enable custom mapping, it is " +
+                                        "expression groups and in the attribute annotation,user needs to map all " +
+                                        "attributes to the regular expression group with the matching group index. " +
+                                        "If the user needs to enable custom mapping, it is " +
                                         "mandatory to specify matching group for each and every attribute.",
                         type = {DataType.STRING}),
 
                 @Parameter(name = "fail.on.missing.attribute",
-                        description = "This can either have value 'true' or 'false'. By default it will be true. This "
-                                + "attribute allows user to handle unknown attributes. By default if an regex "
-                                + "execution fails or attribute is not present in event, SP will drop that message. " +
-                                "However setting this property to false will prompt DAS to onEventHandler and " +
-                                "event with 'null' value to Siddhi.",
+                        description = "This can either have a value of 'true' or 'false'. By default it will be " +
+                                "true. This attribute allows user to handle unknown attributes. By default if a regex "
+                                + "execution fails or attribute is not present in the event, SP will drop that " +
+                                "message. However setting this property to false will prompt DAS to pass 'null' " +
+                                "value to that attribute in the event.",
                         defaultValue = "true",
                         optional = true,
                         type = {DataType.BOOL}),
 
                 @Parameter(name = "event.grouping.enabled",
                         description =
-                                "This attribute is used to specify weather event group is enabled or not. if user " +
-                                        "need to receive group of events together and generate multiple siddhi " +
-                                        "event user can enable this by specifying true.",
+                                "This attribute is used to specify whether the event group is enabled or not. " +
+                                        "If the user needs to receive group of events together and generate multiple " +
+                                        "siddhi events user can enable this by specifying true.",
                         type = {DataType.BOOL},
                         optional = true,
                         defaultValue = "false"),
 
                 @Parameter(name = "delimiter",
-                        description = "This attribute indicate the delimiter of grouped event which is expected to " +
-                                "receive. This should be whole line and cannot be single character.",
+                        description = "This attribute indicates the delimiter of grouped event which is " +
+                                "expected to be received. This should be whole line and not a single character.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "~~~~~~~~~~"),
                 @Parameter(name = "new.line.character",
-                        description = "This attribute indicate the new line character of event which is " +
-                                "expected to receive. This is used mostly when communication between 2 types of " +
-                                "operating systems. As example Linux use '\n' is it's end of line character while " +
-                                "windows use '\r\n' for that.",
+                        description = "This attribute indicates the new line character of the event which is " +
+                                "expected to be received. This is used mostly when communication between 2 types of " +
+                                "operating systems is expected. For instance as the end of line character " +
+                                "linux uses '\n' while windows use '\r\n'.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "\n")
@@ -109,8 +109,8 @@ import java.util.regex.Pattern;
                 @Example(
                         syntax = "@source(type='inMemory', topic='stock', @map(type='text'))\n"
                                 + "define stream FooStream (symbol string, price float, volume long);\n",
-                        description = "Above configuration will do a default text input mapping. Expected "
-                                + "input will look like below."
+                        description = "Above configuration will perform a default text input mapping." +
+                                " Expected input should be as follows,"
 
                                 + "symbol:\"WSO2\",\n"
                                 + "price:55.6,\n"
@@ -122,7 +122,7 @@ import java.util.regex.Pattern;
                                 + "price:55.6,\n"
                                 + "volume:100"
 
-                                + "If group events is enabled then input will look like below."
+                                + "If group events is enabled then input should be as follows,"
 
                                 + "symbol:'WSO2',\n"
                                 + "price:55.6,\n"
@@ -138,9 +138,10 @@ import java.util.regex.Pattern;
                                 "symbol = 'A[1]'," +
                                 "price = 'A[2]'," +
                                 "volume = 'B' )",
-                        description = "Above configuration will perform a custom text mapping. Expected input will "
-                                + "look like below."
-                                + "wos2 550 volume 100")
+                        description = "Above configuration will perform a custom text mapping. Expected output " +
+                                "would be as follows,"
+                                + "wos2 550 volume 100"
+                )
         }
 )
 public class TextSourceMapper extends SourceMapper {
