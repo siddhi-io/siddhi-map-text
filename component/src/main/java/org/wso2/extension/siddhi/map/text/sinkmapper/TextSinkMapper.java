@@ -128,15 +128,16 @@ public class TextSinkMapper extends SinkMapper {
     private static final String OPTION_NEW_LINE = "new.line.character";
     private static final String DEFAULT_NEW_LINE = "\n";
 
-    private Boolean eventGroupEnabled;
+    private boolean eventGroupEnabled;
     private String eventDelimiter;
     private List<Attribute> attributeList;
     private String endOfLine;
-
+    private String streamID;
 
     @Override
     public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, TemplateBuilder
             templateBuilder, ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
+        this.streamID = streamDefinition.getId();
         this.attributeList = streamDefinition.getAttributeList();
         this.eventGroupEnabled = Boolean.valueOf(optionHolder
                 .validateAndGetStaticValue(OPTION_GROUP_EVENTS, DEFAULT_GROUP_EVENTS));
@@ -206,7 +207,8 @@ public class TextSinkMapper extends SinkMapper {
                 try {
                     sinkListener.publish(templateBuilder.build(event));
                 } catch (NoSuchAttributeException e) {
-                    log.error("Malformed event " + event.toString() + ". Hence proceed with null values");
+                    log.error("Malformed event " + event.toString() + ". Hence proceed with null values" +
+                            " in the stream " + streamID + " of siddhi text output mapper.");
                     //drop the event
                 }
             }
@@ -223,17 +225,18 @@ public class TextSinkMapper extends SinkMapper {
      * @param event Event object
      * @return the constructed TEXT string
      */
-    private Object constructDefaultMapping(Event event, Boolean isEventGroup) {
+    private Object constructDefaultMapping(Event event, boolean isEventGroup) {
         StringBuilder eventText = new StringBuilder();
         Object[] data = event.getData();
         for (int i = 0; i < data.length; i++) {
             Object attributeValue = data[i];
-            if ((attributeValue != null) && attributeList.get(i).getType().equals(Attribute.Type.STRING)) {
-                eventText.append(attributeList.get(i).getName()).append(EVENT_ATTRIBUTE_VALUE_SEPARATOR)
+            Attribute attribute = attributeList.get(i);
+            if ((attributeValue != null) && attribute.getType().equals(Attribute.Type.STRING)) {
+                eventText.append(attribute.getName()).append(EVENT_ATTRIBUTE_VALUE_SEPARATOR)
                         .append(STRING_ENCLOSING_ELEMENT).append(attributeValue.toString())
                         .append(STRING_ENCLOSING_ELEMENT).append(EVENT_ATTRIBUTE_SEPARATOR).append(endOfLine);
             } else {
-                eventText.append(attributeList.get(i).getName()).append(EVENT_ATTRIBUTE_VALUE_SEPARATOR)
+                eventText.append(attribute.getName()).append(EVENT_ATTRIBUTE_VALUE_SEPARATOR)
                         .append(attributeValue).append(EVENT_ATTRIBUTE_SEPARATOR).append(endOfLine);
             }
         }

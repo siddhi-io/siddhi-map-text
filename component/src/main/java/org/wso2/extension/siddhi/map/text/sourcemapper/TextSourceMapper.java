@@ -169,14 +169,14 @@ public class TextSourceMapper extends SourceMapper {
     private List<Element> attributeRegex;
     private List<Attribute> attributeList;
     private AttributeConverter attributeConverter;
-    private Boolean isCustomMappingEnabled = false;
-    private Boolean eventGroupEnabled = false;
-    private Boolean failOnMissingAttribute;
+    private boolean isCustomMappingEnabled = false;
+    private boolean eventGroupEnabled = false;
+    private boolean failOnMissingAttribute;
     private StreamDefinition streamDefinition;
     private String eventDelimiter;
     private String endOfLine;
     private BitSet assignedPositionsBitSet;
-
+    private String streamID;
     /**
      * Initialize the mapper and the mapping configurations.
      *
@@ -189,6 +189,7 @@ public class TextSourceMapper extends SourceMapper {
     public void init(StreamDefinition streamDefinition, OptionHolder optionHolder,
                      List<AttributeMapping> attributeMappingList,
                      ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
+        this.streamID = streamDefinition.getId();
         this.attributeConverter = new AttributeConverter();
         this.streamDefinition = streamDefinition;
         this.attributeList = streamDefinition.getAttributeList();
@@ -223,12 +224,13 @@ public class TextSourceMapper extends SourceMapper {
                 throw new SiddhiAppValidationException("Stream: '" + streamDefinition.getId() + "' has "
                         + streamDefinition.getAttributeList().size() + " attributes, but here we only found" +
                         " below mapping." + attributeMappingList.toString() + "All the attributes should" +
-                        " have mapping.");
+                        " have mapping" + " in the stream " + streamID + " of siddhi text input mapper.");
             }
             if (streamDefinition.getAttributeList().size() < attributeMappingList.size()) {
                 throw new SiddhiAppValidationException("Stream: '" + streamDefinition.getId() + "' has "
                         + streamDefinition.getAttributeList().size() + " attributes, but " + attributeMappingList.size()
-                        + " attribute mappings found. Each attribute should have one and only one mapping.");
+                        + " attribute mappings found. Each attribute should have one and only one mapping" + " in " +
+                        "the stream " + streamID + " of siddhi text input mapper.");
             }
         }
         this.assignedPositionsBitSet = new BitSet(attributePositionMap.size());
@@ -279,9 +281,9 @@ public class TextSourceMapper extends SourceMapper {
             if (result.length != 0) {
                 inputEventHandler.sendEvents(result);
             }
-            //else  drop the null event
         } catch (Throwable e) {
-            log.error("Exception occurred when converting Text message to Siddhi Event", e);
+            log.error("Exception occurred when converting Text message:" + eventObject + " to Siddhi Event "+
+                    "in the stream " + streamID + " of siddhi text input mapper.", e);
         }
     }
 
@@ -332,12 +334,14 @@ public class TextSourceMapper extends SourceMapper {
                             matchText = match((String) eventObject,
                                     regexPosition, regexGroupMap.get(regexGroup));
                         } catch (IndexOutOfBoundsException e) {
-                            log.error("Could not find group for " + regexPosition, e);
+                            log.error("Could not find group for " + regexPosition + " in the stream "
+                                    + streamID + " of siddhi text input mapper.", e);
                             isValidEvent.set(false);
                         }
                     } else {
                         log.error("Could not find machine regular expression group for " + regexGroup + " for " +
-                                "attribute " + attributeKey);
+                                "attribute " + attributeKey + " in the stream " + streamID + " of siddhi text " +
+                                "input mapper.");
                         isValidEvent.set(false);
                     }
                 } else { //symbol=B
@@ -347,19 +351,21 @@ public class TextSourceMapper extends SourceMapper {
                             matchText = match((String) eventObject,
                                     1, regexGroupMap.get(attributeValue));
                         } catch (IndexOutOfBoundsException e) {
-                            log.error("Could not find group for " + attributeValue, e);
+                            log.error("Could not find regular expression group index for " + attributeValue
+                                    + " in the stream " + streamID + " of siddhi text input mapper.", e);
                             isValidEvent.set(false);
                         }
                     } else {
                         log.error("Could not find machine regular expression group for " + attributeValue + " for " +
-                                "attribute " + attributeKey);
+                                "attribute " + attributeKey + " in the stream " + streamID + " of siddhi text " +
+                                "input mapper.");
                         isValidEvent.set(false);
                     }
                 }
                 if (failOnMissingAttribute && (matchText == null)) { //if fail on missing attribute is enabled
                     log.error("Invalid format of event " + eventObject + " for " +
                             "attribute " + attr + " could not find proper value while fail on missing attribute is " +
-                            "'true'");
+                            "'true' in the stream " + streamID + " of siddhi text input mapper.");
                     isValidEvent.set(false);
                 }
                 int position = attributePositionMap.get(attributeKey);
@@ -384,7 +390,8 @@ public class TextSourceMapper extends SourceMapper {
         String[] events = eventObject.split(ATTRIBUTE_SEPARATOR + endOfLine);
         if ((events.length < attributeList.size()) && (failOnMissingAttribute)) {
             log.error("Invalid format of event because some required attributes are missing in event " + eventObject
-                    + " while needed attributes are " + attributeList.toString());
+                    + " while needed attributes are " + attributeList.toString() + " in the stream " + streamID +
+                    " of siddhi text input mapper.");
             isValidEvent.set(false);
         }
         for (String event1 : events) {
@@ -408,7 +415,8 @@ public class TextSourceMapper extends SourceMapper {
                             }
                         } catch (ClassCastException | NumberFormatException e) {
                             log.error("Incompatible data format. Because value is " + value + " and attribute type is "
-                                    + attributeTypeMap.get(key.trim()).name());
+                                    + attributeTypeMap.get(key.trim()).name() + " in the stream " + streamID +
+                                    " of siddhi text input mapper.");
                             isValidEvent.set(false);
                         }
                         assignedPositionsBitSet.flip(position);
@@ -418,8 +426,9 @@ public class TextSourceMapper extends SourceMapper {
         }
         if ((events.length > assignedPositionsBitSet.length()) && (assignedPositionsBitSet.length()
                 < attributeList.size()) && (failOnMissingAttribute)) {
-            log.error("Invalid format of event because some required attributes are missing while some un nessasary " +
-                    "mappings are present" + eventObject);
+            log.error("Invalid format of event because some required attributes are missing while some un necessary " +
+                    "mappings are present" + eventObject + " in the stream " + streamID +
+                    " of siddhi text input mapper.");
             isValidEvent.set(false);
         }
         assignedPositionsBitSet.clear();
