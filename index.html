@@ -352,6 +352,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="api/1.0.1-SNAPSHOT/" title="1.0.1-SNAPSHOT" class="md-nav__link">
+      1.0.1-SNAPSHOT
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -493,10 +505,10 @@
 <h2 id="_1">======================================</h2>
 <h5 id="new-version-of-siddhi-v400-is-built-in-java-8">New version of Siddhi v4.0.0 is built in Java 8.</h5>
 <h5 id="latest-released-version-v400-m18">Latest Released Version v4.0.0-m18.</h5>
-<p>This extension provides converts canonical events of the server in the WSO2Event format to any text message format 
+<p>This extension provides the functionality to convert canonical events of the server in the WSO2Event format to any text message format
 and convert events of any text format to the server's canonical event format (WSO2Event) for processing.</p>
 <h2 id="features-supported">Features Supported</h2>
-<p>This extension uses used to convert Text message to/from Siddhi events. </p>
+<p>This extension is used to convert Text message to/from Siddhi events.</p>
 <ul>
 <li>Text source mapper :Text source mapping allows user to convert events of any text format to the server's canonical event format (WSO2Event) for processing.</li>
 <li>Text sink mapper : Text sink mapping converts canonical events of the server in the WSO2Event format to any text message format. A sample mapping configuration is shown below.</li>
@@ -506,7 +518,7 @@ and convert events of any text format to the server's canonical event format (WS
 <li>Siddhi Stream should be defined</li>
 </ul>
 <h2 id="deploying-the-feature">Deploying the feature</h2>
-<p>Feature can be deploy as a OSGI bundle by putting jar file of component to DAS_HOME/lib directory of DAS 4.0.0 pack. </p>
+<p>Feature can be deploy as a OSGI bundle by putting jar file of component to DAS_HOME/lib directory of DAS 4.0.0 pack.</p>
 <h2 id="example-siddhi-queries">Example Siddhi Queries</h2>
 <h2 id="default-mapping">Default Mapping</h2>
 <pre><code>  - @source(type='inMemory', topic='home', @map(type='text'))
@@ -516,11 +528,11 @@ and convert events of any text format to the server's canonical event format (WS
     define stream InMemorySmartHomeInputData (houseId int, maxVal float, minVal float, avgVal double);
 </code></pre>
 <h2 id="custom-mapping">Custom Mapping</h2>
-<pre><code>   -@source(type='inMemory', topic='home', @map(type='text' , regex.A='houseId:([-,.0-9E]+),\nmaxVal:([-,.0-9E]+),\nminVal:([-,.0-9E]+),\navgVal:([-,.0-9E]+)', 
+<pre><code>   -@source(type='inMemory', topic='home', @map(type='text' , regex.A='houseId:([-,.0-9E]+),\nmaxVal:([-,.0-9E]+),\nminVal:([-,.0-9E]+),\navgVal:([-,.0-9E]+)',
     @attributes(houseId = 'A[1]', maxVal = 'A[2]', minVal = 'A[3]' ,avgVal='A[4]')))
     define stream UsageStream2 (houseId int, maxVal float, minVal float, avgVal double);
 
-   -@sink(type='inMemory', topic='home', @map(type='text', 
+   -@sink(type='inMemory', topic='home', @map(type='text',
     @payload("""houseId:{{houseId}},
     maxVal:{{maxVal}},
     minVal:{{minVal}},
@@ -529,7 +541,7 @@ and convert events of any text format to the server's canonical event format (WS
 </code></pre>
 <h2 id="how-to-contribute">How to Contribute</h2>
 <ul>
-<li>Send your bug fixes pull requests to [master branch] (https://github.com/wso2-extensions/siddhi-map-text/tree/master) </li>
+<li>Send your bug fixes pull requests to [master branch] (https://github.com/wso2-extensions/siddhi-map-text/tree/master)</li>
 </ul>
 <h2 id="contact-us">Contact us</h2>
 <p>Siddhi developers can be contacted via the mailing lists:</p>
@@ -538,9 +550,11 @@ and convert events of any text format to the server's canonical event format (WS
 <li>Carbon Architecture List : architecture@wso2.org</li>
 </ul>
 <h2 id="we-welcome-your-feedback-and-contribution">We welcome your feedback and contribution.</h2>
+<p>SP Team</p>
 <h2 id="api-docs">API Docs:</h2>
 <ol>
 <li><a href="./api/1.0.0-SNAPSHOT">1.0.0-SNAPSHOT</a></li>
+<li><a href="./api/1.0.1-SNAPSHOT">1.0.1-SNAPSHOT</a></li>
 </ol>
                 
                   
