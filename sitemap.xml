@@ -4,7 +4,7 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-07-18</lastmod>
+     <lastmod>2017-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -13,7 +13,7 @@
         
     <url>
      <loc>/api/1.0.0-SNAPSHOT/</loc>
-     <lastmod>2017-07-18</lastmod>
+     <lastmod>2017-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -22,7 +22,7 @@
     
     <url>
      <loc>/license/</loc>
-     <lastmod>2017-07-18</lastmod>
+     <lastmod>2017-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -31,7 +31,13 @@
         
     <url>
      <loc>/api/1.0.0-SNAPSHOT/</loc>
-     <lastmod>2017-07-18</lastmod>
+     <lastmod>2017-07-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/api/1.0.1-SNAPSHOT/</loc>
+     <lastmod>2017-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
