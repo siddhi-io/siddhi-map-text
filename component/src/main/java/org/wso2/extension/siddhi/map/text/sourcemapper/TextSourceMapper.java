@@ -282,7 +282,7 @@ public class TextSourceMapper extends SourceMapper {
                 inputEventHandler.sendEvents(result);
             }
         } catch (Throwable e) {
-            log.error("Exception occurred when converting Text message:" + eventObject + " to Siddhi Event "+
+            log.error("Exception occurred when converting Text message:" + eventObject + " to Siddhi Event " +
                     "in the stream " + streamID + " of siddhi text input mapper.", e);
         }
     }
