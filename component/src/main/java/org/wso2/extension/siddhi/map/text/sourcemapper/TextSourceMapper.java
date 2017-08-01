@@ -55,52 +55,51 @@ import java.util.regex.Pattern;
 @Extension(
         name = "text",
         namespace = "sourceMapper",
-        description = "Text to siddhi event source mapper. Transports which accepts text messages can utilize this " +
-                "extension"
-                + "to convert the incoming text message to Siddhi event. Users can either use the onEventHandler," +
-                " a pre-defined text format, where event conversion will happen without any configs or regex to " +
-                "map a text message using custom configs.",
+        description = "This extension is a text to Siddhi event source mapper. Transports that publish text messages" +
+                " can utilize this extension to convert the incoming text message to Siddhi events. Users can either " +
+                "use the `onEventHandler`which is a pre-defined text format where event conversion happens without " +
+                "any additional configurations, or specify a regex to map a text message using custom configurations.",
         parameters = {
                 @Parameter(name = "regex.groupid",
                         description =
-                                "Used to specify a regular expression group. Here, groupid can be any capital letter " +
-                                        "such as regex.A,regex.B .. etc. User can specify any number of regular " +
-                                        "expression groups and in the attribute annotation,user needs to map all " +
-                                        "attributes to the regular expression group with the matching group index. " +
-                                        "If the user needs to enable custom mapping, it is " +
-                                        "mandatory to specify matching group for each and every attribute.",
+                                "This parameter specifies a regular expression group. The `groupid` can be any " +
+                                        "capital letter (e.g., regex.A,regex.B .. etc). You can specify any number of" +
+                                        " regular expression groups. In the attribute annotation, you need to map" +
+                                        " all attributes to the regular expression group with the matching group" +
+                                        " index. If you need to to enable custom mapping, it is required to specify" +
+                                        "the matching group for each and every attribute.",
                         type = {DataType.STRING}),
 
                 @Parameter(name = "fail.on.missing.attribute",
-                        description = "This can either have a value of 'true' or 'false'. By default it will be " +
-                                "true. This attribute allows user to handle unknown attributes. By default if a regex "
-                                + "execution fails or attribute is not present in the event, SP will drop that " +
-                                "message. However setting this property to false will prompt DAS to pass 'null' " +
-                                "value to that attribute in the event.",
+                        description = "" +
+                                "This parameter specifies how unknown attributes should be handled. If it is set to" +
+                                "`true` a message is dropped if its execution fails, or if one or more attributes do" +
+                                " not have values. If this parameter is set to `false`, null values are assigned to " +
+                                "attributes with missing values, and messages with such attributes are not dropped.",
                         defaultValue = "true",
                         optional = true,
                         type = {DataType.BOOL}),
 
                 @Parameter(name = "event.grouping.enabled",
                         description =
-                                "This attribute is used to specify whether the event group is enabled or not. " +
-                                        "If the user needs to receive group of events together and generate multiple " +
-                                        "siddhi events user can enable this by specifying true.",
+                                "This parameter specifies whether event grouping is enabled or not. To receive a " +
+                                        "group of events together and generate multiple events, this parameter must" +
+                                        " be set to `true`." ,
                         type = {DataType.BOOL},
                         optional = true,
                         defaultValue = "false"),
 
                 @Parameter(name = "delimiter",
-                        description = "This attribute indicates the delimiter of grouped event which is " +
-                                "expected to be received. This should be whole line and not a single character.",
+                        description = "This parameter specifies how events must be separated when multiple events are" +
+                                " received. This must be whole line and not a single character.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "~~~~~~~~~~"),
                 @Parameter(name = "new.line.character",
-                        description = "This attribute indicates the new line character of the event which is " +
-                                "expected to be received. This is used mostly when communication between 2 types of " +
-                                "operating systems is expected. For instance as the end of line character " +
-                                "linux uses '\n' while windows use '\r\n'.",
+                        description = "This attribute indicates the new line character of the event that is expected" +
+                                " to be received. This is used mostly when communication between 2 types of operating" +
+                                " systems is expected. For example, Linux uses '\n' as the end of line character " +
+                                "whereas windows uses '\r\n'.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "\n")
@@ -109,8 +108,8 @@ import java.util.regex.Pattern;
                 @Example(
                         syntax = "@source(type='inMemory', topic='stock', @map(type='text'))\n"
                                 + "define stream FooStream (symbol string, price float, volume long);\n",
-                        description = "Above configuration will perform a default text input mapping." +
-                                " Expected input should be as follows,"
+                        description = "This query performs a default text input mapping. The expected input is as" +
+                                " follows:"
 
                                 + "symbol:\"WSO2\",\n"
                                 + "price:55.6,\n"
@@ -138,8 +137,7 @@ import java.util.regex.Pattern;
                                 "symbol = 'A[1]'," +
                                 "price = 'A[2]'," +
                                 "volume = 'B' )",
-                        description = "Above configuration will perform a custom text mapping. Expected output " +
-                                "would be as follows,"
+                        description = "This query performs a custom text mapping. The expected output is as follows:"
                                 + "wos2 550 volume 100"
                 )
         }
@@ -426,7 +424,7 @@ public class TextSourceMapper extends SourceMapper {
         }
         if ((events.length > assignedPositionsBitSet.length()) && (assignedPositionsBitSet.length()
                 < attributeList.size()) && (failOnMissingAttribute)) {
-            log.error("Invalid format of event because some required attributes are missing while some un necessary " +
+            log.error("Invalid format of event because some required attributes are missing while some unnecessary " +
                     "mappings are present" + eventObject + " in the stream " + streamID +
                     " of siddhi text input mapper.");
             isValidEvent.set(false);
