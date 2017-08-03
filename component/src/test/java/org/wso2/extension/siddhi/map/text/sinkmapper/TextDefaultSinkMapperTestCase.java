@@ -18,9 +18,11 @@
 
 package org.wso2.extension.siddhi.map.text.sinkmapper;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 import org.testng.AssertJUnit;
+import org.testng.TestException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
@@ -39,6 +41,7 @@ import org.wso2.siddhi.query.api.execution.query.selection.Selector;
 import org.wso2.siddhi.query.api.expression.Variable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -325,6 +328,7 @@ public class TextDefaultSinkMapperTestCase {
                     .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
         }
         stockStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[10]));
+
         SiddhiTestHelper.waitForEvents(waitTime, 1, wso2Count, timeout);
         SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
 
@@ -472,6 +476,7 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.unsubscribe(subscriberWSO2);
         InMemoryBroker.unsubscribe(subscriberIBM);
     }
+
     @Test
     public void testTextSinkMapperEventGroupSingleEvent() throws InterruptedException {
         log.info("Test for single event when event grouping enabled.");
@@ -586,6 +591,12 @@ public class TextDefaultSinkMapperTestCase {
 
         Thread.sleep(1000);
         siddhiAppRuntime.shutdown();
+        File sinkRoot = new File(sinkUri);
+        try {
+            FileUtils.deleteDirectory(sinkRoot);
+        } catch (IOException e) {
+            throw new TestException("Failed to delete files in due to " + e.getMessage(), e);
+        }
     }
 
     @Test
@@ -614,21 +625,23 @@ public class TextDefaultSinkMapperTestCase {
 
         siddhiAppRuntime.start();
 
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
+        ArrayList<org.wso2.siddhi.core.event.Event> arrayListWSO2 = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
-            arrayList.add(new org.wso2.siddhi.core.event
+            arrayListWSO2.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
-            arrayList.add(new org.wso2.siddhi.core.event
+        }
+        ArrayList<org.wso2.siddhi.core.event.Event> arrayListIBM = new ArrayList<>(100);
+        for (int j = 0; j < 5; j++) {
+            arrayListIBM.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
         }
-        stockStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[10]));
+        stockStream.send(arrayListWSO2.toArray(new org.wso2.siddhi.core.event.Event[5]));
+        stockStream.send(arrayListIBM.toArray(new org.wso2.siddhi.core.event.Event[5]));
         Thread.sleep(100);
 
         ArrayList<String> symbolNames = new ArrayList<>();
         symbolNames.add("WSO2.txt");
         symbolNames.add("IBM.txt");
-        symbolNames.add("GOOGLE.txt");
-        symbolNames.add("REDHAT.txt");
 
         File sink = new File(sinkUri);
         if (sink.isDirectory()) {
@@ -637,13 +650,19 @@ public class TextDefaultSinkMapperTestCase {
                     count.incrementAndGet();
                 }
             }
-            AssertJUnit.assertEquals(4, count.intValue());
+            AssertJUnit.assertEquals(2, count.intValue());
         } else {
             AssertJUnit.fail(sinkUri + " is not a directory.");
         }
 
         Thread.sleep(1000);
         siddhiAppRuntime.shutdown();
+        File sinkRoot = new File(sinkUri);
+        try {
+            FileUtils.deleteDirectory(sinkRoot);
+        } catch (IOException e) {
+            throw new TestException("Failed to delete files in due to " + e.getMessage(), e);
+        }
     }
 
     @Test
@@ -699,5 +718,11 @@ public class TextDefaultSinkMapperTestCase {
 
         Thread.sleep(1000);
         siddhiAppRuntime.shutdown();
+        File sinkRoot = new File(sinkUri);
+        try {
+            FileUtils.deleteDirectory(sinkRoot);
+        } catch (IOException e) {
+            throw new TestException("Failed to delete files in due to " + e.getMessage(), e);
+        }
     }
 }

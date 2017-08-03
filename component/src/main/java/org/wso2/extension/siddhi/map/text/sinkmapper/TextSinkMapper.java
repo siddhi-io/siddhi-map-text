@@ -192,11 +192,10 @@ public class TextSinkMapper extends SinkMapper {
                     }
                 }
                 int idx = eventData.lastIndexOf(eventDelimiter);
-                eventData.delete(idx, idx + eventDelimiter.length());
+                eventData.delete(idx - endOfLine.length(), idx + eventDelimiter.length());
             }
             sinkListener.publish(eventData.toString());
         }
-
     }
 
     @Override
