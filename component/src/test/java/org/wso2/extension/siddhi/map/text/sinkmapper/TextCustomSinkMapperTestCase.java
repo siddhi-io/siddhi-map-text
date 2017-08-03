@@ -637,7 +637,7 @@ public class TextCustomSinkMapperTestCase {
 
     @Test
     public void testTextSinkMapperNewLineCharacterWrong() throws InterruptedException {
-        log.info("Test with custom new lie charater.");
+        log.info("Test with custom new.line.character.");
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
