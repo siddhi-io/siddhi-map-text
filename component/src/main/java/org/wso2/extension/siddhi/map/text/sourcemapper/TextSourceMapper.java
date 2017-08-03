@@ -377,7 +377,9 @@ public class TextSourceMapper extends SourceMapper {
                 }
             }
         }
-        eventList.add(event);
+        if (isValidEvent.get()) {
+            eventList.add(event);
+        }
         return eventList.toArray(new Event[0]);
     }
 

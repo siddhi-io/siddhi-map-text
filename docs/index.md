@@ -1,6 +1,10 @@
 # siddhi-map-text
 ======================================
 ---
+|  Branch | Build Status |
+| :------ |:------------ | 
+| master  | [![Build Status](https://wso2.org/jenkins/view/All%20Builds/job/siddhi/job/siddhi-map-text/badge/icon)](https://wso2.org/jenkins/view/All%20Builds/job/siddhi/job/siddhi-map-text/) |
+---
 ##### New version of Siddhi v4.0.0 is built in Java 8.
 ##### Latest Released Version v4.0.0-m18.
 
@@ -62,4 +66,5 @@ SP Team
 ## API Docs:
 
 1. <a href="./api/1.0.0-SNAPSHOT">1.0.0-SNAPSHOT</a>
+1. <a href="./api/1.0.2-SNAPSHOT">1.0.2-SNAPSHOT</a>
 1. <a href="./api/1.0.1-SNAPSHOT">1.0.1-SNAPSHOT</a>

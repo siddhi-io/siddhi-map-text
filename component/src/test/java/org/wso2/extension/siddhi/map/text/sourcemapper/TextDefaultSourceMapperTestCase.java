@@ -357,6 +357,59 @@ public class TextDefaultSourceMapperTestCase {
     }
 
     @Test
+    public void testTextSourceMapperGroupedEventsCustomNewline() throws InterruptedException {
+        log.info("Test gropup event with custom delimiter.");
+        String streams =
+                "@App:name('TestSiddhiApp')" +
+                        "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true'" +
+                        ",delimiter='####',new.line.character='\\n\\r')) " +
+                        "define stream FooStream (symbol string, price float, volume long); " +
+                        "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query =
+                "from FooStream " +
+                        "select * " +
+                        "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    count.incrementAndGet();
+
+                }
+            }
+        });
+
+        siddhiAppRuntime.start();
+        String event1 = "symbol:\"wso2\",\n" +
+                "price:55.6,\n" +
+                "volume:200\n" +
+                "####\n" +
+                "symbol:\"IBM\",\n" +
+                "price:75.6,\n" +
+                "volume:100";
+        String event2 = "symbol:\"IFS\",\n" +
+                "price:50.6,\n" +
+                "volume:200\n" +
+                "####\n" +
+                "symbol:\"Virtusa\",\n" +
+                "price:70.6,\n" +
+                "volume:100";
+        InMemoryBroker.publish("stock", event1);
+        InMemoryBroker.publish("stock", event2);
+        SiddhiTestHelper.waitForEvents(waitTime, 0, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 0);
+        siddhiAppRuntime.shutdown();
+
+    }
+    @Test
     public void testTextSourceMapperMissingAttribute() throws InterruptedException {
         log.info("Test for missing attributes.");
         String streams = "" +

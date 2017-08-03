@@ -42,6 +42,10 @@
             <artifactId>siddhi-query-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.wso2.extension.siddhi.io.file</groupId>
+            <artifactId>siddhi-io-file</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.siddhi</groupId>
             <artifactId>siddhi-annotations</artifactId>
         </dependency>
@@ -53,6 +57,10 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.extension.siddhi.io.tcp</groupId>
+            <artifactId>siddhi-io-tcp</artifactId>
         </dependency>
     </dependencies>
 

@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
 import org.wso2.siddhi.core.util.SiddhiTestHelper;
@@ -149,6 +150,44 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
+    public void testTextCustomSourceMapperNoRegex() throws InterruptedException {
+        log.info("Test for custom mapping for regex.");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='inMemory', topic='stock', @map(type='text',fail.on.missing.attribute='true'," +
+                "@attributes(symbol = 'A[1]', price = 'A[2]', volume = 'A[3]'))) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    count.incrementAndGet();
+                }
+            }
+        });
+
+        siddhiAppRuntime.start();
+
+        InMemoryBroker.publish("stock", "wso2 55.6:45");
+        InMemoryBroker.publish("stock", "IBM 75.6:45");
+        SiddhiTestHelper.waitForEvents(waitTime, 0, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 0);
+        siddhiAppRuntime.shutdown();
+    }
+    @Test
     public void testTextCustomSourceMapperSpecialCharacters() throws InterruptedException {
         log.info("Test for events with special charaters.");
         String streams = "" +
@@ -197,6 +236,54 @@ public class TextCustomSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
     }
 
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void testTextCustomSourceMapperTcp() throws InterruptedException {
+        log.info("Test for events with special charaters.");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='tcp', topic='stock', @map(type='text',fail.on.missing.attribute='true'," +
+                "regex.A='(.{0,})\\s([-.0-9]+):([-.0-9]+)'," +
+                "@attributes(symbol = 'A[1]', price = 'A[2]', volume = 'A[3]'))) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    switch (count.incrementAndGet()) {
+                        case 1:
+                            assertEquals(event.getData(1), 55.6f);
+                            break;
+                        case 2:
+                            assertEquals(event.getData(1), 75.6f);
+                            break;
+                        default:
+                            fail();
+                    }
+                }
+            }
+        });
+
+        siddhiAppRuntime.start();
+
+        InMemoryBroker.publish("stock", "w#@so2 55.6:45");
+        InMemoryBroker.publish("stock", "I&BM 75.6:45");
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 2);
+        siddhiAppRuntime.shutdown();
+    }
     @Test
     public void testTextCustomSourceMapperEventGroup() throws InterruptedException {
         log.info("Test for custom mapping for event grouping");

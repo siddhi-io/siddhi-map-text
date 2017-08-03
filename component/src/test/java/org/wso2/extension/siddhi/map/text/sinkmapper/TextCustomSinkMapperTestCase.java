@@ -20,6 +20,7 @@ package org.wso2.extension.siddhi.map.text.sinkmapper;
 
 import org.apache.log4j.Logger;
 import org.testng.Assert;
+import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
@@ -38,6 +39,7 @@ import org.wso2.siddhi.query.api.execution.query.input.stream.InputStream;
 import org.wso2.siddhi.query.api.execution.query.selection.Selector;
 import org.wso2.siddhi.query.api.expression.Variable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -631,5 +633,195 @@ public class TextCustomSinkMapperTestCase {
         //unsubscribe from "inMemory" broker per topic
         InMemoryBroker.unsubscribe(subscriberWSO2);
         InMemoryBroker.unsubscribe(subscriberIBM);
+    }
+
+    @Test
+    public void testTextSinkMapperNewLineCharacterWrong() throws InterruptedException {
+        log.info("Test with custom new lie charater.");
+        InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
+            @Override
+            public void onMessage(Object msg) {
+                wso2Count.incrementAndGet();
+            }
+
+            @Override
+            public String getTopic() {
+                return "WSO2";
+            }
+        };
+
+        InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
+            @Override
+            public void onMessage(Object msg) {
+                ibmCount.incrementAndGet();
+            }
+
+            @Override
+            public String getTopic() {
+                return "IBM";
+            }
+        };
+
+        //subscribe to "inMemory" broker per topic
+        InMemoryBroker.subscribe(subscriberWSO2);
+        InMemoryBroker.subscribe(subscriberIBM);
+
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "@sink(type='inMemory', topic='{{symbol}}', @map(type='text' , event.grouping.enabled='false'," +
+                "new.line.character='\\r' , @payload(\"Stock price of {{symbol}} is" +
+                " {{price}}\"))) " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setExtension("sink:inMemory", InMemorySink.class);
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
+        for (int j = 0; j < 5; j++) {
+            arrayList.add(new org.wso2.siddhi.core.event
+                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
+            arrayList.add(new org.wso2.siddhi.core.event
+                    .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
+        }
+        stockStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[10]));
+        SiddhiTestHelper.waitForEvents(waitTime, 5, wso2Count, timeout);
+        SiddhiTestHelper.waitForEvents(waitTime, 5, ibmCount, timeout);
+
+        //assert event count
+        Assert.assertEquals(wso2Count.get(), 5);
+        Assert.assertEquals(ibmCount.get(), 5);
+        siddhiAppRuntime.shutdown();
+
+        //unsubscribe from "inMemory" broker per topic
+        InMemoryBroker.unsubscribe(subscriberWSO2);
+        InMemoryBroker.unsubscribe(subscriberIBM);
+    }
+
+    @Test
+    public void fileSinkTest() throws InterruptedException {
+        log.info("test text custom map with file io");
+        AtomicInteger count = new AtomicInteger();
+        ClassLoader classLoader = TextDefaultSinkMapperTestCase.class.getClassLoader();
+        String rootPath = classLoader.getResource("files").getFile();
+        String sinkUri = rootPath + "/sink";
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "@sink(type='file', @map(type='text' , @payload('Stock price of {{symbol}} is {{price}}')), " +
+                "append='false', " +
+                "file.uri='" + sinkUri + "/{{symbol}}.txt') " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+
+        stockStream.send(new Object[]{"WSO2", 55.6f, 100L});
+        stockStream.send(new Object[]{"IBM", 57.678f, 100L});
+        stockStream.send(new Object[]{"GOOGLE", 50f, 100L});
+        stockStream.send(new Object[]{"REDHAT", 50f, 100L});
+        Thread.sleep(100);
+
+        ArrayList<String> symbolNames = new ArrayList<>();
+        symbolNames.add("WSO2.txt");
+        symbolNames.add("IBM.txt");
+        symbolNames.add("GOOGLE.txt");
+        symbolNames.add("REDHAT.txt");
+
+        File sink = new File(sinkUri);
+        if (sink.isDirectory()) {
+            for (File file : sink.listFiles()) {
+                if (symbolNames.contains(file.getName())) {
+                    count.incrementAndGet();
+                }
+            }
+            AssertJUnit.assertEquals(4, count.intValue());
+        } else {
+            AssertJUnit.fail(sinkUri + " is not a directory.");
+        }
+
+        Thread.sleep(1000);
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void fileSinkTestGroup() throws InterruptedException {
+        log.info("test text default map with file io");
+        AtomicInteger count = new AtomicInteger();
+        ClassLoader classLoader = TextDefaultSinkMapperTestCase.class.getClassLoader();
+        String rootPath = classLoader.getResource("files").getFile();
+        String sinkUri = rootPath + "/sink";
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "@sink(type='file', @map(type='text',event.grouping.enabled='true', @payload('Stock price of " +
+                "{{symbol}} is {{price}}')" +
+                "), append='false', " +
+                "file.uri='" + sinkUri + "/{{symbol}}.txt') " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
+
+        siddhiAppRuntime.start();
+
+        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
+        for (int j = 0; j < 5; j++) {
+            arrayList.add(new org.wso2.siddhi.core.event
+                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
+            arrayList.add(new org.wso2.siddhi.core.event
+                    .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
+        }
+        stockStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[10]));
+        Thread.sleep(100);
+
+        ArrayList<String> symbolNames = new ArrayList<>();
+        symbolNames.add("WSO2.txt");
+        symbolNames.add("IBM.txt");
+        symbolNames.add("GOOGLE.txt");
+        symbolNames.add("REDHAT.txt");
+
+        File sink = new File(sinkUri);
+        if (sink.isDirectory()) {
+            for (File file : sink.listFiles()) {
+                if (symbolNames.contains(file.getName())) {
+                    count.incrementAndGet();
+                }
+            }
+            AssertJUnit.assertEquals(4, count.intValue());
+        } else {
+            AssertJUnit.fail(sinkUri + " is not a directory.");
+        }
+
+        Thread.sleep(1000);
+        siddhiAppRuntime.shutdown();
+    }
+
+    @BeforeMethod
+    void initVariable() {
+        wso2Count.set(0);
+        ibmCount.set(0);
     }
 }
