@@ -6,7 +6,6 @@
 | master  | [![Build Status](https://wso2.org/jenkins/view/All%20Builds/job/siddhi/job/siddhi-map-text/badge/icon)](https://wso2.org/jenkins/view/All%20Builds/job/siddhi/job/siddhi-map-text/) |
 ---
 ##### New version of Siddhi v4.0.0 is built in Java 8.
-##### Latest Released Version v4.0.0-m18.
 
 This extension provides the functionality to convert canonical events of the server in the WSO2Event format to any text message format
 and convert events of any text format to the server's canonical event format (WSO2Event) for processing.
