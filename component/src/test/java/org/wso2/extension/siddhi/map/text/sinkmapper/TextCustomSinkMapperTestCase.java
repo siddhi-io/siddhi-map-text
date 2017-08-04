@@ -25,6 +25,7 @@ import org.testng.AssertJUnit;
 import org.testng.TestException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wso2.extension.siddhi.map.text.sinkmapper.util.HttpServerListenerHandler;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.exception.NoSuchAttributeException;
@@ -838,9 +839,81 @@ public class TextCustomSinkMapperTestCase {
         }
     }
 
-    @BeforeMethod
-    void initVariable() {
-        wso2Count.set(0);
-        ibmCount.set(0);
+    /**
+     * Creating test for publishing events with TEXT mapping.
+     *
+     * @throws Exception Interrupted exception
+     */
+    @Test
+    public void testHTTPTextMappingText() throws Exception {
+
+        log.info("Creating test for publishing events with TEXT mapping.");
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setExtension("text-output-mapper", TextSinkMapper.class);
+        String inStreamDefinition = "Define stream FooStream (message String,method String,headers String);"
+                + "@sink(type='http',publisher.url='http://localhost:8005/abc',method='{{method}}',"
+                + "headers='{{headers}}',"
+                + "@map(type='text', @payload('{{message}}'))) "
+                + "Define stream BarStream (message String,method String,headers String);";
+        String query = ("@info(name = 'query1') " +
+                "from FooStream select message,method,headers insert into BarStream;");
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition +
+                query);
+        InputHandler fooStream = siddhiAppRuntime.getInputHandler("FooStream");
+        siddhiAppRuntime.start();
+        HttpServerListenerHandler lst = new HttpServerListenerHandler(8005);
+        lst.run();
+        fooStream.send(new Object[]{"WSO2,55.6,100", "POST", "'Name:John','Age:23'"});
+        while (!lst.getServerListener().isMessageArrive()) {
+            Thread.sleep(10);
+        }
+        String eventData = lst.getServerListener().getData();
+        Assert.assertEquals(eventData, "WSO2,55.6,100\n");
+        lst.shutdown();
+        siddhiAppRuntime.shutdown();
     }
+
+    @Test
+    public void testHTTPTextMappingTextMultiple() throws Exception {
+
+        log.info("Creating test for publishing events with TEXT mapping.");
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setExtension("text-output-mapper", TextSinkMapper.class);
+        String inStreamDefinition = "Define stream FooStream (message String,method String,headers String);"
+                + "@sink(type='http',publisher.url='http://localhost:8005/abc',method='{{method}}',"
+                + "headers='{{headers}}',"
+                + "@map(type='text', event.grouping" +
+                ".enabled='true', @payload('{{message}}'))) "
+                + "Define stream BarStream (message String,method String,headers String);";
+        String query = ("@info(name = 'query1') " +
+                "from FooStream select message,method,headers insert into BarStream;");
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition +
+                query);
+        InputHandler fooStream = siddhiAppRuntime.getInputHandler("FooStream");
+        siddhiAppRuntime.start();
+        HttpServerListenerHandler lst = new HttpServerListenerHandler(8005);
+        lst.run();
+        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(5);
+        for (int j = 0; j < 5; j++) {
+            arrayList.add(new org.wso2.siddhi.core.event
+                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", "POST", "'place:office'"}));
+        }
+        fooStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[5]));
+        while (!lst.getServerListener().isMessageArrive()) {
+            Thread.sleep(10);
+        }
+        String eventData = lst.getServerListener().getData();
+        Assert.assertEquals(eventData, "WSO2\n" +
+                "~~~~~~~~~~\n" +
+                "WSO2\n" +
+                "~~~~~~~~~~\n" +
+                "WSO2\n" +
+                "~~~~~~~~~~\n" +
+                "WSO2\n" +
+                "~~~~~~~~~~\n" +
+                "WSO2\n");
+        lst.shutdown();
+        siddhiAppRuntime.shutdown();
+    }
+
 }
