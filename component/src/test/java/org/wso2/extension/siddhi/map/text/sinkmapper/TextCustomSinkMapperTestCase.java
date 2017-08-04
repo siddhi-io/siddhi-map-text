@@ -915,9 +915,5 @@ public class TextCustomSinkMapperTestCase {
         lst.shutdown();
         siddhiAppRuntime.shutdown();
     }
-    @BeforeMethod
-    void initVariable() {
-        wso2Count.set(0);
-        ibmCount.set(0);
-    }
+
 }

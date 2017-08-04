@@ -701,10 +701,10 @@ public class TextCustomSourceMapperTestCase {
         expected.add("IBM");
         String event1 = "volume=45 wso2 55.6";
         String event2 = "volume=45 IBM 55.6";
-        new HttpTestUtil().httpPublishEvent(event1, baseURI, "/endpoints/RecPro", false, "text",
-                "POST");
-        new HttpTestUtil().httpPublishEvent(event2, baseURI, "/endpoints/RecPro", false, "text",
-                "POST");
+        new HttpTestUtil().httpPublishEvent(event1, baseURI
+        );
+        new HttpTestUtil().httpPublishEvent(event2, baseURI
+        );
         SiddhiTestHelper.waitForEvents(waitTime, 2, eventCount, timeout);
         Assert.assertEquals(receivedEventNameList.toString(), expected.toString());
         siddhiAppRuntime.shutdown();

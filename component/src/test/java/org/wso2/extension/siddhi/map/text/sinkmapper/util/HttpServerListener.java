@@ -42,17 +42,16 @@ public class HttpServerListener implements HttpHandler {
     }
 
     @Override
-    public void handle(HttpExchange t) throws IOException {
+    public void handle(HttpExchange event) throws IOException {
         // Get the paramString form the request
         String line;
-        headers = t.getRequestHeaders();
-        InputStream is = t.getRequestBody();
+        headers = event.getRequestHeaders();
+        InputStream is = event.getRequestBody();
         // initiating
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
         strBld = new StringBuilder();
         while ((line = in.readLine()) != null) {
             strBld = strBld.append(line).append("\n");
-            System.out.print(line + "\n");
         }
         logger.info("Event Arrived: " + strBld.toString());
         isEventArraved.set(true);
