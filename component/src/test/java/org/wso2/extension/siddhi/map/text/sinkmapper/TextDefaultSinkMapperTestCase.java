@@ -25,6 +25,7 @@ import org.testng.AssertJUnit;
 import org.testng.TestException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wso2.extension.siddhi.map.text.sinkmapper.util.HttpServerListenerHandler;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
@@ -724,5 +725,96 @@ public class TextDefaultSinkMapperTestCase {
         } catch (IOException e) {
             throw new TestException("Failed to delete files in due to " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Creating test for publishing events with TEXT mapping.
+     *
+     * @throws Exception Interrupted exception
+     */
+    @Test
+    public void testHTTPTextMappingText() throws Exception {
+
+        log.info("Creating test for publishing events with TEXT mapping.");
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setExtension("text-output-mapper", TextSinkMapper.class);
+        String inStreamDefinition = "Define stream FooStream (message String,method String,headers String);"
+                + "@sink(type='http',publisher.url='http://localhost:8005/abc',method='{{method}}',"
+                + "headers='{{headers}}',"
+                + "@map(type='text')) "
+                + "Define stream BarStream (message String,method String,headers String);";
+        String query = ("@info(name = 'query1') " +
+                "from FooStream select message,method,headers insert into BarStream;");
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition +
+                query);
+        InputHandler fooStream = siddhiAppRuntime.getInputHandler("FooStream");
+        siddhiAppRuntime.start();
+        HttpServerListenerHandler lst = new HttpServerListenerHandler(8005);
+        lst.run();
+        fooStream.send(new Object[]{"WSO2,55.6,100", "POST", "'Name:John','Age:23'"});
+        while (!lst.getServerListener().isMessageArrive()) {
+            Thread.sleep(10);
+        }
+        String eventData = lst.getServerListener().getData();
+        Assert.assertEquals(eventData, "message:\"WSO2,55.6,100\",\n" +
+                "method:\"POST\",\n" +
+                "headers:\"'Name:John','Age:23'\"\n");
+        lst.shutdown();
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testTextSinkMapperEventGroupHTTP() throws InterruptedException {
+        log.info("Test for default event delimiter and http.");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "define stream FooStream (message String,method String,headers String);" +
+                "@sink(type='http',publisher.url='http://localhost:8005/abc',method='{{method}}',"
+                + "headers='{{headers}}', @map(type='text' , event.grouping" +
+                ".enabled='true')) " +
+                "define stream BarStream (message String,method String,headers String);";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        InputHandler fooStream = siddhiAppRuntime.getInputHandler("FooStream");
+        siddhiAppRuntime.start();
+        HttpServerListenerHandler lst = new HttpServerListenerHandler(8005);
+        lst.run();
+        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(5);
+        for (int j = 0; j < 5; j++) {
+            arrayList.add(new org.wso2.siddhi.core.event
+                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", "POST", "'place:office'"}));
+        }
+        fooStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[5]));
+        while (!lst.getServerListener().isMessageArrive()) {
+            Thread.sleep(10);
+        }
+        String eventData = lst.getServerListener().getData();
+        Assert.assertEquals(eventData, "message:\"WSO2\",\n" +
+                "method:\"POST\",\n" +
+                "headers:\"'place:office'\"\n" +
+                "~~~~~~~~~~\n" +
+                "message:\"WSO2\",\n" +
+                "method:\"POST\",\n" +
+                "headers:\"'place:office'\"\n" +
+                "~~~~~~~~~~\n" +
+                "message:\"WSO2\",\n" +
+                "method:\"POST\",\n" +
+                "headers:\"'place:office'\"\n" +
+                "~~~~~~~~~~\n" +
+                "message:\"WSO2\",\n" +
+                "method:\"POST\",\n" +
+                "headers:\"'place:office'\"\n" +
+                "~~~~~~~~~~\n" +
+                "message:\"WSO2\",\n" +
+                "method:\"POST\",\n" +
+                "headers:\"'place:office'\"\n");
+        lst.shutdown();
+        siddhiAppRuntime.shutdown();
     }
 }

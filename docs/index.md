@@ -66,4 +66,5 @@ SP Team
 
 1. <a href="./api/1.0.0-SNAPSHOT">1.0.0-SNAPSHOT</a>
 1. <a href="./api/1.0.2-SNAPSHOT">1.0.2-SNAPSHOT</a>
+1. <a href="./api/1.0.3-SNAPSHOT">1.0.3-SNAPSHOT</a>
 1. <a href="./api/1.0.1-SNAPSHOT">1.0.1-SNAPSHOT</a>

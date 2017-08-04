@@ -19,17 +19,25 @@
 package org.wso2.extension.siddhi.map.text.sourcemapper;
 
 import org.apache.log4j.Logger;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wso2.extension.siddhi.map.text.sourcemapper.util.HttpTestUtil;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
+import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
 import org.wso2.siddhi.core.util.SiddhiTestHelper;
+import org.wso2.siddhi.core.util.persistence.InMemoryPersistenceStore;
+import org.wso2.siddhi.core.util.persistence.PersistenceStore;
 import org.wso2.siddhi.core.util.transport.InMemoryBroker;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.testng.Assert.assertEquals;
@@ -637,6 +645,68 @@ public class TextCustomSourceMapperTestCase {
         SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
         //assert event count
         assertEquals(count.get(), 2);
+        siddhiAppRuntime.shutdown();
+    }
+
+    /**
+     * Creating test for publishing events with Text mapping.
+     *
+     * @throws Exception Interrupted exception
+     */
+    @Test
+    public void testTextMappingSingleCustom() throws Exception {
+        AtomicInteger eventCount = new AtomicInteger(0);
+        int waitTime = 50;
+        int timeout = 30000;
+        log.info("Creating test for publishing events with Text mapping through http.");
+        URI baseURI = URI.create(String.format("http://%s:%d", "localhost", 8005));
+        List<String> receivedEventNameList = new ArrayList<>(2);
+        PersistenceStore persistenceStore = new InMemoryPersistenceStore();
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setPersistenceStore(persistenceStore);
+        siddhiManager.setExtension("text", TextSourceMapper.class);
+        String inStreamDefinition = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='http', receiver.url='http://localhost:8005/endpoints/RecPro', " +
+                "@map(type='text',fail" +
+                ".on.missing.attribute='true'," +
+                "regex.A='(\\w+)\\s([-.0-9]+)',regex.B='volume=([-0-9]+)'," +
+                "@attributes(symbol = 'A[1]', price = 'A[2]', volume = 'B'))) " +
+                "define stream inputStream (symbol string, price float, volume long); " +
+                "define stream outputStream (symbol string, price float, volume long); ";
+        String query = (
+                "@info(name = 'query') "
+                        + "from inputStream "
+                        + "select *  "
+                        + "insert into outputStream;"
+        );
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager
+                .createSiddhiAppRuntime(inStreamDefinition + query);
+
+        siddhiAppRuntime.addCallback("query", new QueryCallback() {
+            @Override
+            public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
+                EventPrinter.print(timeStamp, inEvents, removeEvents);
+                for (Event event : inEvents) {
+                    eventCount.incrementAndGet();
+                    receivedEventNameList.add(event.getData(0).toString());
+                }
+            }
+        });
+        siddhiAppRuntime.start();
+
+        // publishing events
+        List<String> expected = new ArrayList<>(2);
+        expected.add("wso2");
+        expected.add("IBM");
+        String event1 = "volume=45 wso2 55.6";
+        String event2 = "volume=45 IBM 55.6";
+        new HttpTestUtil().httpPublishEvent(event1, baseURI, "/endpoints/RecPro", false, "text",
+                "POST");
+        new HttpTestUtil().httpPublishEvent(event2, baseURI, "/endpoints/RecPro", false, "text",
+                "POST");
+        SiddhiTestHelper.waitForEvents(waitTime, 2, eventCount, timeout);
+        Assert.assertEquals(receivedEventNameList.toString(), expected.toString());
         siddhiAppRuntime.shutdown();
     }
 }
