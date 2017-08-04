@@ -1006,10 +1006,8 @@ public void testTextSourceMapperSingleEventForEventGroup() throws InterruptedExc
         String event2 = "name:\"Mike\",\n" +
                 "age:100,\n" +
                 "country:\"USA\"";
-        new HttpTestUtil().httpPublishEvent(event1, baseURI
-        );
-        new HttpTestUtil().httpPublishEvent(event2, baseURI
-        );
+        HttpTestUtil.httpPublishEvent(event1, baseURI);
+        HttpTestUtil.httpPublishEvent(event2, baseURI);
         SiddhiTestHelper.waitForEvents(waitTime, 2, eventCount, timeout);
         Assert.assertEquals(receivedEventNameList.toString(), expected.toString());
         siddhiAppRuntime.shutdown();
@@ -1076,10 +1074,8 @@ public void testTextSourceMapperSingleEventForEventGroup() throws InterruptedExc
                 + "name:\"Mike2\",\n" +
                 "age:100,\n" +
                 "country:\"USA\"";
-        new HttpTestUtil().httpPublishEvent(event1, baseURI
-        );
-        new HttpTestUtil().httpPublishEvent(event2, baseURI
-        );
+        HttpTestUtil.httpPublishEvent(event1, baseURI);
+        HttpTestUtil.httpPublishEvent(event2, baseURI);
         SiddhiTestHelper.waitForEvents(waitTime, 4, eventCount, timeout);
         Assert.assertEquals(receivedEventNameList.toString(), expected.toString());
         siddhiAppRuntime.shutdown();

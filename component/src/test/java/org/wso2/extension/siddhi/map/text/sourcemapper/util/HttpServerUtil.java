@@ -55,13 +55,5 @@ class HttpServerUtil {
         urlConn.setRequestMethod(method);
         return urlConn;
     }
-
-    static void setHeader(HttpURLConnection urlConnection, String key, String value) {
-        urlConnection.setRequestProperty(key, value);
-    }
-
-    static void handleException(Exception ex) {
-        log.error("IOException occurred while running the HttpsSourceTestCaseForSSL", ex);
-    }
 }
 

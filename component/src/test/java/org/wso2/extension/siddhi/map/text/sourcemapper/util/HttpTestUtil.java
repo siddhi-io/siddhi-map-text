@@ -27,16 +27,13 @@ import java.net.URI;
 public class HttpTestUtil {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HttpTestUtil.class);
 
-    public HttpTestUtil() {
-    }
-
-    public void httpPublishEvent(String event, URI baseURI) {
+    public static void httpPublishEvent(String event, URI baseURI) {
         try {
             HttpURLConnection urlConn = null;
             try {
                 urlConn = HttpServerUtil.request(baseURI, "/endpoints/RecPro", "POST");
             } catch (IOException e) {
-                HttpServerUtil.handleException(e);
+                logger.error("IOException occurred while running the HttpsSourceTestCaseForSSL", e);
             }
             HttpServerUtil.writeContent(urlConn, event);
             assert urlConn != null;
@@ -44,7 +41,7 @@ public class HttpTestUtil {
             logger.info("Event response message " + urlConn.getResponseMessage());
             urlConn.disconnect();
         } catch (IOException e) {
-            HttpServerUtil.handleException(e);
+            logger.error("IOException occurred while running the HttpsSourceTestCaseForSSL", e);
         }
     }
 
