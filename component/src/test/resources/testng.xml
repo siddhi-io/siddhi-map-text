@@ -14,8 +14,8 @@ limitations under the License.
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="Carbon-Security-Test-Suite">
-    <test name="carbon-security-tests" preserve-order="true" parallel="false">
+<suite name="Siddhi-map-text-Test-Suite">
+    <test name="Siddhi-map-text-unit-tests" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.extension.siddhi.map.text.sourcemapper.TextCustomSourceMapperTestCase"/>
             <class name="org.wso2.extension.siddhi.map.text.sourcemapper.TextDefaultSourceMapperTestCase"/>
