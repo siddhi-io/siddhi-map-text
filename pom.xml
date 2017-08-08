@@ -17,7 +17,9 @@
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>wso2</artifactId>
         <groupId>org.wso2</groupId>
@@ -87,6 +89,12 @@
                     <version>${commons.io.version}</version>
                     <scope>test</scope>
                 </dependency>
+                <dependency>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>org.jacoco.agent</artifactId>
+                    <classifier>runtime</classifier>
+                    <version>${jacoco.version}</version>
+                </dependency>
             </dependencies>
     </dependencyManagement>
     <build>
@@ -155,6 +163,7 @@
         <carbon.feature.plugin.version>3.0.0</carbon.feature.plugin.version>
         <testng.version>6.11</testng.version>
         <commons.io.version>2.5</commons.io.version>
+        <jacoco.version>0.7.9</jacoco.version>
     </properties>
 
     <scm>
