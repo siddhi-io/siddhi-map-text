@@ -12,6 +12,8 @@ Find some useful links below:
 
 ## Latest API Docs 
 
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.3-SNAPSHOT">1.0.3-SNAPSHOT</a>.
+
 ## How to use 
 
 **Using the extension in <a target="_blank" href="https://github.com/wso2/product-sp">WSO2 Stream Processor</a>**
@@ -44,6 +46,9 @@ Find some useful links below:
 
 ## Features
 
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.3-SNAPSHOT/#text-source-mapper">text</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source-mappers">Source Mapper</a>)*<br><div style="padding-left: 1em;"><p>Text to siddhi event source mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either use the onEventHandler, a pre-defined text format, where event conversion will happen without any configs or regex to map a text message using custom configs.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.3-SNAPSHOT/#text-sink-mapper">text</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink-mappers">Sink Mapper</a>)*<br><div style="padding-left: 1em;"><p>Text to Event input mapper. Transports which accepts text messages can utilize this extensionto convert the incoming text message to Siddhi event. Users can either use  a pre-defined text format where event conversion will happen without any configs or use placeholders to map from a custom text message.</p></div>
+
 ## How to Contribute
  
   * Please report issues at <a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text/issues">GitHub Issue Tracker</a>.
@@ -65,7 +70,3 @@ Find some useful links below:
 * We are committed to ensuring support for this extension in production. Our unique approach ensures that all support leverages our open development methodology and is provided by the very same engineers who build the technology. 
 
 * For more details and to take advantage of this unique opportunity contact us via <a target="_blank" href="http://wso2.com/support?utm_source=gitanalytics&utm_campaign=gitanalytics_Jul17">http://wso2.com/support/</a>. 
-
-## API Docs:
-
-1. <a href="./api/1.0.3-SNAPSHOT">1.0.3-SNAPSHOT</a>
