@@ -11,7 +11,6 @@ Find some useful links below:
 * <a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text/issues">Issue tracker</a>
 
 ## Latest API Docs 
-
 Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.3-SNAPSHOT">1.0.3-SNAPSHOT</a>.
 
 ## How to use 
