@@ -1,63 +1,67 @@
-# siddhi-map-text
+siddhi-map-text
 ======================================
+
+The **siddhi-map-text extension** is an extension to <a target="_blank" href="https://wso2.github
+.io/siddhi">Siddhi</a> that provides the functionality to convert canonical events of the server in the WSO2Event format to any text message format and convert events of any text format to the server's canonical event format (WSO2Event) for processing.
+
+Find some useful links below:
+
+* <a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text">Source code</a>
+* <a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text/releases">Releases</a>
+* <a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text/issues">Issue tracker</a>
+
+## Latest API Docs 
+
+## How to use 
+
+**Using the extension in <a target="_blank" href="https://github.com/wso2/product-sp">WSO2 Stream Processor</a>**
+
+* You can use this extension in the latest <a target="_blank" href="https://github.com/wso2/product-sp/releases">WSO2 Stream Processor</a> that is a part of <a target="_blank" href="http://wso2.com/analytics?utm_source=gitanalytics&utm_campaign=gitanalytics_Jul17">WSO2 Analytics</a> offering, with editor, debugger and simulation support. 
+
+* This extension is shipped by default with WSO2 Stream Processor, if you wish to use an alternative version of this extension you can replace the component <a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text/releases">jar</a> that can be found in the `<STREAM_PROCESSOR_HOME>/lib` directory.
+
+**Using the extension as a <a target="_blank" href="https://wso2.github.io/siddhi/documentation/running-as-a-java-library">java library</a>**
+
+* This extension can be added as a maven dependency along with other Siddhi dependencies to your project.
+
+```
+     <dependency>
+        <groupId>org.wso2.extension.siddhi.map.text</groupId>
+        <artifactId>siddhi-map-text-parent</artifactId>
+        <version>x.x.x</version>
+     </dependency>
+```
+
+## Jenkins Build Status
+
 ---
+
 |  Branch | Build Status |
 | :------ |:------------ | 
 | master  | [![Build Status](https://wso2.org/jenkins/view/All%20Builds/job/siddhi/job/siddhi-map-text/badge/icon)](https://wso2.org/jenkins/view/All%20Builds/job/siddhi/job/siddhi-map-text/) |
+
 ---
-##### New version of Siddhi v4.0.0 is built in Java 8.
 
-This extension provides the functionality to convert canonical events of the server in the WSO2Event format to any text message format
-and convert events of any text format to the server's canonical event format (WSO2Event) for processing.
+## Features
 
-Features Supported
-------------------
-This extension is used to convert Text message to/from Siddhi events.
+## How to Contribute
+ 
+  * Please report issues at <a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text/issues">GitHub Issue Tracker</a>.
+  
+  * Send your contributions as pull requests to <a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text/tree/master">master branch</a>. 
+ 
+## Contact us 
 
-  - Text source mapper :Text source mapping allows user to convert events of any text format to the server's canonical event format (WSO2Event) for processing.
-  - Text sink mapper : Text sink mapping converts canonical events of the server in the WSO2Event format to any text message format. A sample mapping configuration is shown below.
+ * Post your questions with the <a target="_blank" href="http://stackoverflow.com/search?q=siddhi">"Siddhi"</a> tag in <a target="_blank" href="http://stackoverflow.com/search?q=siddhi">Stackoverflow</a>. 
+ 
+ * Siddhi developers can be contacted via the mailing lists:
+ 
+    Developers List   : [dev@wso2.org](mailto:dev@wso2.org)
+    
+    Architecture List : [architecture@wso2.org](mailto:architecture@wso2.org)
+ 
+## Support 
 
-Prerequisites for using the feature
-------------------
-  - Siddhi Stream should be defined
+* We are committed to ensuring support for this extension in production. Our unique approach ensures that all support leverages our open development methodology and is provided by the very same engineers who build the technology. 
 
-Deploying the feature
-------------------
-   Feature can be deploy as a OSGI bundle by putting jar file of component to DAS_HOME/lib directory of DAS 4.0.0 pack.
-
-Example Siddhi Queries
-------------------
-Default Mapping
---------------
-      - @source(type='inMemory', topic='home', @map(type='text'))
-        define stream UsageStream (houseId int, maxVal float, minVal float, avgVal double);
-
-      - @sink(type='inMemory', topic='home', @map(type='text'))
-        define stream InMemorySmartHomeInputData (houseId int, maxVal float, minVal float, avgVal double);
-Custom Mapping
---------------
-       -@source(type='inMemory', topic='home', @map(type='text' , regex.A='houseId:([-,.0-9E]+),\nmaxVal:([-,.0-9E]+),\nminVal:([-,.0-9E]+),\navgVal:([-,.0-9E]+)',
-        @attributes(houseId = 'A[1]', maxVal = 'A[2]', minVal = 'A[3]' ,avgVal='A[4]')))
-        define stream UsageStream2 (houseId int, maxVal float, minVal float, avgVal double);
-
-       -@sink(type='inMemory', topic='home', @map(type='text',
-        @payload("""houseId:{{houseId}},
-        maxVal:{{maxVal}},
-        minVal:{{minVal}},
-        avgVal:{{avgVal}}""")))
-        define stream InMemorySmartHomeInputData2 (houseId int, maxVal float, minVal float, avgVal double);
-
-How to Contribute
-------------------
-   * Send your bug fixes pull requests to [master branch] (https://github.com/wso2-extensions/siddhi-map-text/tree/master)
-
-Contact us
-------------------
-   Siddhi developers can be contacted via the mailing lists:
-
-   * Carbon Developers List : dev@wso2.org
-   * Carbon Architecture List : architecture@wso2.org
-
-We welcome your feedback and contribution.
-------------------
-SP Team
+* For more details and to take advantage of this unique opportunity contact us via <a target="_blank" href="http://wso2.com/support?utm_source=gitanalytics&utm_campaign=gitanalytics_Jul17">http://wso2.com/support/</a>. 
