@@ -9,14 +9,12 @@ extra:
   palette:
     primary: teal
     accent: teal
+google_analytics:
+- UA-103065-28
+- auto
 pages:
-- Welcome to WSO2 Siddhi IO TCP: index.md
-- Api:
-  - 2.0.0-SNAPSHOT: api/1.0.0-SNAPSHOT.md
+- Welcome to WSO2 Siddhi Map Text: index.md
 - License: license.md
 - API Docs:
-  - 1.0.0-SNAPSHOT: api/1.0.0-SNAPSHOT.md
-  - 1.0.2-SNAPSHOT: api/1.0.2-SNAPSHOT.md
   - 1.0.3-SNAPSHOT: api/1.0.3-SNAPSHOT.md
-  - 1.0.1-SNAPSHOT: api/1.0.1-SNAPSHOT.md
 theme: material
