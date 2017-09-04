@@ -42,30 +42,30 @@ import java.util.List;
 @Extension(
         name = "text",
         namespace = "sinkMapper",
-        description = "Text to Event input mapper. Transports which accepts text messages can utilize this extension"
-                + "to convert the incoming text message to Siddhi event. Users can either use  a pre-defined "
-                + "text format where event conversion will happen without any configs or use placeholders to map from" +
-                " a custom text message.",
+        description = "This extension is a Text to Event input mapper. Transports that accept text messages can" +
+                " utilize this extension to convert the incoming text messages to Siddhi events. Users can use" +
+                " a pre-defined text format where event conversion is carried out without any additional " +
+                "configurations, or use placeholders to map from a custom text message.",
         parameters = {
                 @Parameter(name = "event.grouping.enabled",
                         description =
-                                "This attribute is used to specify whether the event grouping is enabled or not." +
-                                        " If user needs to publish a group of events together user can enable this " +
-                                        "by specifying 'true'.",
+                                "If this parameter is set to `true`, events are grouped via a delimiter when " +
+                                        "multiple events are received. It is required to specify a value for the " +
+                                        "`delimiter` parameter when the value for this parameter is `true`.",
                         type = {DataType.BOOL},
                         optional = true,
                         defaultValue = "false"),
                 @Parameter(name = "delimiter",
-                        description = "This attribute indicates the delimiter of the grouped event which is expected" +
-                                " to be received. This should be a whole line not a single character.",
+                        description = "This parameter specifies how events are separated when a grouped event is" +
+                                " received. This must be a whole line and not a single character.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "~~~~~~~~~~"),
                 @Parameter(name = "new.line.character",
-                        description = "This attribute indicates the new line character ofthe event which is " +
+                        description = "This attribute indicates the new line character of the event that is " +
                                 "expected to be received. This is used mostly when communication between 2 types of " +
-                                "operating systems is expected. For instance as the end of line character " +
-                                "linux uses '\n' while windows use '\r\n'.",
+                                "operating systems is expected. For example, Linux uses '\n' whereas Windows" +
+                                " uses '\r\n'as the end of line character.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "\n")
@@ -74,8 +74,8 @@ import java.util.List;
                 @Example(
                         syntax = "@sink(type='inMemory', topic='stock', @map(type='text'))\n"
                                 + "define stream FooStream (symbol string, price float, volume long);\n",
-                        description = "Above configuration will perform a default text input mapping. " +
-                                "Expected output would be as follows,"
+                        description = "This query performs a default text input mapping. The expected output is " +
+                                "as follows:"
 
                         + "symbol:\"WSO2\",\n"
                         + "price:55.6,\n"
@@ -87,7 +87,7 @@ import java.util.List;
                         + "price:55.6,\n"
                         + "volume:100"
 
-                        + "If group events is enabled then the output would be as follows,"
+                        + "If event grouping is enabled, then the output is as follows:"
 
                         + "symbol:'WSO2',\n"
                         + "price:55.6,\n"
@@ -103,8 +103,7 @@ import java.util.List;
                                 "SensorID : {{symbol}}/{{Volume}},\n" +
                                 "SensorPrice : Rs{{price}}/=,\n" +
                                 "Value : {{Volume}}ml”)))",
-                        description = "Above configuration will perform a custom text mapping. The output will "
-                                + "be as follows,"
+                        description = "This query performs a custom text mapping. The output is as follows:"
 
                                 + "SensorID : wso2/100,\n"
                                 + "SensorPrice : Rs1000/=,\n"
