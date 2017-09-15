@@ -26,6 +26,7 @@ import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.exception.NoSuchAttributeException;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.output.sink.SinkListener;
 import org.wso2.siddhi.core.stream.output.sink.SinkMapper;
 import org.wso2.siddhi.core.util.config.ConfigReader;
@@ -35,6 +36,7 @@ import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.definition.StreamDefinition;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Text output mapper implementation. This will convert Siddhi Event to it's string representation.
@@ -134,8 +136,9 @@ public class TextSinkMapper extends SinkMapper {
     private String streamID;
 
     @Override
-    public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, TemplateBuilder
-            templateBuilder, ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
+    public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, Map<String,
+            TemplateBuilder> payloadTemplateBuilderMap, ConfigReader mapperConfigReader,
+                     SiddhiAppContext siddhiAppContext) {
         this.streamID = streamDefinition.getId();
         this.attributeList = streamDefinition.getAttributeList();
         this.eventGroupEnabled = Boolean.valueOf(optionHolder
@@ -143,6 +146,17 @@ public class TextSinkMapper extends SinkMapper {
         this.endOfLine = optionHolder.validateAndGetStaticValue(OPTION_NEW_LINE, DEFAULT_NEW_LINE);
         this.eventDelimiter = optionHolder.validateAndGetStaticValue(OPTION_GROUP_EVENTS_DELIMITER,
                 DEFAULT_EVENTS_DELIMITER) + endOfLine;
+
+        //if @payload() is added there must be at least 1 element in it, otherwise a SiddhiParserException raised
+        if (payloadTemplateBuilderMap != null && payloadTemplateBuilderMap.size() != 1) {
+            throw new SiddhiAppCreationException("Text sink-mapper does not support multiple @payload mappings, " +
+                    "error at the mapper of '" + streamDefinition.getId() + "'");
+        }
+        if (payloadTemplateBuilderMap != null &&
+                payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet().iterator().next()).isObjectMessage()) {
+            throw new SiddhiAppCreationException("Text sink-mapper does not support object @payload mappings, " +
+                    "error at the mapper of '" + streamDefinition.getId() + "'");
+        }
     }
 
     @Override
@@ -156,29 +170,30 @@ public class TextSinkMapper extends SinkMapper {
     }
 
     @Override
-    public void mapAndSend(Event[] events, OptionHolder optionHolder, TemplateBuilder templateBuilder,
-                           SinkListener sinkListener) {
+    public void mapAndSend(Event[] events, OptionHolder optionHolder, Map<String,
+            TemplateBuilder> payloadTemplateBuilderMap, SinkListener sinkListener) {
         if (!eventGroupEnabled) { //Event not grouping
-            if (templateBuilder != null) { //custom mapping case
+            if (payloadTemplateBuilderMap != null) { //custom mapping case
                 for (Event event : events) {
                     if (event != null) {
-                        sinkListener.publish(templateBuilder.build(event));
+                        sinkListener.publish(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet()
+                                .iterator().next()).build(event));
                     }
                 }
             } else { //default mapping case
                 for (Event event : events) {
-                    if (event != null) {  
+                    if (event != null) {
                         sinkListener.publish(constructDefaultMapping(event, false));
                     }
                 }
             }
         } else { //events group scenario
             StringBuilder eventData = new StringBuilder();
-            if (templateBuilder != null) { //custom mapping case
+            if (payloadTemplateBuilderMap != null) { //custom mapping case
                 for (Event event : events) {
                     if (event != null) {
-                        eventData.append(templateBuilder.build(event)).append(endOfLine)
-                                .append(eventDelimiter);
+                        eventData.append(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet().iterator()
+                                .next()).build(event)).append(endOfLine).append(eventDelimiter);
                     }
                 }
                 int idx = eventData.lastIndexOf(eventDelimiter);
@@ -198,12 +213,13 @@ public class TextSinkMapper extends SinkMapper {
     }
 
     @Override
-    public void mapAndSend(Event event, OptionHolder optionHolder, TemplateBuilder templateBuilder,
-                           SinkListener sinkListener) {
-        if (templateBuilder != null) { //custom mapping case
+    public void mapAndSend(Event event, OptionHolder optionHolder, Map<String,
+            TemplateBuilder> payloadTemplateBuilderMap, SinkListener sinkListener) {
+        if (payloadTemplateBuilderMap != null) { //custom mapping case
             if (event != null) {
                 try {
-                    sinkListener.publish(templateBuilder.build(event));
+                    sinkListener.publish(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet().iterator()
+                            .next()).build(event));
                 } catch (NoSuchAttributeException e) {
                     log.error("Malformed event " + event.toString() + ". Hence proceed with null values" +
                             " in the stream " + streamID + " of siddhi text output mapper.");
