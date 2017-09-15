@@ -147,6 +147,7 @@ public class TextSinkMapper extends SinkMapper {
         this.eventDelimiter = optionHolder.validateAndGetStaticValue(OPTION_GROUP_EVENTS_DELIMITER,
                 DEFAULT_EVENTS_DELIMITER) + endOfLine;
 
+        //if @payload() is added there must be at least 1 element in it, otherwise a SiddhiParserException raised
         if (payloadTemplateBuilderMap != null && payloadTemplateBuilderMap.size() != 1) {
             throw new SiddhiAppCreationException("Text sink-mapper does not support multiple @payload mappings, " +
                     "error at the mapper of '" + streamDefinition.getId() + "'");
