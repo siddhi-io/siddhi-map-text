@@ -89,12 +89,6 @@
                     <version>${commons.io.version}</version>
                     <scope>test</scope>
                 </dependency>
-                <dependency>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>org.jacoco.agent</artifactId>
-                    <classifier>runtime</classifier>
-                    <version>${jacoco.version}</version>
-                </dependency>
             </dependencies>
     </dependencyManagement>
     <build>
@@ -155,7 +149,7 @@
     </build>
 
     <properties>
-        <siddhi.version>4.0.0-M73</siddhi.version>
+        <siddhi.version>4.0.0-M78</siddhi.version>
         <siddhi.extension.io.tcp.version>2.0.2</siddhi.extension.io.tcp.version>
         <siddhi.extension.io.http.version>1.0.1</siddhi.extension.io.http.version>
         <siddhi.extension.io.file.version>1.0.0-M1</siddhi.extension.io.file.version>
