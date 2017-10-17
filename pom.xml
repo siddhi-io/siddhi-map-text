@@ -156,6 +156,8 @@
         <testng.version>6.11</testng.version>
         <commons.io.version>2.5</commons.io.version>
         <jacoco.version>0.7.9</jacoco.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <scm>
