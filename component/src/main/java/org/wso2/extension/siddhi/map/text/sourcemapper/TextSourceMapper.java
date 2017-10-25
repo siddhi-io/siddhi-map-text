@@ -257,6 +257,11 @@ public class TextSourceMapper extends SourceMapper {
     }
 
     @Override
+    protected boolean allowNullInTransportProperties() {
+        return !failOnMissingAttribute;
+    }
+
+    @Override
     public Class[] getSupportedInputEventClasses() {
         return new Class[]{String.class};
     }

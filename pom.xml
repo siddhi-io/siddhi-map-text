@@ -147,10 +147,10 @@
     </build>
 
     <properties>
-        <siddhi.version>4.0.0-M106</siddhi.version>
-        <siddhi.extension.io.tcp.version>2.0.6</siddhi.extension.io.tcp.version>
-        <siddhi.extension.io.http.version>1.0.3</siddhi.extension.io.http.version>
-        <siddhi.extension.io.file.version>1.0.0-M8</siddhi.extension.io.file.version>
+        <siddhi.version>4.0.0-M114</siddhi.version>
+        <siddhi.extension.io.tcp.version>2.0.7</siddhi.extension.io.tcp.version>
+        <siddhi.extension.io.http.version>1.0.4</siddhi.extension.io.http.version>
+        <siddhi.extension.io.file.version>1.0.0-M10</siddhi.extension.io.file.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <carbon.feature.plugin.version>3.0.0</carbon.feature.plugin.version>
         <testng.version>6.11</testng.version>
