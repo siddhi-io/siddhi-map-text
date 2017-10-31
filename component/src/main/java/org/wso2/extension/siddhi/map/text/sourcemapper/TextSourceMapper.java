@@ -248,23 +248,26 @@ public class TextSourceMapper extends SourceMapper {
             try {
                 result = new String((byte[]) eventObject, "UTF-8");
             } catch (UnsupportedEncodingException e) {
-                log.error("Error is encountered while decoding the byte stream. Please note that only UTF-8 "
-                            + "encoding is supported" + e.getMessage(), e);
+                log.error("Error is encountered while decoding the byte stream. Therefore, event is"
+                        + " dropped by the testSource mapper. Please note that only UTF-8 encoding is supported. "
+                        + e.getMessage(), e);
             }
         }  else {
             result = eventObject;
         }
 
-        if (!eventGroupEnabled) {
-            onEventHandler(inputEventHandler, result);
-        } else {
-            String[] allEvents = String.valueOf(result).split(eventDelimiter);
-            int i;
-            for (i = 0; i < allEvents.length - 1; i++) {
-                onEventHandler(inputEventHandler,
-                        allEvents[i].substring(0, allEvents[i].length() - endOfLine.length()));
+        if (null != result) {
+            if (!eventGroupEnabled) {
+                onEventHandler(inputEventHandler, result);
+            } else {
+                String[] allEvents = String.valueOf(result).split(eventDelimiter);
+                int i;
+                for (i = 0; i < allEvents.length - 1; i++) {
+                    onEventHandler(inputEventHandler, allEvents[i].substring(0, allEvents[i].length()
+                            - endOfLine.length()));
+                }
+                onEventHandler(inputEventHandler, allEvents[i]);
             }
-            onEventHandler(inputEventHandler, allEvents[i]);
         }
     }
 
