@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.map.text.sinkmapper.util.HttpServerListenerHandler;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
-import org.wso2.siddhi.core.exception.NoSuchAttributeException;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.sink.InMemorySink;
 import org.wso2.siddhi.core.util.SiddhiTestHelper;
@@ -427,7 +427,7 @@ public class TextCustomSinkMapperTestCase {
         InMemoryBroker.unsubscribe(subscriberIBM);
     }
 
-    @Test(expectedExceptions = NoSuchAttributeException.class)
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
     public void testTextSinkWrongMapping() throws InterruptedException {
         log.info("Test custom for wrong mapping.");
         List<Object> onMessageList = new ArrayList<Object>();
