@@ -22,11 +22,12 @@ import org.apache.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.wso2.extension.siddhi.io.tcp.transport.TCPNettyClient;
 import org.wso2.extension.siddhi.map.text.sourcemapper.util.HttpTestUtil;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
+import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
@@ -36,6 +37,7 @@ import org.wso2.siddhi.core.util.persistence.PersistenceStore;
 import org.wso2.siddhi.core.util.transport.InMemoryBroker;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -102,6 +104,58 @@ public class TextCustomSourceMapperTestCase {
 
         InMemoryBroker.publish("stock", "wso2 55.6 volume=45");
         InMemoryBroker.publish("stock", "IBM 75.6 volume=45");
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 2);
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testTextCustomSourceMapperOnBinaryMessage() throws InterruptedException {
+        log.info("Test for custom source mapping");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='inMemory', topic='stock', @map(type='text',fail.on.missing.attribute='true'," +
+                "regex.A='(\\w+)\\s([-.0-9]+)',regex.B='volume=([-0-9]+)'," +
+                "@attributes(symbol = 'A[1]', price = 'A[2]', volume = 'B'))) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    switch (count.incrementAndGet()) {
+                    case 1:
+                        assertEquals(event.getData(1), 55.6f);
+                        break;
+                    case 2:
+                        assertEquals(event.getData(1), 75.6f);
+                        break;
+                    default:
+                        fail();
+                    }
+                }
+            }
+        });
+
+        byte[] event1 = "wso2 55.6 volume=45".getBytes(StandardCharsets.UTF_8);
+        byte[] event2 = "IBM 75.6 volume=45".getBytes(StandardCharsets.UTF_8);
+
+        siddhiAppRuntime.start();
+
+        InMemoryBroker.publish("stock", event1);
+        InMemoryBroker.publish("stock", event2);
         SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
         //assert event count
         assertEquals(count.get(), 2);
@@ -244,8 +298,8 @@ public class TextCustomSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void testTextCustomSourceMapperTcp() throws InterruptedException {
+    @Test
+    public void testTextCustomSourceMapperTcp() throws InterruptedException, ConnectionUnavailableException {
         log.info("Test for events with special charaters.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -285,13 +339,21 @@ public class TextCustomSourceMapperTestCase {
 
         siddhiAppRuntime.start();
 
-        InMemoryBroker.publish("stock", "w#@so2 55.6:45");
-        InMemoryBroker.publish("stock", "I&BM 75.6:45");
+        TCPNettyClient tcpNettyClient = new TCPNettyClient();
+        tcpNettyClient.connect("localhost", 9892);
+
+        byte[] event1 = "w#@so2 55.6:45".getBytes(StandardCharsets.UTF_8);
+        byte[] event2 = "I&BM 75.6:45".getBytes(StandardCharsets.UTF_8);
+
+        tcpNettyClient.send("TestSiddhiApp/FooStream", "w#@so2 55.6:45".getBytes(StandardCharsets.UTF_8)).await();
+        tcpNettyClient.send("TestSiddhiApp/FooStream", "I&BM 75.6:45".getBytes(StandardCharsets.UTF_8)).await();
+
         SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
         //assert event count
         assertEquals(count.get(), 2);
         siddhiAppRuntime.shutdown();
     }
+
     @Test
     public void testTextCustomSourceMapperEventGroup() throws InterruptedException {
         log.info("Test for custom mapping for event grouping");
@@ -396,6 +458,58 @@ public class TextCustomSourceMapperTestCase {
 
         InMemoryBroker.publish("stock", "houseId:1,\nmaxVal:100,\nminVal:0,\navgVal:55.5");
         InMemoryBroker.publish("stock", "houseId:1,\nmaxVal:75.6,\nminVal:0,\navgVal:55.5");
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 2);
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void sampleOnBinaryMessage() throws InterruptedException {
+        log.info("test for sample");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='inMemory', topic='stock', @map(type='text',fail.on.missing.attribute='true'," +
+                "regex.A='houseId:([-.0-9]+),\\nmaxVal:([-.0-9]+),\\nminVal:([-.0-9]+),\\navgVal:([-.0-9]+)'," +
+                "@attributes(houseId = 'A[1]', maxVal = 'A[2]', minVal = 'A[3]' ,avgVal='A[4]'))) " +
+                "define stream FooStream (houseId int, maxVal float, minVal float, avgVal double); " +
+                "define stream BarStream (houseId int, maxVal float, minVal float, avgVal double); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    switch (count.incrementAndGet()) {
+                    case 1:
+                        assertEquals(event.getData(1), 100f);
+                        break;
+                    case 2:
+                        assertEquals(event.getData(1), 75.6f);
+                        break;
+                    default:
+                        fail();
+                    }
+                }
+            }
+        });
+
+        siddhiAppRuntime.start();
+
+        byte[] event1 = "houseId:1,\nmaxVal:100,\nminVal:0,\navgVal:55.5".getBytes(StandardCharsets.UTF_8);
+        byte[] event2 = "houseId:1,\nmaxVal:75.6,\nminVal:0,\navgVal:55.5".getBytes(StandardCharsets.UTF_8);
+
+        InMemoryBroker.publish("stock", event1);
+        InMemoryBroker.publish("stock", event2);
         SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
         //assert event count
         assertEquals(count.get(), 2);

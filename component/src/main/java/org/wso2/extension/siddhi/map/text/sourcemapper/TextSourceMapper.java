@@ -37,6 +37,7 @@ import org.wso2.siddhi.query.api.definition.StreamDefinition;
 import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 import org.wso2.siddhi.query.api.util.AnnotationHelper;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -45,8 +46,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-//import org.wso2.siddhi.query.api.util.AnnotationHelper;
 
 /**
  * This mapper converts Text string input to {@link org.wso2.siddhi.core.event.ComplexEventChunk}. This extension
@@ -243,16 +242,32 @@ public class TextSourceMapper extends SourceMapper {
      */
     @Override
     protected void mapAndProcess(Object eventObject, InputEventHandler inputEventHandler) throws InterruptedException {
-        if (!eventGroupEnabled) {
-            onEventHandler(inputEventHandler, eventObject);
-        } else {
-            String[] allEvents = String.valueOf(eventObject).split(eventDelimiter);
-            int i;
-            for (i = 0; i < allEvents.length - 1; i++) {
-                onEventHandler(inputEventHandler, allEvents[i].substring(0, allEvents[i].length() -
-                        endOfLine.length()));
+        Object result = null;
+
+        if (eventObject instanceof byte[]) {
+            try {
+                result = new String((byte[]) eventObject, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                log.error("Error is encountered while decoding the byte stream. Therefore, event is"
+                        + " dropped by the testSource mapper. Please note that only UTF-8 encoding is supported. "
+                        + e.getMessage(), e);
             }
-            onEventHandler(inputEventHandler, allEvents[i]);
+        }  else {
+            result = eventObject;
+        }
+
+        if (null != result) {
+            if (!eventGroupEnabled) {
+                onEventHandler(inputEventHandler, result);
+            } else {
+                String[] allEvents = String.valueOf(result).split(eventDelimiter);
+                int i;
+                for (i = 0; i < allEvents.length - 1; i++) {
+                    onEventHandler(inputEventHandler, allEvents[i].substring(0, allEvents[i].length()
+                            - endOfLine.length()));
+                }
+                onEventHandler(inputEventHandler, allEvents[i]);
+            }
         }
     }
 
@@ -263,7 +278,7 @@ public class TextSourceMapper extends SourceMapper {
 
     @Override
     public Class[] getSupportedInputEventClasses() {
-        return new Class[]{String.class};
+        return new Class[]{String.class, byte[].class};
     }
 
     /**

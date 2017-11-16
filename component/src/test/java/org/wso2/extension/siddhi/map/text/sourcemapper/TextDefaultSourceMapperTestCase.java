@@ -35,6 +35,7 @@ import org.wso2.siddhi.core.util.persistence.PersistenceStore;
 import org.wso2.siddhi.core.util.transport.InMemoryBroker;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -947,6 +948,159 @@ public void testTextSourceMapperSingleEventForEventGroup() throws InterruptedExc
                 "symbol:\"P\",\n" +
                 "price:75.6,\n" +
                 "volume:100";
+        InMemoryBroker.publish("stock", event1);
+        SiddhiTestHelper.waitForEvents(waitTime, 16, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 16);
+        siddhiAppRuntime.shutdown();
+
+    }
+
+    @Test
+    public void testTextSourceMapperGroupedEventsLargeGroupOnbinaryMessage() throws InterruptedException {
+        log.info("test for large event group.");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true')) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    switch (count.incrementAndGet()) {
+                    case 1:
+                        assertEquals(event.getData(0), "A");
+                        break;
+                    case 2:
+                        assertEquals(event.getData(0), "B");
+                        break;
+                    case 3:
+                        assertEquals(event.getData(0), "C");
+                        break;
+                    case 4:
+                        assertEquals(event.getData(0), "D");
+                        break;
+                    case 5:
+                        assertEquals(event.getData(0), "E");
+                        break;
+                    case 6:
+                        assertEquals(event.getData(0), "F");
+                        break;
+                    case 7:
+                        assertEquals(event.getData(0), "G");
+                        break;
+                    case 8:
+                        assertEquals(event.getData(0), "H");
+                        break;
+                    case 9:
+                        assertEquals(event.getData(0), "I");
+                        break;
+                    case 10:
+                        assertEquals(event.getData(0), "J");
+                        break;
+                    case 11:
+                        assertEquals(event.getData(0), "K");
+                        break;
+                    case 12:
+                        assertEquals(event.getData(0), "L");
+                        break;
+                    case 13:
+                        assertEquals(event.getData(0), "M");
+                        break;
+                    case 14:
+                        assertEquals(event.getData(0), "N");
+                        break;
+                    case 15:
+                        assertEquals(event.getData(0), "O");
+                        break;
+                    case 16:
+                        assertEquals(event.getData(0), "P");
+                        break;
+                    default:
+                        fail();
+                    }
+                }
+            }
+        });
+
+        siddhiAppRuntime.start();
+        String event1 = "symbol:\"A\",\n" +
+                "price:55.6,\n" +
+                "volume:200\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"B\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"C\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"D\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"E\",\n" +
+                "price:55.6,\n" +
+                "volume:200\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"F\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"G\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"H\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"I\",\n" +
+                "price:55.6,\n" +
+                "volume:200\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"J\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"K\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"L\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"M\",\n" +
+                "price:55.6,\n" +
+                "volume:200\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"N\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"O\",\n" +
+                "price:75.6,\n" +
+                "volume:100\n" +
+                "~~~~~~~~~~\n" +
+                "symbol:\"P\",\n" +
+                "price:75.6,\n" +
+                "volume:100";
+
+        byte[] byteEvent = event1.getBytes(StandardCharsets.UTF_8);
         InMemoryBroker.publish("stock", event1);
         SiddhiTestHelper.waitForEvents(waitTime, 16, count, timeout);
         //assert event count
