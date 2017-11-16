@@ -28,7 +28,7 @@
 
     <groupId>org.wso2.extension.siddhi.map.text</groupId>
     <artifactId>siddhi-map-text-parent</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.8-SNAPSHOT</version>
     <name>Siddhi Text Map Extensions</name>
 
     <modules>       
@@ -147,10 +147,10 @@
     </build>
 
     <properties>
-        <siddhi.version>4.0.0-M114</siddhi.version>
-        <siddhi.extension.io.tcp.version>2.0.7</siddhi.extension.io.tcp.version>
-        <siddhi.extension.io.http.version>1.0.4</siddhi.extension.io.http.version>
-        <siddhi.extension.io.file.version>1.0.0-M10</siddhi.extension.io.file.version>
+        <siddhi.version>4.0.0-alpha</siddhi.version>
+        <siddhi.extension.io.tcp.version>2.0.8</siddhi.extension.io.tcp.version>
+        <siddhi.extension.io.http.version>1.0.6</siddhi.extension.io.http.version>
+        <siddhi.extension.io.file.version>1.0.0-M11</siddhi.extension.io.file.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <carbon.feature.plugin.version>3.0.0</carbon.feature.plugin.version>
         <testng.version>6.11</testng.version>
