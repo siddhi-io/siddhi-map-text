@@ -770,8 +770,6 @@ public class TextCustomSourceMapperTestCase {
     @Test
     public void testTextMappingSingleCustom() throws Exception {
         AtomicInteger eventCount = new AtomicInteger(0);
-        int waitTime = 50;
-        int timeout = 30000;
         log.info("Creating test for publishing events with Text mapping through http.");
         URI baseURI = URI.create(String.format("http://%s:%d", "localhost", 8005));
         List<String> receivedEventNameList = new ArrayList<>(2);

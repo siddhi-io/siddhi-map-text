@@ -39,20 +39,20 @@ class HttpServerUtil {
     }
 
     static void writeContent(HttpURLConnection urlConn, String content) throws IOException {
-        OutputStreamWriter out = new OutputStreamWriter(
+        OutputStreamWriter streamWriter = new OutputStreamWriter(
                 urlConn.getOutputStream());
-        out.write(content);
-        out.close();
+        streamWriter.write(content);
+        streamWriter.close();
     }
 
-    static HttpURLConnection request(URI baseURI, String path, String method)
+    static HttpURLConnection request(URI baseURI)
             throws IOException {
-        URL url = baseURI.resolve(path).toURL();
+        URL url = baseURI.resolve("/endpoints/RecPro").toURL();
         HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
-        if (method.equals(HttpMethod.POST.name()) || method.equals(HttpMethod.PUT.name())) {
+        if ("POST".equals(HttpMethod.POST.name()) || "POST".equals(HttpMethod.PUT.name())) {
             urlConn.setDoOutput(true);
         }
-        urlConn.setRequestMethod(method);
+        urlConn.setRequestMethod("POST");
         return urlConn;
     }
 }
