@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.map.text.sinkmapper.util.HttpServerListenerHandler;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
+import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.stream.output.sink.InMemorySink;
@@ -187,7 +188,7 @@ public class TextCustomSinkMapperTestCase {
         InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
 
         siddhiAppRuntime.start();
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(10);
+        List<Event> arrayList = new ArrayList<>(10);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
@@ -258,7 +259,7 @@ public class TextCustomSinkMapperTestCase {
         InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
 
         siddhiAppRuntime.start();
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
+        List<Event> arrayList = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
@@ -547,7 +548,7 @@ public class TextCustomSinkMapperTestCase {
         InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
 
         siddhiAppRuntime.start();
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
+        List<Event> arrayList = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
@@ -618,7 +619,7 @@ public class TextCustomSinkMapperTestCase {
         InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
 
         siddhiAppRuntime.start();
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
+        List<Event> arrayList = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
@@ -689,7 +690,7 @@ public class TextCustomSinkMapperTestCase {
         InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
 
         siddhiAppRuntime.start();
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
+        List<Event> arrayList = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
@@ -742,7 +743,7 @@ public class TextCustomSinkMapperTestCase {
         stockStream.send(new Object[]{"REDHAT", 50f, 100L});
         Thread.sleep(100);
 
-        ArrayList<String> symbolNames = new ArrayList<>();
+        List<String> symbolNames = new ArrayList<>();
         symbolNames.add("WSO2.txt");
         symbolNames.add("IBM.txt");
         symbolNames.add("GOOGLE.txt");
@@ -766,7 +767,7 @@ public class TextCustomSinkMapperTestCase {
         try {
             FileUtils.deleteDirectory(sinkRoot);
         } catch (IOException e) {
-            throw new TestException("Failed to delete files in due to " + e.getMessage(), e);
+            throw new TestException("Failed to delete files in '" + sinkUri + "' due to " + e.getMessage(), e);
         }
     }
 
@@ -797,12 +798,12 @@ public class TextCustomSinkMapperTestCase {
 
         siddhiAppRuntime.start();
 
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayListWSO2 = new ArrayList<>(100);
+        List<Event> arrayListWSO2 = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayListWSO2.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
         }
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayListIBM = new ArrayList<>(100);
+        List<Event> arrayListIBM = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayListIBM.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
@@ -811,7 +812,7 @@ public class TextCustomSinkMapperTestCase {
         stockStream.send(arrayListIBM.toArray(new org.wso2.siddhi.core.event.Event[5]));
         Thread.sleep(100);
 
-        ArrayList<String> symbolNames = new ArrayList<>();
+        List<String> symbolNames = new ArrayList<>();
         symbolNames.add("WSO2.txt");
         symbolNames.add("IBM.txt");
         symbolNames.add("GOOGLE.txt");
@@ -835,7 +836,7 @@ public class TextCustomSinkMapperTestCase {
         try {
             FileUtils.deleteDirectory(sinkRoot);
         } catch (IOException e) {
-            throw new TestException("Failed to delete files in due to " + e.getMessage(), e);
+            throw new TestException("Failed to delete files in '" + sinkUri + "' due to " + e.getMessage(), e);
         }
     }
 
@@ -861,15 +862,15 @@ public class TextCustomSinkMapperTestCase {
                 query);
         InputHandler fooStream = siddhiAppRuntime.getInputHandler("FooStream");
         siddhiAppRuntime.start();
-        HttpServerListenerHandler lst = new HttpServerListenerHandler(8005);
-        lst.run();
+        HttpServerListenerHandler listenerHandler = new HttpServerListenerHandler(8005);
+        listenerHandler.run();
         fooStream.send(new Object[]{"WSO2,55.6,100", "POST", "'Name:John','Age:23'"});
-        while (!lst.getServerListener().isMessageArrive()) {
+        while (!listenerHandler.getServerListener().isMessageArrive()) {
             Thread.sleep(10);
         }
-        String eventData = lst.getServerListener().getData();
+        String eventData = listenerHandler.getServerListener().getData();
         Assert.assertEquals(eventData, "WSO2,55.6,100\n");
-        lst.shutdown();
+        listenerHandler.shutdown();
         siddhiAppRuntime.shutdown();
     }
 
@@ -891,18 +892,18 @@ public class TextCustomSinkMapperTestCase {
                 query);
         InputHandler fooStream = siddhiAppRuntime.getInputHandler("FooStream");
         siddhiAppRuntime.start();
-        HttpServerListenerHandler lst = new HttpServerListenerHandler(8005);
-        lst.run();
-        ArrayList<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(5);
+        HttpServerListenerHandler listenerHandler = new HttpServerListenerHandler(8005);
+        listenerHandler.run();
+        List<Event> arrayList = new ArrayList<>(5);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
                     .Event(System.currentTimeMillis(), new Object[]{"WSO2", "POST", "'place:office'"}));
         }
         fooStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[5]));
-        while (!lst.getServerListener().isMessageArrive()) {
+        while (!listenerHandler.getServerListener().isMessageArrive()) {
             Thread.sleep(10);
         }
-        String eventData = lst.getServerListener().getData();
+        String eventData = listenerHandler.getServerListener().getData();
         Assert.assertEquals(eventData, "WSO2\n" +
                 "~~~~~~~~~~\n" +
                 "WSO2\n" +
@@ -912,7 +913,7 @@ public class TextCustomSinkMapperTestCase {
                 "WSO2\n" +
                 "~~~~~~~~~~\n" +
                 "WSO2\n");
-        lst.shutdown();
+        listenerHandler.shutdown();
         siddhiAppRuntime.shutdown();
     }
 

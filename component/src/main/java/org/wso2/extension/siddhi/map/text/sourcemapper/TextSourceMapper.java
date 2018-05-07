@@ -24,6 +24,7 @@ import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.Event;
+import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.stream.input.source.AttributeMapping;
 import org.wso2.siddhi.core.stream.input.source.InputEventHandler;
 import org.wso2.siddhi.core.stream.input.source.SourceMapper;
@@ -433,7 +434,7 @@ public class TextSourceMapper extends SourceMapper {
                                 data[position] = value.trim().substring(STRING_ENCLOSING_ELEMENT.length(),
                                         +value.length() - STRING_ENCLOSING_ELEMENT.length());
                             }
-                        } catch (ClassCastException | NumberFormatException e) {
+                        } catch (ClassCastException | NumberFormatException | SiddhiAppRuntimeException e) {
                             log.error("Incompatible data format. Because value is " + value + " and attribute type is "
                                     + attributeTypeMap.get(key.trim()).name() + " in the stream " + streamID +
                                     " of siddhi text input mapper.");

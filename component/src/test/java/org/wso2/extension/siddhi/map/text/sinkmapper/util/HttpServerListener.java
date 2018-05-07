@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class HttpServerListener implements HttpHandler {
     private AtomicBoolean isEventArraved = new AtomicBoolean(false);
-    private StringBuilder strBld;
+    private StringBuilder stringBuilder;
     private Headers headers;
     private static final Logger logger = Logger.getLogger(HttpServerListener.class);
 
@@ -46,19 +46,19 @@ public class HttpServerListener implements HttpHandler {
         // Get the paramString form the request
         String line;
         headers = event.getRequestHeaders();
-        InputStream is = event.getRequestBody();
+        InputStream inputStream = event.getRequestBody();
         // initiating
-        BufferedReader in = new BufferedReader(new InputStreamReader(is));
-        strBld = new StringBuilder();
-        while ((line = in.readLine()) != null) {
-            strBld = strBld.append(line).append("\n");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        stringBuilder = new StringBuilder();
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuilder = stringBuilder.append(line).append("\n");
         }
-        logger.info("Event Arrived: " + strBld.toString());
+        logger.info("Event Arrived: " + stringBuilder.toString());
         isEventArraved.set(true);
     }
 
     public String getData() {
-        String data = strBld.toString();
+        String data = stringBuilder.toString();
         isEventArraved = new AtomicBoolean(false);
         return data;
     }

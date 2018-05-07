@@ -31,12 +31,12 @@ public class HttpTestUtil {
         try {
             HttpURLConnection urlConn = null;
             try {
-                urlConn = HttpServerUtil.request(baseURI, "/endpoints/RecPro", "POST");
+                urlConn = HttpServerUtil.request(baseURI);
             } catch (IOException e) {
                 logger.error("IOException occurred while running the HttpsSourceTestCaseForSSL", e);
             }
-            HttpServerUtil.writeContent(urlConn, event);
             assert urlConn != null;
+            HttpServerUtil.writeContent(urlConn, event);
             logger.info("Event response code " + urlConn.getResponseCode());
             logger.info("Event response message " + urlConn.getResponseMessage());
             urlConn.disconnect();

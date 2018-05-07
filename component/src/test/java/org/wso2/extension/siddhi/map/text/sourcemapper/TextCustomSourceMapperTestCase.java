@@ -1,5 +1,5 @@
 /*
- * Copyright (c)  2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c)  2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -770,8 +770,6 @@ public class TextCustomSourceMapperTestCase {
     @Test
     public void testTextMappingSingleCustom() throws Exception {
         AtomicInteger eventCount = new AtomicInteger(0);
-        int waitTime = 50;
-        int timeout = 30000;
         log.info("Creating test for publishing events with Text mapping through http.");
         URI baseURI = URI.create(String.format("http://%s:%d", "localhost", 8005));
         List<String> receivedEventNameList = new ArrayList<>(2);
