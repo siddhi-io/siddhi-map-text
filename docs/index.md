@@ -2,7 +2,7 @@ siddhi-map-text
 ======================================
 
 The **siddhi-map-text extension** is an extension to <a target="_blank" href="https://wso2.github
-.io/siddhi">Siddhi</a> that provides the functionality to convert canonical events of the server in the WSO2Event format to any text message format and convert events of any text format to the server's canonical event format (WSO2Event) for processing.
+.io/siddhi">Siddhi</a> that supports mapping incoming text messages to a stream at the source, and mapping a stream to text messages at the sink.
 
 Find some useful links below:
 
@@ -12,7 +12,7 @@ Find some useful links below:
 
 ## Latest API Docs 
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.15">1.0.15</a>.
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.16">1.0.16</a>.
 
 ## How to use 
 
@@ -46,8 +46,8 @@ Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/si
 
 ## Features
 
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.15/#text-sink-mapper">text</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink-mapper">(Sink Mapper)</a>)*<br><div style="padding-left: 1em;"><p>This extension is a Text to Event input mapper. Transports that accept text messages can utilize this extension to convert the incoming text messages to Siddhi events. Users can use a pre-defined text format where event conversion is carried out without any additional configurations, or use placeholders to map from a custom text message.</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.15/#text-source-mapper">text</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source-mapper">(Source Mapper)</a>)*<br><div style="padding-left: 1em;"><p>This extension is a text to Siddhi event source mapper. Transports that publish text messages can utilize this extension to convert the incoming text message to Siddhi events. Users can either use the <code>onEventHandler</code>which is a pre-defined text format where event conversion happens without any additional configurations, or specify a regex to map a text message using custom configurations.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.16/#text-sink-mapper">text</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink-mapper">(Sink Mapper)</a>)*<br><div style="padding-left: 1em;"><p>This extension is a Text to Event input mapper. Transports that accept text messages can utilize this extension to convert the incoming text messages to Siddhi events. Users can use a pre-defined text format where event conversion is carried out without any additional configurations, or use placeholders to map from a custom text message.</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.0.16/#text-source-mapper">text</a> *(<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source-mapper">(Source Mapper)</a>)*<br><div style="padding-left: 1em;"><p>This extension is a text to Siddhi event source mapper. Transports that publish text messages can utilize this extension to convert the incoming text message to Siddhi events. Users can either use the <code>onEventHandler</code>which is a pre-defined text format where event conversion happens without any additional configurations, or specify a regex to map a text message using custom configurations.</p></div>
 
 ## How to Contribute
  
