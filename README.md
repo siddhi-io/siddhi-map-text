@@ -2,7 +2,7 @@ siddhi-map-text
 ======================================
 
 The **siddhi-map-text extension** is an extension to <a target="_blank" href="https://wso2.github
-.io/siddhi">Siddhi</a> that provides the functionality to convert canonical events of the server in the WSO2Event format to any text message format and convert events of any text format to the server's canonical event format (WSO2Event) for processing.
+.io/siddhi">Siddhi</a> that supports mapping incoming text messages to a stream at the source, and mapping a stream to text messages at the sink.
 
 Find some useful links below:
 
