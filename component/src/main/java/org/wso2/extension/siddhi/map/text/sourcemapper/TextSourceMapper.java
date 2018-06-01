@@ -84,7 +84,7 @@ import java.util.regex.Pattern;
                         description =
                                 "This parameter specifies whether event grouping is enabled or not. To receive a " +
                                         "group of events together and generate multiple events, this parameter must" +
-                                        " be set to `true`." ,
+                                        " be set to `true`.",
                         type = {DataType.BOOL},
                         optional = true,
                         defaultValue = "false"),
@@ -164,7 +164,6 @@ public class TextSourceMapper extends SourceMapper {
     private Map<String, Integer> attributePositionMap = new HashMap<>();
     private Map<String, String> regexGroupMap = new HashMap<>();
 
-    private List<Element> attributeRegex;
     private List<Attribute> attributeList;
     private AttributeConverter attributeConverter;
     private boolean isCustomMappingEnabled = false;
@@ -175,19 +174,22 @@ public class TextSourceMapper extends SourceMapper {
     private String endOfLine;
     private BitSet assignedPositionsBitSet;
     private String streamID;
+    private List<AttributeMapping> attributeMappingList;
+
     /**
      * Initialize the mapper and the mapping configurations.
      *
-     * @param streamDefinition the  StreamDefinition
-     * @param optionHolder     mapping options
-     * @param attributeMappingList             list of attributes mapping
-     * @param configReader     source config reader.
+     * @param streamDefinition     the  StreamDefinition
+     * @param optionHolder         mapping options
+     * @param attributeMappingList list of attributes mapping
+     * @param configReader         source config reader.
      */
     @Override
     public void init(StreamDefinition streamDefinition, OptionHolder optionHolder,
                      List<AttributeMapping> attributeMappingList,
                      ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
         this.streamID = streamDefinition.getId();
+        this.attributeMappingList = attributeMappingList;
         this.attributeConverter = new AttributeConverter();
         this.streamDefinition = streamDefinition;
         this.attributeList = streamDefinition.getAttributeList();
@@ -207,22 +209,11 @@ public class TextSourceMapper extends SourceMapper {
         }
         if (attributeMappingList != null && attributeMappingList.size() > 0) { //custom mapping scenario
             this.isCustomMappingEnabled = true;
-            List<Annotation> sourceAnnotation = AnnotationHelper.getAnnotation("source", streamDefinition
-                    .getAnnotations()).getAnnotations();
-            List<Annotation> mapAnnotation = AnnotationHelper.getAnnotation("map", sourceAnnotation).getAnnotations();
-            Annotation attributeAnnotation = AnnotationHelper.getAnnotation("attributes", mapAnnotation);
-            this.attributeRegex = attributeAnnotation.getElements();
             for (Element el : streamDefinition.getAnnotations().get(0).getAnnotations().get(0).getElements()) {
                 if (el.getKey().contains(REGULAR_EXPRESSION_GROUP)) {
                     regexGroupMap.put(el.getKey()
                             .replaceFirst(REGULAR_EXPRESSION_GROUP, EMPTY_STRING), el.getValue());
                 }
-            }
-            if (attributeRegex.size() != attributeMappingList.size()) {
-                throw new SiddhiAppValidationException("Stream: '" + streamDefinition.getId() + "' has "
-                        + streamDefinition.getAttributeList().size() + " attributes, but here we only found" +
-                        " below mapping." + attributeMappingList.toString() + "All the attributes should" +
-                        " have mapping" + " in the stream " + streamID + " of siddhi text input mapper.");
             }
             if (streamDefinition.getAttributeList().size() < attributeMappingList.size()) {
                 throw new SiddhiAppValidationException("Stream: '" + streamDefinition.getId() + "' has "
@@ -238,7 +229,7 @@ public class TextSourceMapper extends SourceMapper {
      * Receives an event as an text string from {@link org.wso2.siddhi.core.stream.input.source.Source}, converts it to
      * a {@link org.wso2.siddhi.core.event.ComplexEventChunk} and onEventHandler.
      *
-     * @param eventObject                 the input event, given as an text string
+     * @param eventObject       the input event, given as an text string
      * @param inputEventHandler input handler
      */
     @Override
@@ -253,7 +244,7 @@ public class TextSourceMapper extends SourceMapper {
                         + " dropped by the testSource mapper. Please note that only UTF-8 encoding is supported. "
                         + e.getMessage(), e);
             }
-        }  else {
+        } else {
             result = eventObject;
         }
 
@@ -337,13 +328,12 @@ public class TextSourceMapper extends SourceMapper {
         Event event = new Event(this.streamDefinition.getAttributeList().size());
         Object[] data = event.getData();
         if (isCustomMappingEnabled) {   //custom mapping case
-            for (Element attr : attributeRegex) {
-                String matchText = null;
-                String attributeValue = attr.getValue();
-                String attributeKey = attr.getKey();
-                if (attributeValue.contains(REGEX_GROUP_OPENING_ELEMENT) && attributeValue.contains
-                        (REGEX_GROUP_CLOSING_ELEMENT)) { //symbol=A[1]
-                    String[] regexGroupElements = attr.getValue().replace(REGEX_GROUP_CLOSING_ELEMENT, EMPTY_STRING)
+            String matchText = null;
+            for (AttributeMapping attributeMapping : attributeMappingList) {
+                if (attributeMapping.getMapping().contains(REGEX_GROUP_OPENING_ELEMENT) &&
+                        attributeMapping.getMapping().contains(REGEX_GROUP_CLOSING_ELEMENT)) { //symbol=A[1]
+                    String[] regexGroupElements = attributeMapping.getMapping()
+                            .replace(REGEX_GROUP_CLOSING_ELEMENT, EMPTY_STRING)
                             .split(REGEX_GROUP_SPLIT_REGEX_ELEMENT, 2);
                     String regexGroup = regexGroupElements[0];
                     int regexPosition = Integer.parseInt(regexGroupElements[1]);
@@ -359,38 +349,41 @@ public class TextSourceMapper extends SourceMapper {
                         }
                     } else {
                         log.error("Could not find machine regular expression group for " + regexGroup + " for " +
-                                "attribute " + attributeKey + " in the stream " + streamID + " of siddhi text " +
-                                "input mapper.");
+                                "attribute " + attributeMapping.getName() + " in the stream " + streamID +
+                                " of siddhi text input mapper.");
                         isValidEvent.set(false);
                     }
                 } else { //symbol=B
-                    String regex = regexGroupMap.get(attributeValue);
+                    String regex = regexGroupMap.get(attributeMapping.getMapping());
                     if (regex != null) {
                         try {
                             matchText = match((String) eventObject,
-                                    1, regexGroupMap.get(attributeValue));
+                                    1, regexGroupMap.get(attributeMapping.getMapping()));
                         } catch (IndexOutOfBoundsException e) {
-                            log.error("Could not find regular expression group index for " + attributeValue
-                                    + " in the stream " + streamID + " of siddhi text input mapper.", e);
+                            log.error("Could not find regular expression group index for " +
+                                    attributeMapping.getMapping() + " in the stream " + streamID + " of siddhi text " +
+                                    "input mapper.", e);
                             isValidEvent.set(false);
                         }
                     } else {
-                        log.error("Could not find machine regular expression group for " + attributeValue + " for " +
-                                "attribute " + attributeKey + " in the stream " + streamID + " of siddhi text " +
-                                "input mapper.");
+                        log.error("Could not find machine regular expression group for " +
+                                attributeMapping.getMapping() + " for attribute " + attributeMapping.getMapping() +
+                                " in the stream " + streamID + " of siddhi text input mapper.");
                         isValidEvent.set(false);
                     }
                 }
                 if (failOnMissingAttribute && (matchText == null)) { //if fail on missing attribute is enabled
                     log.error("Invalid format of event " + eventObject + " for " +
-                            "attribute " + attr + " could not find proper value while fail on missing attribute is " +
-                            "'true' in the stream " + streamID + " of siddhi text input mapper.");
+                            "attribute " + attributeMapping.getName() + " could not find proper value while fail on" +
+                            " missing attribute is 'true' in the stream " + streamID + " of siddhi text input mapper.");
                     isValidEvent.set(false);
                 }
-                int position = attributePositionMap.get(attributeKey);
-                if ((Attribute.Type.STRING != attributeTypeMap.get(attributeKey)) && (matchText != null)) {
-                    data[position] = attributeConverter.getPropertyValue(matchText.replaceAll(",", ""), attributeTypeMap
-                            .get(attributeKey));
+                int position = attributePositionMap.get(attributeMapping.getName());
+                if ((Attribute.Type.STRING != attributeTypeMap.get(attributeMapping.getName()))
+                        && (matchText != null)) {
+                    data[position] = attributeConverter.getPropertyValue(
+                            matchText.replaceAll(",", ""),
+                            attributeTypeMap.get(attributeMapping.getName()));
                 } else {
                     data[position] = matchText;
                 }

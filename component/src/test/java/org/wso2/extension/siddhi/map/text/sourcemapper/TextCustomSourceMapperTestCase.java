@@ -136,14 +136,14 @@ public class TextCustomSourceMapperTestCase {
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
-                    case 1:
-                        assertEquals(event.getData(1), 55.6f);
-                        break;
-                    case 2:
-                        assertEquals(event.getData(1), 75.6f);
-                        break;
-                    default:
-                        fail();
+                        case 1:
+                            assertEquals(event.getData(1), 55.6f);
+                            break;
+                        case 2:
+                            assertEquals(event.getData(1), 75.6f);
+                            break;
+                        default:
+                            fail();
                     }
                 }
             }
@@ -249,6 +249,7 @@ public class TextCustomSourceMapperTestCase {
         assertEquals(count.get(), 0);
         siddhiAppRuntime.shutdown();
     }
+
     @Test
     public void testTextCustomSourceMapperSpecialCharacters() throws InterruptedException {
         log.info("Test for events with special charaters.");
@@ -402,11 +403,11 @@ public class TextCustomSourceMapperTestCase {
 
         siddhiAppRuntime.start();
         String event1 = "wso2 55.6:45\n" +
-                        "~~~~~~~~~~\n" +
-                        "IBM 75.6:45\n";
+                "~~~~~~~~~~\n" +
+                "IBM 75.6:45\n";
         String event2 = "IFS 65.6:45\n" +
-                        "~~~~~~~~~~\n" +
-                        "MIT 85.6:45";
+                "~~~~~~~~~~\n" +
+                "MIT 85.6:45";
         InMemoryBroker.publish("stock", event1);
         InMemoryBroker.publish("stock", event2);
         SiddhiTestHelper.waitForEvents(waitTime, 4, count, timeout);
@@ -490,14 +491,14 @@ public class TextCustomSourceMapperTestCase {
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
-                    case 1:
-                        assertEquals(event.getData(1), 100f);
-                        break;
-                    case 2:
-                        assertEquals(event.getData(1), 75.6f);
-                        break;
-                    default:
-                        fail();
+                        case 1:
+                            assertEquals(event.getData(1), 100f);
+                            break;
+                        case 2:
+                            assertEquals(event.getData(1), 75.6f);
+                            break;
+                        default:
+                            fail();
                     }
                 }
             }
@@ -817,6 +818,156 @@ public class TextCustomSourceMapperTestCase {
         HttpTestUtil.httpPublishEvent(event2, baseURI);
         SiddhiTestHelper.waitForEvents(waitTime, 2, eventCount, timeout);
         Assert.assertEquals(receivedEventNameList.toString(), expected.toString());
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testTextCustomSourceMapper2() throws InterruptedException {
+        log.info("Test for custom source mapping2");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='inMemory', topic='stock', @map(type='text', " +
+                "regex.A='(\\w+)\\s([-.0-9]+)',regex.B='volume=([-0-9]+)'," +
+                "@attributes('A[1]', 'A[2]', 'B'))) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    switch (count.incrementAndGet()) {
+                        case 1:
+                            assertEquals(event.getData(1), 55.6f);
+                            break;
+                        case 2:
+                            assertEquals(event.getData(1), 75.6f);
+                            break;
+                        default:
+                            fail();
+                    }
+                }
+            }
+        });
+
+        siddhiAppRuntime.start();
+
+        InMemoryBroker.publish("stock", "wso2 55.6 volume=45");
+        InMemoryBroker.publish("stock", "IBM 75.6 volume=45");
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 2);
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testTextCustomSourceMapper3() throws InterruptedException {
+        log.info("Test for custom source mapping3");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='testTrpInMemory', prop1='foo', prop2='bar', topic='stock', @map(type='text', " +
+                "regex.A='(\\w+)\\s([-.0-9]+)',regex.B='volume=([-0-9]+)'," +
+                "@attributes('trp:symbol', 'A[2]', 'B'))) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    Assert.assertEquals("foo", event.getData(0));
+                    switch (count.incrementAndGet()) {
+                        case 1:
+                            assertEquals(event.getData(1), 55.6f);
+                            break;
+                        case 2:
+                            assertEquals(event.getData(1), 75.6f);
+                            break;
+                        default:
+                            fail();
+                    }
+                }
+            }
+        });
+
+        siddhiAppRuntime.start();
+
+        InMemoryBroker.publish("stock", "wso2 55.6 volume=45");
+        InMemoryBroker.publish("stock", "IBM 75.6 volume=45");
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 2);
+        siddhiAppRuntime.shutdown();
+    }
+
+
+    @Test
+    public void testTextCustomSourceMapper4() throws InterruptedException {
+        log.info("Test for custom source mapping4");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='testTrpInMemory', prop1='foo', prop2='bar', topic='stock', @map(type='text', " +
+                "regex.A='(\\w+)\\s([-.0-9]+)',regex.B='volume=([-0-9]+)'," +
+                "@attributes(symbol='trp:symbol', price='A[2]', volume='B'))) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
+
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    Assert.assertEquals("foo", event.getData(0));
+                    switch (count.incrementAndGet()) {
+                        case 1:
+                            assertEquals(event.getData(1), 55.6f);
+                            break;
+                        case 2:
+                            assertEquals(event.getData(1), 75.6f);
+                            break;
+                        default:
+                            fail();
+                    }
+                }
+            }
+        });
+
+        siddhiAppRuntime.start();
+
+        InMemoryBroker.publish("stock", "wso2 55.6 volume=45");
+        InMemoryBroker.publish("stock", "IBM 75.6 volume=45");
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 2);
         siddhiAppRuntime.shutdown();
     }
 }
