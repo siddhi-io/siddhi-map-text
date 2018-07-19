@@ -1,60 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-    
     <url>
-     <loc>/</loc>
-     <lastmod>2018-06-13</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
-        
     <url>
-     <loc>/api/1.0.18/</loc>
-     <lastmod>2018-06-13</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/api/1.0.19/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/1.0.17/</loc>
-     <lastmod>2018-06-13</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/api/1.0.18/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/1.0.16/</loc>
-     <lastmod>2018-06-13</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/api/1.0.17/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/1.0.15/</loc>
-     <lastmod>2018-06-13</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/api/1.0.16/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/1.0.14/</loc>
-     <lastmod>2018-06-13</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/api/1.0.15/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
     <url>
-     <loc>/api/latest/</loc>
-     <lastmod>2018-06-13</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/api/1.0.14/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-        
-    
-
-    
     <url>
-     <loc>/license/</loc>
-     <lastmod>2018-06-13</lastmod>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/api/latest/</loc>
+     <lastmod>2018-07-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
+    <url>
+     <loc>https://wso2-extensions.github.io/siddhi-map-text/license/</loc>
+     <lastmod>2018-07-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
 </urlset>
