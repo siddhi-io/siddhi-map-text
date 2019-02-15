@@ -1,4 +1,4 @@
-# API Docs - v1.0.22
+# API Docs - v1.1.0-SNAPSHOT
 
 ## Sinkmapper
 
@@ -61,7 +61,7 @@ define stream FooStream (symbol string, price float, volume long);
 ```
 @sink(type='inMemory', topic='stock', @map(type='text',  @payload(SensorID : {{symbol}}/{{Volume}},
 SensorPrice : Rs{{price}}/=,
-Value : {{Volume}}ml?)))
+Value : {{Volume}}ml”)))
 ```
 <p style="word-wrap: break-word">This query performs a custom text mapping. The output is as follows:SensorID : wso2/100,<br>SensorPrice : Rs1000/=,<br>Value : 100mlfor the following siddhi event.{wso2,1000,100}</p>
 
