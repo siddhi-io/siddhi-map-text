@@ -27,7 +27,6 @@ import org.wso2.extension.siddhi.map.text.sourcemapper.util.HttpTestUtil;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
-import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.output.StreamCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
@@ -62,7 +61,7 @@ public class TextCustomSourceMapperTestCase {
 
 
     @Test
-    public void testTextCustomSourceMapper() throws InterruptedException {
+    public void testTextCustomSourceMapper() throws Exception {
         log.info("Test for custom source mapping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -111,7 +110,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperOnBinaryMessage() throws InterruptedException {
+    public void testTextCustomSourceMapperOnBinaryMessage() throws Exception {
         log.info("Test for custom source mapping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -163,7 +162,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperOneRegex() throws InterruptedException {
+    public void testTextCustomSourceMapperOneRegex() throws Exception {
         log.info("Test for custom mapping for regex.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -212,7 +211,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperNoRegex() throws InterruptedException {
+    public void testTextCustomSourceMapperNoRegex() throws Exception {
         log.info("Test for custom mapping for regex.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -251,7 +250,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperSpecialCharacters() throws InterruptedException {
+    public void testTextCustomSourceMapperSpecialCharacters() throws Exception {
         log.info("Test for events with special charaters.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -300,7 +299,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperTcp() throws InterruptedException, ConnectionUnavailableException {
+    public void testTextCustomSourceMapperTcp() throws Exception {
         log.info("Test for events with special charaters.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -356,7 +355,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperEventGroup() throws InterruptedException {
+    public void testTextCustomSourceMapperEventGroup() throws Exception {
         log.info("Test for custom mapping for event grouping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -417,7 +416,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void sample() throws InterruptedException {
+    public void sample() throws Exception {
         log.info("test for sample");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -466,7 +465,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void sampleOnBinaryMessage() throws InterruptedException {
+    public void sampleOnBinaryMessage() throws Exception {
         log.info("test for sample");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -518,7 +517,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceWrongRegexGroup() throws InterruptedException {
+    public void testTextCustomSourceWrongRegexGroup() throws Exception {
         log.info("Test for applying wrong regex group.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -555,7 +554,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperFailOnMissingFalse() throws InterruptedException {
+    public void testTextCustomSourceMapperFailOnMissingFalse() throws Exception {
         log.info("Test for fail.on.missing attribute false");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -604,7 +603,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceWrongRegexGroupIdx() throws InterruptedException {
+    public void testTextCustomSourceWrongRegexGroupIdx() throws Exception {
         log.info("Test for wrong regex group ID.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -641,7 +640,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceWithoutAttribute() throws InterruptedException {
+    public void testTextCustomSourceWithoutAttribute() throws Exception {
         //this will consider as default mapping and drop event if not default format
         log.info("Test for custom mapping without attributes.");
         String streams = "" +
@@ -678,7 +677,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperDifferentEventOrder() throws InterruptedException {
+    public void testTextCustomSourceMapperDifferentEventOrder() throws Exception {
         log.info("Test for different event order present and it will effected for regex");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -715,7 +714,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapperDifferentEventOrder2() throws InterruptedException {
+    public void testTextCustomSourceMapperDifferentEventOrder2() throws Exception {
         log.info("Test for different event order present and it will not effected for regex");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -822,7 +821,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapper2() throws InterruptedException {
+    public void testTextCustomSourceMapper2() throws Exception {
         log.info("Test for custom source mapping2");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -871,7 +870,7 @@ public class TextCustomSourceMapperTestCase {
     }
 
     @Test
-    public void testTextCustomSourceMapper3() throws InterruptedException {
+    public void testTextCustomSourceMapper3() throws Exception {
         log.info("Test for custom source mapping3");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -922,7 +921,7 @@ public class TextCustomSourceMapperTestCase {
 
 
     @Test
-    public void testTextCustomSourceMapper4() throws InterruptedException {
+    public void testTextCustomSourceMapper4() throws Exception {
         log.info("Test for custom source mapping4");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
