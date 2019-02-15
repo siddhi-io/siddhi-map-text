@@ -63,7 +63,7 @@ public class TextDefaultSourceMapperTestCase {
      * @throws InterruptedException the InterruptedException.
      */
     @Test
-    public void  defaultTextMapping() throws InterruptedException {
+    public void  defaultTextMapping() throws Exception {
         log.info("Test for default text mapping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -121,7 +121,7 @@ public class TextDefaultSourceMapperTestCase {
      * @throws InterruptedException the InterruptedException.
      */
     @Test
-    public void  defaultTextMappingAttributeOrderDifferent() throws InterruptedException {
+    public void  defaultTextMappingAttributeOrderDifferent() throws Exception {
         log.info("Test for default text mapping with attribute oder of event is different.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -178,7 +178,7 @@ public class TextDefaultSourceMapperTestCase {
      * @throws InterruptedException the InterruptedException.
      */
     @Test
-    public void defaultTextMappingFallonMissingFalse() throws InterruptedException {
+    public void defaultTextMappingFallonMissingFalse() throws Exception {
         log.info("test for fail on missing attribute false");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -232,7 +232,7 @@ public class TextDefaultSourceMapperTestCase {
     }
 
     @Test
-    public void testTextSourceMapperGroupedEvents() throws InterruptedException {
+    public void testTextSourceMapperGroupedEvents() throws Exception {
         log.info("test for group of events");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -298,7 +298,7 @@ public class TextDefaultSourceMapperTestCase {
 
     }
     @Test
-    public void testTextSourceMapperGroupedEventsCustom() throws InterruptedException {
+    public void testTextSourceMapperGroupedEventsCustom() throws Exception {
         log.info("Test gropup event with custom delimiter.");
         String streams =
                 "@App:name('TestSiddhiApp')" +
@@ -366,7 +366,7 @@ public class TextDefaultSourceMapperTestCase {
     }
 
     @Test
-    public void testTextSourceMapperGroupedEventsCustomNewline() throws InterruptedException {
+    public void testTextSourceMapperGroupedEventsCustomNewline() throws Exception {
         log.info("Test gropup event with custom delimiter.");
         String streams =
                 "@App:name('TestSiddhiApp')" +
@@ -419,7 +419,7 @@ public class TextDefaultSourceMapperTestCase {
 
     }
     @Test
-    public void testTextSourceMapperMissingAttribute() throws InterruptedException {
+    public void testTextSourceMapperMissingAttribute() throws Exception {
         log.info("Test for missing attributes.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -470,7 +470,7 @@ public class TextDefaultSourceMapperTestCase {
 
     }
     @Test
-    public void testTextSourceMapperExtraMapping() throws InterruptedException {
+    public void testTextSourceMapperExtraMapping() throws Exception {
         log.info("Test for extra mapping present.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -544,7 +544,7 @@ public class TextDefaultSourceMapperTestCase {
 
     }
     @Test
-    public void testTextSourceMapperGroupedEventsWithoutEnable() throws InterruptedException {
+    public void testTextSourceMapperGroupedEventsWithoutEnable() throws Exception {
         log.info("test for present group of events with delimiter when event.grouping is false.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -593,7 +593,7 @@ public class TextDefaultSourceMapperTestCase {
 
     }
     @Test
-    public void testTextSourceMapperGroupedEventsWithoutEnable2() throws InterruptedException {
+    public void testTextSourceMapperGroupedEventsWithoutEnable2() throws Exception {
         log.info("test for present group of events when event.grouping is false.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -648,7 +648,7 @@ public class TextDefaultSourceMapperTestCase {
 
     }
 @Test
-public void testTextSourceMapperSingleEventForEventGroup() throws InterruptedException {
+public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
     log.info("test testTextSourceMapperSingleEventForEventGroup");
     String streams = "" +
             "@App:name('TestSiddhiApp')" +
@@ -700,7 +700,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws InterruptedExc
 
 }
     @Test
-    public void  sampleTest() throws InterruptedException {
+    public void  sampleTest() throws Exception {
         log.info("test default mapping for sample");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -750,7 +750,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws InterruptedExc
     }
 
     @Test
-    public void testTextSourceMapperAttributeSameName() throws InterruptedException {
+    public void testTextSourceMapperAttributeSameName() throws Exception {
         log.info("test multiple time same attrbute is pressent.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -806,7 +806,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws InterruptedExc
     }
 
     @Test
-    public void testTextSourceMapperGroupedEventsLargeGroup() throws InterruptedException {
+    public void testTextSourceMapperGroupedEventsLargeGroup() throws Exception {
         log.info("test for large event group.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -957,7 +957,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws InterruptedExc
     }
 
     @Test
-    public void testTextSourceMapperGroupedEventsLargeGroupOnbinaryMessage() throws InterruptedException {
+    public void testTextSourceMapperGroupedEventsLargeGroupOnbinaryMessage() throws Exception {
         log.info("test for large event group.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
