@@ -36,9 +36,11 @@ class HttpServerUtil {
     private static final Logger log = LoggerFactory.getLogger(HttpServerUtil.class);
 
     HttpServerUtil() {
+
     }
 
     static void writeContent(HttpURLConnection urlConn, String content) throws IOException {
+
         OutputStreamWriter streamWriter = new OutputStreamWriter(
                 urlConn.getOutputStream());
         streamWriter.write(content);
@@ -47,6 +49,7 @@ class HttpServerUtil {
 
     static HttpURLConnection request(URI baseURI)
             throws IOException {
+
         URL url = baseURI.resolve("/endpoints/RecPro").toURL();
         HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
         if ("POST".equals(HttpMethod.POST.name()) || "POST".equals(HttpMethod.PUT.name())) {

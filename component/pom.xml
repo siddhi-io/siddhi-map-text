@@ -72,6 +72,10 @@
             <groupId>org.wso2.extension.siddhi.io.tcp</groupId>
             <artifactId>siddhi-io-tcp</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.spullara.mustache.java</groupId>
+            <artifactId>compiler</artifactId>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -109,8 +113,14 @@
                             org.wso2.extension.siddhi.map.text.*
                         </Export-Package>
                         <Import-Package>
+                            org.wso2.siddhi.core.*;version="${siddhi.version.range}",
+                            org.wso2.siddhi.annotation.*;version="${siddhi.version.range}",
+                            org.wso2.siddhi.query.api.*;version="${siddhi.version.range}",
                             *;resolution:=optional
                         </Import-Package>
+                        <Private-Package>
+                            com.github.mustachejava.*;version="${mustache.version}"
+                        </Private-Package>
                         <Include-Resource>
                             META-INF=target/classes/META-INF
                         </Include-Resource>

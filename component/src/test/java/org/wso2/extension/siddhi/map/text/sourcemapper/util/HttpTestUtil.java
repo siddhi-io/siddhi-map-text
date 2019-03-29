@@ -21,13 +21,16 @@ package org.wso2.extension.siddhi.map.text.sourcemapper.util;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
+
 /**
  * Util class for test cases.
  */
 public class HttpTestUtil {
+
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HttpTestUtil.class);
 
     public static void httpPublishEvent(String event, URI baseURI) {
+
         try {
             HttpURLConnection urlConn = null;
             try {

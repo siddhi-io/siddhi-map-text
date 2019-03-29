@@ -43,11 +43,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
-
 /**
  * Test case for input text mapper.
  */
 public class TextDefaultSourceMapperTestCase {
+
     private static final Logger log = Logger.getLogger(TextDefaultSourceMapperTestCase.class);
     private int waitTime = 50;
     private int timeout = 30000;
@@ -55,15 +55,18 @@ public class TextDefaultSourceMapperTestCase {
 
     @BeforeMethod
     public void init() {
+
         count.set(0);
     }
 
     /**
      * DASC5-1113:Configure 'in-Memory' event receiver with default text mapping.
+     *
      * @throws InterruptedException the InterruptedException.
      */
     @Test
-    public void  defaultTextMapping() throws Exception {
+    public void defaultTextMapping() throws Exception {
+
         log.info("Test for default text mapping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -83,6 +86,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -118,10 +122,12 @@ public class TextDefaultSourceMapperTestCase {
 
     /**
      * DASC5-1113:Configure 'in-Memory' event receiver with default text mapping.
+     *
      * @throws InterruptedException the InterruptedException.
      */
     @Test
-    public void  defaultTextMappingAttributeOrderDifferent() throws Exception {
+    public void defaultTextMappingAttributeOrderDifferent() throws Exception {
+
         log.info("Test for default text mapping with attribute oder of event is different.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -141,6 +147,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -159,8 +166,8 @@ public class TextDefaultSourceMapperTestCase {
 
         siddhiAppRuntime.start();
         String event1 = "price:55.6,\n" +
-                        "symbol:\"WSO2\",\n" +
-                        "volume:100";
+                "symbol:\"WSO2\",\n" +
+                "volume:100";
 
         String event2 = "volume:10,\n" +
                 "symbol:\"IBM\",\n" +
@@ -173,12 +180,15 @@ public class TextDefaultSourceMapperTestCase {
         assertEquals(count.get(), 2);
         siddhiAppRuntime.shutdown();
     }
+
     /**
      * DASC5-1114:Configure event receiver with default text mapping when fail.on.missing.attribute=false.
+     *
      * @throws InterruptedException the InterruptedException.
      */
     @Test
     public void defaultTextMappingFallonMissingFalse() throws Exception {
+
         log.info("test for fail on missing attribute false");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -198,6 +208,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -233,6 +244,7 @@ public class TextDefaultSourceMapperTestCase {
 
     @Test
     public void testTextSourceMapperGroupedEvents() throws Exception {
+
         log.info("test for group of events");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -252,6 +264,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -297,20 +310,22 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
+
     @Test
     public void testTextSourceMapperGroupedEventsCustom() throws Exception {
+
         log.info("Test gropup event with custom delimiter.");
         String streams =
                 "@App:name('TestSiddhiApp')" +
-                "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true'" +
-                ",delimiter='####')) " +
-                "define stream FooStream (symbol string, price float, volume long); " +
-                "define stream BarStream (symbol string, price float, volume long); ";
+                        "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true'" +
+                        ",delimiter='####')) " +
+                        "define stream FooStream (symbol string, price float, volume long); " +
+                        "define stream BarStream (symbol string, price float, volume long); ";
 
         String query =
                 "from FooStream " +
-                "select * " +
-                "insert into BarStream; ";
+                        "select * " +
+                        "insert into BarStream; ";
 
         SiddhiManager siddhiManager = new SiddhiManager();
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
@@ -319,6 +334,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -367,6 +383,7 @@ public class TextDefaultSourceMapperTestCase {
 
     @Test
     public void testTextSourceMapperGroupedEventsCustomNewline() throws Exception {
+
         log.info("Test gropup event with custom delimiter.");
         String streams =
                 "@App:name('TestSiddhiApp')" +
@@ -387,6 +404,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     count.incrementAndGet();
@@ -418,8 +436,10 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
+
     @Test
     public void testTextSourceMapperMissingAttribute() throws Exception {
+
         log.info("Test for missing attributes.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -440,6 +460,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -469,8 +490,10 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
+
     @Test
     public void testTextSourceMapperExtraMapping() throws Exception {
+
         log.info("Test for extra mapping present.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -491,6 +514,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -543,8 +567,10 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
+
     @Test
     public void testTextSourceMapperGroupedEventsWithoutEnable() throws Exception {
+
         log.info("test for present group of events with delimiter when event.grouping is false.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -564,6 +590,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
 
             }
@@ -592,8 +619,10 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
+
     @Test
     public void testTextSourceMapperGroupedEventsWithoutEnable2() throws Exception {
+
         log.info("test for present group of events when event.grouping is false.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -613,6 +642,7 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -647,60 +677,65 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-@Test
-public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
-    log.info("test testTextSourceMapperSingleEventForEventGroup");
-    String streams = "" +
-            "@App:name('TestSiddhiApp')" +
-            "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true')) " +
-            "define stream FooStream (symbol string, price float, volume long); " +
-            "define stream BarStream (symbol string, price float, volume long); ";
 
-    String query = "" +
-            "from FooStream " +
-            "select * " +
-            "insert into BarStream; ";
+    @Test
+    public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
 
-    SiddhiManager siddhiManager = new SiddhiManager();
-    SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        log.info("test testTextSourceMapperSingleEventForEventGroup");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true')) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
 
-    siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
 
-        @Override
-        public void receive(Event[] events) {
-            EventPrinter.print(events);
-            for (Event event : events) {
-                switch (count.incrementAndGet()) {
-                    case 1:
-                        assertEquals(event.getData(1), 55.6f);
-                        break;
-                    case 2:
-                        assertEquals(event.getData(1), 50.6f);
-                        break;
-                    default:
-                        fail();
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+
+            @Override
+            public void receive(Event[] events) {
+
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    switch (count.incrementAndGet()) {
+                        case 1:
+                            assertEquals(event.getData(1), 55.6f);
+                            break;
+                        case 2:
+                            assertEquals(event.getData(1), 50.6f);
+                            break;
+                        default:
+                            fail();
+                    }
                 }
             }
-        }
-    });
+        });
 
-    siddhiAppRuntime.start();
-    String event1 = "symbol:\"wso2\",\n" +
-            "price:55.6,\n" +
-            "volume:200";
-    String event2 = "symbol:\"IFS\",\n" +
-            "price:50.6,\n" +
-            "volume:200";
-    InMemoryBroker.publish("stock", event1);
-    InMemoryBroker.publish("stock", event2);
-    SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
-    //assert event count
-    assertEquals(count.get(), 2);
-    siddhiAppRuntime.shutdown();
+        siddhiAppRuntime.start();
+        String event1 = "symbol:\"wso2\",\n" +
+                "price:55.6,\n" +
+                "volume:200";
+        String event2 = "symbol:\"IFS\",\n" +
+                "price:50.6,\n" +
+                "volume:200";
+        InMemoryBroker.publish("stock", event1);
+        InMemoryBroker.publish("stock", event2);
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 2);
+        siddhiAppRuntime.shutdown();
 
-}
+    }
+
     @Test
-    public void  sampleTest() throws Exception {
+    public void sampleTest() throws Exception {
+
         log.info("test default mapping for sample");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -720,6 +755,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -751,6 +787,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
 
     @Test
     public void testTextSourceMapperAttributeSameName() throws Exception {
+
         log.info("test multiple time same attrbute is pressent.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -770,6 +807,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -807,6 +845,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
 
     @Test
     public void testTextSourceMapperGroupedEventsLargeGroup() throws Exception {
+
         log.info("test for large event group.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -826,6 +865,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -958,6 +998,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
 
     @Test
     public void testTextSourceMapperGroupedEventsLargeGroupOnbinaryMessage() throws Exception {
+
         log.info("test for large event group.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -977,59 +1018,60 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
-                    case 1:
-                        assertEquals(event.getData(0), "A");
-                        break;
-                    case 2:
-                        assertEquals(event.getData(0), "B");
-                        break;
-                    case 3:
-                        assertEquals(event.getData(0), "C");
-                        break;
-                    case 4:
-                        assertEquals(event.getData(0), "D");
-                        break;
-                    case 5:
-                        assertEquals(event.getData(0), "E");
-                        break;
-                    case 6:
-                        assertEquals(event.getData(0), "F");
-                        break;
-                    case 7:
-                        assertEquals(event.getData(0), "G");
-                        break;
-                    case 8:
-                        assertEquals(event.getData(0), "H");
-                        break;
-                    case 9:
-                        assertEquals(event.getData(0), "I");
-                        break;
-                    case 10:
-                        assertEquals(event.getData(0), "J");
-                        break;
-                    case 11:
-                        assertEquals(event.getData(0), "K");
-                        break;
-                    case 12:
-                        assertEquals(event.getData(0), "L");
-                        break;
-                    case 13:
-                        assertEquals(event.getData(0), "M");
-                        break;
-                    case 14:
-                        assertEquals(event.getData(0), "N");
-                        break;
-                    case 15:
-                        assertEquals(event.getData(0), "O");
-                        break;
-                    case 16:
-                        assertEquals(event.getData(0), "P");
-                        break;
-                    default:
-                        fail();
+                        case 1:
+                            assertEquals(event.getData(0), "A");
+                            break;
+                        case 2:
+                            assertEquals(event.getData(0), "B");
+                            break;
+                        case 3:
+                            assertEquals(event.getData(0), "C");
+                            break;
+                        case 4:
+                            assertEquals(event.getData(0), "D");
+                            break;
+                        case 5:
+                            assertEquals(event.getData(0), "E");
+                            break;
+                        case 6:
+                            assertEquals(event.getData(0), "F");
+                            break;
+                        case 7:
+                            assertEquals(event.getData(0), "G");
+                            break;
+                        case 8:
+                            assertEquals(event.getData(0), "H");
+                            break;
+                        case 9:
+                            assertEquals(event.getData(0), "I");
+                            break;
+                        case 10:
+                            assertEquals(event.getData(0), "J");
+                            break;
+                        case 11:
+                            assertEquals(event.getData(0), "K");
+                            break;
+                        case 12:
+                            assertEquals(event.getData(0), "L");
+                            break;
+                        case 13:
+                            assertEquals(event.getData(0), "M");
+                            break;
+                        case 14:
+                            assertEquals(event.getData(0), "N");
+                            break;
+                        case 15:
+                            assertEquals(event.getData(0), "O");
+                            break;
+                        case 16:
+                            assertEquals(event.getData(0), "P");
+                            break;
+                        default:
+                            fail();
                     }
                 }
             }
@@ -1116,6 +1158,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
      */
     @Test
     public void testTextMappingSingle() throws Exception {
+
         AtomicInteger eventCount = new AtomicInteger(0);
         int waitTime = 50;
         int timeout = 30000;
@@ -1141,6 +1184,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
         siddhiAppRuntime.addCallback("query", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
+
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     eventCount.incrementAndGet();
@@ -1174,6 +1218,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
      */
     @Test
     public void testTextMappingMultiple() throws Exception {
+
         AtomicInteger eventCount = new AtomicInteger(0);
         int waitTime = 50;
         int timeout = 30000;
@@ -1199,6 +1244,7 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
         siddhiAppRuntime.addCallback("query", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
+
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     eventCount.incrementAndGet();

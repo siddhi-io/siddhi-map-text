@@ -18,6 +18,9 @@
 
 package org.wso2.extension.siddhi.map.text.sinkmapper;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import org.apache.log4j.Logger;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
@@ -25,16 +28,23 @@ import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.Event;
-import org.wso2.siddhi.core.exception.NoSuchAttributeException;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.output.sink.SinkListener;
 import org.wso2.siddhi.core.stream.output.sink.SinkMapper;
+import org.wso2.siddhi.core.util.SiddhiConstants;
 import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
 import org.wso2.siddhi.core.util.transport.TemplateBuilder;
+import org.wso2.siddhi.query.api.annotation.Annotation;
+import org.wso2.siddhi.query.api.annotation.Element;
 import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.definition.StreamDefinition;
+import org.wso2.siddhi.query.api.util.AnnotationHelper;
 
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,80 +54,95 @@ import java.util.Map;
 @Extension(
         name = "text",
         namespace = "sinkMapper",
-        description = "This extension is a Text to Event input mapper. Transports that accept text messages can" +
-                " utilize this extension to convert the incoming text messages to Siddhi events. Users can use" +
+        description = "This extension is a Event to Text output mapper. Transports that publish text messages can" +
+                " utilize this extension to convert the Siddhi events to text messages. Users can use" +
                 " a pre-defined text format where event conversion is carried out without any additional " +
-                "configurations, or use placeholders to map from a custom text message.",
+                "configurations, or use custom placeholder(using '{{{' and '}}}') to map custom text messages.",
         parameters = {
                 @Parameter(name = "event.grouping.enabled",
-                        description =
-                                "If this parameter is set to `true`, events are grouped via a delimiter when " +
-                                        "multiple events are received. It is required to specify a value for the " +
-                                        "`delimiter` parameter when the value for this parameter is `true`.",
+                        description = "If this parameter is set to `true`, events are grouped via a delimiter when " +
+                                "multiple events are received. It is required to specify a value for the " +
+                                "`delimiter` parameter when the value for this parameter is `true`.",
                         type = {DataType.BOOL},
                         optional = true,
                         defaultValue = "false"),
+
                 @Parameter(name = "delimiter",
                         description = "This parameter specifies how events are separated when a grouped event is" +
                                 " received. This must be a whole line and not a single character.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "~~~~~~~~~~"),
+
                 @Parameter(name = "new.line.character",
                         description = "This attribute indicates the new line character of the event that is " +
                                 "expected to be received. This is used mostly when communication between 2 types of " +
-                                "operating systems is expected. For example, Linux uses '\n' whereas Windows" +
-                                " uses '\r\n'as the end of line character.",
+                                "operating systems is expected. For example, Linux uses `\\n` whereas Windows" +
+                                " uses `\\r\\n` as the end of line character.",
                         type = {DataType.STRING},
                         optional = true,
-                        defaultValue = "\n")
+                        defaultValue = "\\n")
         },
         examples = {
                 @Example(
                         syntax = "@sink(type='inMemory', topic='stock', @map(type='text'))\n"
-                                + "define stream FooStream (symbol string, price float, volume long);\n",
+                                + "define stream FooStream (symbol string, price float, volume long);",
                         description = "This query performs a default text input mapping. The expected output is " +
-                                "as follows:"
+                                "as follows:\n"
 
-                        + "symbol:\"WSO2\",\n"
-                        + "price:55.6,\n"
-                        + "volume:100"
-
-                        + "or"
-
-                        + "symbol:'WSO2',\n"
-                        + "price:55.6,\n"
-                        + "volume:100"
-
-                        + "If event grouping is enabled, then the output is as follows:"
-
-                        + "symbol:'WSO2',\n"
-                        + "price:55.6,\n"
-                        + "volume:100\n"
-                        + "~~~~~~~~~~\n"
-                        + "symbol:'WSO2',\n"
-                        + "price:55.6,\n"
-                        + "volume:100"
+                                + "symbol:\"WSO2\",\n"
+                                + "price:55.6,\n"
+                                + "volume:100"
                 ),
                 @Example(
                         syntax = "@sink(type='inMemory', topic='stock', @map(type='text', " +
-                                " @payload(" +
-                                "SensorID : {{symbol}}/{{Volume}},\n" +
-                                "SensorPrice : Rs{{price}}/=,\n" +
-                                "Value : {{Volume}}ml”)))",
-                        description = "This query performs a custom text mapping. The output is as follows:"
+                                "event.grouping.enabled='true'))\n"
+                                + "define stream FooStream (symbol string, price float, volume long);",
+                        description = "This query performs a default text input mapping with event grouping. The " +
+                                "expected output is as follows:\n"
+
+                                + "symbol:\"WSO2\",\n"
+                                + "price:55.6,\n"
+                                + "volume:100\n"
+                                + "~~~~~~~~~~\n"
+                                + "symbol:\"WSO2\",\n"
+                                + "price:55.6,\n"
+                                + "volume:100"
+                ),
+                @Example(
+                        syntax = "@sink(type='inMemory', topic='stock', @map(type='text', " +
+                                " @payload(\"SensorID : {{{symbol}}}/{{{volume}}}, SensorPrice : Rs{{{price}}}/=," +
+                                "Value : {{{volume}}}ml\")))\n"
+                                + "define stream FooStream (symbol string, price float, volume long);",
+                        description = "This query performs a custom text mapping. The expected output is as follows:\n"
 
                                 + "SensorID : wso2/100,\n"
                                 + "SensorPrice : Rs1000/=,\n"
-                                + "Value : 100ml"
+                                + "Value : 100ml \n"
 
-                                + "for the following siddhi event."
-
+                                + "for the following siddhi event.\n"
                                 + "{wso2,1000,100}"
+                ),
+                @Example(
+                        syntax = "@sink(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled=" +
+                                "'true', @payload(\"Stock price of {{{symbol}}} is {{{price}}}\")))\n"
+                                + "define stream FooStream (symbol string, price float, volume long);",
+                        description = "This query performs a custom text mapping with event grouping. The expected " +
+                                "output is as follows:\n"
+
+                                + "Stock price of WSO2 is 55.6\n"
+                                + "~~~~~~~~~~\n"
+                                + "Stock price of WSO2 is 55.6\n"
+                                + "~~~~~~~~~~\n"
+                                + "Stock price of WSO2 is 55.6\n"
+
+                                + "for the following siddhi event.\n"
+                                + "{wso2,55.6,10}"
                 )
         }
 )
 public class TextSinkMapper extends SinkMapper {
+
     private static final Logger log = Logger.getLogger(TextSinkMapper.class);
     private static final String EVENT_ATTRIBUTE_SEPARATOR = ",";
     private static final String STRING_ENCLOSING_ELEMENT = "\"";
@@ -134,11 +159,16 @@ public class TextSinkMapper extends SinkMapper {
     private List<Attribute> attributeList;
     private String endOfLine;
     private String streamID;
+    private Mustache mustache;
+    private Map<String, Object> scopes;
 
     @Override
     public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, ConfigReader mapperConfigReader,
                      SiddhiAppContext siddhiAppContext) {
+
+        MustacheFactory mf = new DefaultMustacheFactory();
+        scopes = new HashMap<String, Object>();
         this.streamID = streamDefinition.getId();
         this.attributeList = streamDefinition.getAttributeList();
         this.eventGroupEnabled = Boolean.valueOf(optionHolder
@@ -157,27 +187,34 @@ public class TextSinkMapper extends SinkMapper {
             throw new SiddhiAppCreationException("Text sink-mapper does not support object @payload mappings, " +
                     "error at the mapper of '" + streamDefinition.getId() + "'");
         }
+        //if it is custom mapping, create the custom template and compile
+        if (payloadTemplateBuilderMap != null) {
+            String customTemplate = createCustomTemplate(getTemplateFromPayload(streamDefinition), eventGroupEnabled);
+            mustache = mf.compile(new StringReader(customTemplate), "customEvent");
+        }
     }
 
     @Override
     public String[] getSupportedDynamicOptions() {
+
         return new String[0];
     }
 
     @Override
     public Class[] getOutputEventClasses() {
+
         return new Class[]{String.class};
     }
 
     @Override
     public void mapAndSend(Event[] events, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, SinkListener sinkListener) {
+
         if (!eventGroupEnabled) { //Event not grouping
             if (payloadTemplateBuilderMap != null) { //custom mapping case
                 for (Event event : events) {
                     if (event != null) {
-                        sinkListener.publish(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet()
-                                .iterator().next()).build(event));
+                        sinkListener.publish(constructCustomMapping(event));
                     }
                 }
             } else { //default mapping case
@@ -192,22 +229,18 @@ public class TextSinkMapper extends SinkMapper {
             if (payloadTemplateBuilderMap != null) { //custom mapping case
                 for (Event event : events) {
                     if (event != null) {
-                        eventData.append(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet().iterator()
-                                .next()).build(event)).append(endOfLine).append(eventDelimiter);
+                        eventData.append(constructCustomMapping(event));
                     }
                 }
-                int idx = eventData.lastIndexOf(eventDelimiter);
-                eventData.delete(idx - endOfLine.length(), idx + eventDelimiter.length());
             } else { //default mapping case
                 for (Event event : events) {
                     if (event != null) {
-                        eventData.append(constructDefaultMapping(event, true))
-                                .append(eventDelimiter);
+                        eventData.append(constructDefaultMapping(event, true)).append(eventDelimiter);
                     }
                 }
-                int idx = eventData.lastIndexOf(eventDelimiter);
-                eventData.delete(idx - endOfLine.length(), idx + eventDelimiter.length());
             }
+            int idx = eventData.lastIndexOf(eventDelimiter);
+            eventData.delete(idx - endOfLine.length(), idx + eventDelimiter.length());
             sinkListener.publish(eventData.toString());
         }
     }
@@ -215,15 +248,17 @@ public class TextSinkMapper extends SinkMapper {
     @Override
     public void mapAndSend(Event event, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, SinkListener sinkListener) {
+
         if (payloadTemplateBuilderMap != null) { //custom mapping case
             if (event != null) {
-                try {
-                    sinkListener.publish(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet().iterator()
-                            .next()).build(event));
-                } catch (NoSuchAttributeException e) {
-                    log.error("Malformed event " + event.toString() + ". Hence proceed with null values" +
-                            " in the stream " + streamID + " of siddhi text output mapper.");
-                    //drop the event
+                if (!eventGroupEnabled) { //event not grouping
+                    sinkListener.publish(constructCustomMapping(event));
+                } else { //event grouping
+                    StringBuilder eventData = new StringBuilder();
+                    eventData.append(constructCustomMapping(event));
+                    int idx = eventData.lastIndexOf(eventDelimiter);
+                    eventData.delete(idx - endOfLine.length(), idx + eventDelimiter.length());
+                    sinkListener.publish(eventData.toString());
                 }
             }
         } else { //default mapping case
@@ -240,6 +275,7 @@ public class TextSinkMapper extends SinkMapper {
      * @return the constructed TEXT string
      */
     private Object constructDefaultMapping(Event event, boolean isEventGroup) {
+
         StringBuilder eventText = new StringBuilder();
         Object[] data = event.getData();
         for (int i = 0; i < data.length; i++) {
@@ -261,5 +297,66 @@ public class TextSinkMapper extends SinkMapper {
             eventText.delete(idx, idx + EVENT_ATTRIBUTE_SEPARATOR.length());
         }
         return eventText.toString();
+    }
+
+    /**
+     * Convert the given {@link Event} to Text string.
+     *
+     * @param event Event object
+     * @return the constructed TEXT string
+     */
+    private Object constructCustomMapping(Event event) {
+
+        Writer writer = new StringWriter();
+        Object[] data = event.getData();
+        for (int i = 0; i < data.length; i++) {
+            Object attributeValue = data[i];
+            Attribute attribute = attributeList.get(i);
+            scopes.put(attribute.getName(), attributeValue);
+        }
+        mustache.execute(writer, scopes);
+        return writer.toString();
+    }
+
+    /**
+     * Create the template based on the payload.
+     *
+     * @param streamDefinition associated streamDefinition
+     * @return the payloadString given by the user
+     */
+    private String getTemplateFromPayload(StreamDefinition streamDefinition) {
+
+        List<Element> elements = null;
+        for (Annotation sinkAnnotation : streamDefinition.getAnnotations()) {
+            Annotation mapAnnotation = AnnotationHelper.getAnnotation(SiddhiConstants.ANNOTATION_MAP,
+                    sinkAnnotation.getAnnotations());
+            List<Annotation> attributeAnnotations = mapAnnotation.getAnnotations(SiddhiConstants.ANNOTATION_PAYLOAD);
+            if (attributeAnnotations.size() == 1) {
+                elements = attributeAnnotations.get(0).getElements();
+            }
+        }
+        if (elements != null) { //remove the start and end quotes and get the payload
+            return elements.get(0).toString().substring(1, elements.get(0).toString().length() - 1);
+        } else {
+            throw new SiddhiAppCreationException("There is no template given in the @payload in" + streamID);
+        }
+    }
+
+    /**
+     * Create the template based on the payload.
+     *
+     * @param customTemplate the template given by the user
+     * @param isEventGroup   events are grouped or not
+     * @return the custom template according to event grouping
+     */
+    private String createCustomTemplate(String customTemplate, boolean isEventGroup) {
+
+        StringBuilder template = new StringBuilder();
+        if (!isEventGroup) { //template for not grouping
+            template.append(customTemplate);
+        } else { //template for grouping
+            template.append(customTemplate).append(endOfLine).append(eventDelimiter);
+        }
+        return template.toString();
     }
 }

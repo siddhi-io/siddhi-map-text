@@ -44,11 +44,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
-
 /**
  * Test case for input text mapper.
  */
 public class TextCustomSourceMapperTestCase {
+
     private static final Logger log = Logger.getLogger(TextCustomSourceMapperTestCase.class);
     private int waitTime = 50;
     private int timeout = 30000;
@@ -56,12 +56,13 @@ public class TextCustomSourceMapperTestCase {
 
     @BeforeMethod
     public void init() {
+
         count.set(0);
     }
 
-
     @Test
     public void testTextCustomSourceMapper() throws Exception {
+
         log.info("Test for custom source mapping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -83,6 +84,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -111,6 +113,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperOnBinaryMessage() throws Exception {
+
         log.info("Test for custom source mapping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -132,6 +135,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -163,6 +167,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperOneRegex() throws Exception {
+
         log.info("Test for custom mapping for regex.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -184,6 +189,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -212,6 +218,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperNoRegex() throws Exception {
+
         log.info("Test for custom mapping for regex.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -232,6 +239,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     count.incrementAndGet();
@@ -251,6 +259,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperSpecialCharacters() throws Exception {
+
         log.info("Test for events with special charaters.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -272,6 +281,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -300,6 +310,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperTcp() throws Exception {
+
         log.info("Test for events with special charaters.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -321,6 +332,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -356,6 +368,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperEventGroup() throws Exception {
+
         log.info("Test for custom mapping for event grouping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -378,6 +391,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -417,6 +431,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void sample() throws Exception {
+
         log.info("test for sample");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -438,6 +453,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -466,6 +482,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void sampleOnBinaryMessage() throws Exception {
+
         log.info("test for sample");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -487,6 +504,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -518,6 +536,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceWrongRegexGroup() throws Exception {
+
         log.info("Test for applying wrong regex group.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -539,6 +558,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
             }
         });
@@ -555,6 +575,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperFailOnMissingFalse() throws Exception {
+
         log.info("Test for fail.on.missing attribute false");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -576,6 +597,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -604,6 +626,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceWrongRegexGroupIdx() throws Exception {
+
         log.info("Test for wrong regex group ID.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -625,6 +648,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
             }
         });
@@ -662,6 +686,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
             }
         });
@@ -678,6 +703,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperDifferentEventOrder() throws Exception {
+
         log.info("Test for different event order present and it will effected for regex");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -699,6 +725,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
             }
         });
@@ -715,6 +742,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapperDifferentEventOrder2() throws Exception {
+
         log.info("Test for different event order present and it will not effected for regex");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -736,6 +764,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -769,6 +798,7 @@ public class TextCustomSourceMapperTestCase {
      */
     @Test
     public void testTextMappingSingleCustom() throws Exception {
+
         AtomicInteger eventCount = new AtomicInteger(0);
         log.info("Creating test for publishing events with Text mapping through http.");
         URI baseURI = URI.create(String.format("http://%s:%d", "localhost", 8005));
@@ -798,6 +828,7 @@ public class TextCustomSourceMapperTestCase {
         siddhiAppRuntime.addCallback("query", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
+
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     eventCount.incrementAndGet();
@@ -822,6 +853,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapper2() throws Exception {
+
         log.info("Test for custom source mapping2");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -843,6 +875,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -871,6 +904,7 @@ public class TextCustomSourceMapperTestCase {
 
     @Test
     public void testTextCustomSourceMapper3() throws Exception {
+
         log.info("Test for custom source mapping3");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -892,6 +926,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     Assert.assertEquals("foo", event.getData(0));
@@ -919,9 +954,9 @@ public class TextCustomSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-
     @Test
     public void testTextCustomSourceMapper4() throws Exception {
+
         log.info("Test for custom source mapping4");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -943,6 +978,7 @@ public class TextCustomSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
+
                 EventPrinter.print(events);
                 for (Event event : events) {
                     Assert.assertEquals("foo", event.getData(0));

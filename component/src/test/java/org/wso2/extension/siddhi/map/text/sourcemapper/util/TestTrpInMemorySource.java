@@ -49,6 +49,7 @@ import org.wso2.siddhi.core.util.transport.OptionHolder;
         )
 )
 public class TestTrpInMemorySource extends InMemorySource {
+
     private static final String TOPIC_KEY = "topic";
     protected SourceEventListener sourceEventListener;
     protected InMemoryBroker.Subscriber subscriber;
@@ -60,6 +61,7 @@ public class TestTrpInMemorySource extends InMemorySource {
     public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
                      String[] requestedTransportPropertyNames, ConfigReader configReader,
                      SiddhiAppContext siddhiAppContext) {
+
         super.init(sourceEventListener, optionHolder, requestedTransportPropertyNames, configReader, siddhiAppContext);
         symbol = optionHolder.validateAndGetStaticValue("prop1");
         price = optionHolder.validateAndGetStaticValue("prop2");
@@ -69,6 +71,7 @@ public class TestTrpInMemorySource extends InMemorySource {
         this.subscriber = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object event) {
+
                 if (fail.equals("true")) {
                     sourceEventListener.onEvent(event, new String[]{symbol});
                 } else {
@@ -81,6 +84,7 @@ public class TestTrpInMemorySource extends InMemorySource {
 
             @Override
             public String getTopic() {
+
                 return topic;
             }
         };
@@ -88,6 +92,7 @@ public class TestTrpInMemorySource extends InMemorySource {
 
     @Override
     public void connect(ConnectionCallback connectionCallback) throws ConnectionUnavailableException {
+
         InMemoryBroker.subscribe(subscriber);
     }
 }
