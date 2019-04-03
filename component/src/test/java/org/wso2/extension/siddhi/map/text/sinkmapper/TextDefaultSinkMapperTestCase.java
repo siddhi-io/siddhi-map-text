@@ -52,7 +52,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Test Case for QLT type output text mapper.
  */
 public class TextDefaultSinkMapperTestCase {
-
     private static final Logger log = Logger.getLogger(TextDefaultSinkMapperTestCase.class);
     private AtomicInteger wso2Count = new AtomicInteger(0);
     private AtomicInteger ibmCount = new AtomicInteger(0);
@@ -61,26 +60,22 @@ public class TextDefaultSinkMapperTestCase {
 
     @BeforeMethod
     public void init() {
-
         wso2Count.set(0);
         ibmCount.set(0);
     }
 
     @Test
     public void testTextSinkMapperWithDefaultMapping() throws InterruptedException {
-
         log.info("Test default text mapping.");
 
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 wso2Count.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "WSO2";
             }
         };
@@ -88,13 +83,11 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 ibmCount.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "IBM";
             }
         };
@@ -139,9 +132,9 @@ public class TextDefaultSinkMapperTestCase {
         InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
 
         siddhiAppRuntime.start();
-        stockStream.send(new Object[]{"WSO2", 55.6f, 100L});
-        stockStream.send(new Object[]{"IBM", 75.6f, 100L});
-        stockStream.send(new Object[]{"WSO2", 57.6f, 100L});
+        stockStream.send(new Object[] {"WSO2", 55.6f, 100L});
+        stockStream.send(new Object[] {"IBM", 75.6f, 100L});
+        stockStream.send(new Object[] {"WSO2", 57.6f, 100L});
         SiddhiTestHelper.waitForEvents(waitTime, 2, wso2Count, timeout);
         SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
 
@@ -157,18 +150,15 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void testTextSinkMapperDefaultEventGrouping() throws InterruptedException {
-
         log.info("Test without event grouping attribute.");
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 wso2Count.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "WSO2";
             }
         };
@@ -176,13 +166,11 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 ibmCount.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "IBM";
             }
         };
@@ -209,8 +197,8 @@ public class TextDefaultSinkMapperTestCase {
 
         siddhiAppRuntime.start();
 
-        stockStream.send(new Object[]{"WSO2", 55.6f, 10});
-        stockStream.send(new Object[]{"IBM", 55.6f, 10});
+        stockStream.send(new Object[] {"WSO2", 55.6f, 10});
+        stockStream.send(new Object[] {"IBM", 55.6f, 10});
         SiddhiTestHelper.waitForEvents(waitTime, 1, wso2Count, timeout);
         SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
 
@@ -226,18 +214,15 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void testTextSinkMapperDefaultEventGroupingTrue() throws InterruptedException {
-
         log.info("Test without event grouping attribute.");
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 wso2Count.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "WSO2";
             }
         };
@@ -245,13 +230,11 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 ibmCount.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "IBM";
             }
         };
@@ -278,8 +261,8 @@ public class TextDefaultSinkMapperTestCase {
 
         siddhiAppRuntime.start();
 
-        stockStream.send(new Object[]{"WSO2", 55.6f, 10});
-        stockStream.send(new Object[]{"IBM", 55.6f, 10});
+        stockStream.send(new Object[] {"WSO2", 55.6f, 10});
+        stockStream.send(new Object[] {"IBM", 55.6f, 10});
         SiddhiTestHelper.waitForEvents(waitTime, 1, wso2Count, timeout);
         SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
 
@@ -294,19 +277,16 @@ public class TextDefaultSinkMapperTestCase {
     }
 
     @Test
-    public void testTextSinkMapperEventGroupDefaultDelimiter() throws InterruptedException {
-
+    public void testTextSinkMapperEventGroupDefaultDecimeter() throws InterruptedException {
         log.info("Test for default event delimiter.");
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 wso2Count.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "WSO2";
             }
         };
@@ -314,13 +294,11 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 ibmCount.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "IBM";
             }
         };
@@ -349,9 +327,9 @@ public class TextDefaultSinkMapperTestCase {
         List<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
+                    .Event(System.currentTimeMillis(), new Object[] {"WSO2", 55.6f, 10}));
             arrayList.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
+                    .Event(System.currentTimeMillis(), new Object[] {"IBM", 75.6f, 10}));
         }
         stockStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[10]));
 
@@ -370,18 +348,15 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void testTextSinkMapperEventGroupCustomDelimiter() throws InterruptedException {
-
         log.info("Test for custom event delimiter.");
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 wso2Count.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "WSO2";
             }
         };
@@ -389,13 +364,11 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 ibmCount.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "IBM";
             }
         };
@@ -425,9 +398,9 @@ public class TextDefaultSinkMapperTestCase {
         List<Event> arrayList = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
+                    .Event(System.currentTimeMillis(), new Object[] {"WSO2", 55.6f, 10}));
             arrayList.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
+                    .Event(System.currentTimeMillis(), new Object[] {"IBM", 75.6f, 10}));
         }
         stockStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[10]));
         SiddhiTestHelper.waitForEvents(waitTime, 1, wso2Count, timeout);
@@ -445,18 +418,15 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void testTextSinkMapperNewLineCharacter() throws InterruptedException {
-
         log.info("Test for new.line.charater");
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 wso2Count.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "WSO2";
             }
         };
@@ -464,13 +434,11 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 ibmCount.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "IBM";
             }
         };
@@ -498,8 +466,8 @@ public class TextDefaultSinkMapperTestCase {
 
         siddhiAppRuntime.start();
 
-        stockStream.send(new Object[]{"WSO2", 55.6f, 10});
-        stockStream.send(new Object[]{"IBM", 55.6f, 10});
+        stockStream.send(new Object[] {"WSO2", 55.6f, 10});
+        stockStream.send(new Object[] {"IBM", 55.6f, 10});
         SiddhiTestHelper.waitForEvents(waitTime, 1, wso2Count, timeout);
         SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
 
@@ -515,18 +483,15 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void testTextSinkMapperEventGroupSingleEvent() throws InterruptedException {
-
         log.info("Test for single event when event grouping enabled.");
         InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 wso2Count.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "WSO2";
             }
         };
@@ -534,13 +499,11 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
             @Override
             public void onMessage(Object msg) {
-
                 ibmCount.incrementAndGet();
             }
 
             @Override
             public String getTopic() {
-
                 return "IBM";
             }
         };
@@ -566,8 +529,8 @@ public class TextDefaultSinkMapperTestCase {
         InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
 
         siddhiAppRuntime.start();
-        stockStream.send(new Object[]{"WSO2", 55.6f, 10});
-        stockStream.send(new Object[]{"IBM", 75.6f, 10});
+        stockStream.send(new Object[] {"WSO2", 55.6f, 10});
+        stockStream.send(new Object[] {"IBM", 75.6f, 10});
         SiddhiTestHelper.waitForEvents(waitTime, 1, wso2Count, timeout);
         SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
 
@@ -583,7 +546,6 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void fileSinkTestSingle() throws InterruptedException {
-
         log.info("test text default map with file io");
         AtomicInteger count = new AtomicInteger();
         ClassLoader classLoader = TextDefaultSinkMapperTestCase.class.getClassLoader();
@@ -607,10 +569,10 @@ public class TextDefaultSinkMapperTestCase {
 
         siddhiAppRuntime.start();
 
-        stockStream.send(new Object[]{"WSO2", 55.6f, 100L});
-        stockStream.send(new Object[]{"IBM", 57.678f, 100L});
-        stockStream.send(new Object[]{"GOOGLE", 50f, 100L});
-        stockStream.send(new Object[]{"REDHAT", 50f, 100L});
+        stockStream.send(new Object[] {"WSO2", 55.6f, 100L});
+        stockStream.send(new Object[] {"IBM", 57.678f, 100L});
+        stockStream.send(new Object[] {"GOOGLE", 50f, 100L});
+        stockStream.send(new Object[] {"REDHAT", 50f, 100L});
         Thread.sleep(100);
 
         List<String> symbolNames = new ArrayList<>();
@@ -643,7 +605,6 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void fileSinkTestGroup() throws InterruptedException {
-
         log.info("test text default map with file io");
         AtomicInteger count = new AtomicInteger();
         ClassLoader classLoader = TextDefaultSinkMapperTestCase.class.getClassLoader();
@@ -671,12 +632,12 @@ public class TextDefaultSinkMapperTestCase {
         List<Event> arrayListWSO2 = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayListWSO2.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
+                    .Event(System.currentTimeMillis(), new Object[] {"WSO2", 55.6f, 10}));
         }
         List<Event> arrayListIBM = new ArrayList<>(100);
         for (int j = 0; j < 5; j++) {
             arrayListIBM.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
+                    .Event(System.currentTimeMillis(), new Object[] {"IBM", 75.6f, 10}));
         }
         stockStream.send(arrayListWSO2.toArray(new org.wso2.siddhi.core.event.Event[5]));
         stockStream.send(arrayListIBM.toArray(new org.wso2.siddhi.core.event.Event[5]));
@@ -710,7 +671,6 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void fileSinkTestNewLineCharacter() throws InterruptedException {
-
         log.info("test text default map with file io");
         AtomicInteger count = new AtomicInteger();
         ClassLoader classLoader = TextDefaultSinkMapperTestCase.class.getClassLoader();
@@ -736,10 +696,10 @@ public class TextDefaultSinkMapperTestCase {
 
         siddhiAppRuntime.start();
 
-        stockStream.send(new Object[]{"WSO2", 55.6f, 100L});
-        stockStream.send(new Object[]{"IBM", 57.678f, 100L});
-        stockStream.send(new Object[]{"GOOGLE", 50f, 100L});
-        stockStream.send(new Object[]{"REDHAT", 50f, 100L});
+        stockStream.send(new Object[] {"WSO2", 55.6f, 100L});
+        stockStream.send(new Object[] {"IBM", 57.678f, 100L});
+        stockStream.send(new Object[] {"GOOGLE", 50f, 100L});
+        stockStream.send(new Object[] {"REDHAT", 50f, 100L});
         Thread.sleep(100);
 
         List<String> symbolNames = new ArrayList<>();
@@ -794,7 +754,7 @@ public class TextDefaultSinkMapperTestCase {
         siddhiAppRuntime.start();
         HttpServerListenerHandler listenerHandler = new HttpServerListenerHandler(8005);
         listenerHandler.run();
-        fooStream.send(new Object[]{"WSO2,55.6,100", "POST", "'Name:John','Age:23'"});
+        fooStream.send(new Object[] {"WSO2,55.6,100", "POST", "'Name:John','Age:23'"});
         while (!listenerHandler.getServerListener().isMessageArrive()) {
             Thread.sleep(10);
         }
@@ -808,7 +768,6 @@ public class TextDefaultSinkMapperTestCase {
 
     @Test
     public void testTextSinkMapperEventGroupHTTP() throws InterruptedException {
-
         log.info("Test for default event delimiter and http.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -832,7 +791,7 @@ public class TextDefaultSinkMapperTestCase {
         List<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(5);
         for (int j = 0; j < 5; j++) {
             arrayList.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", "POST", "'place:office'"}));
+                    .Event(System.currentTimeMillis(), new Object[] {"WSO2", "POST", "'place:office'"}));
         }
         fooStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[5]));
         while (!listenerHandler.getServerListener().isMessageArrive()) {
@@ -860,80 +819,5 @@ public class TextDefaultSinkMapperTestCase {
                 "headers:\"'place:office'\"\n");
         listenerHandler.shutdown();
         siddhiAppRuntime.shutdown();
-    }
-
-    @Test
-    public void testTextSinkMapperNotEventGroupWithEventArray() throws InterruptedException {
-
-        log.info("Test for default event delimiter.");
-        InMemoryBroker.Subscriber subscriberWSO2 = new InMemoryBroker.Subscriber() {
-            @Override
-            public void onMessage(Object msg) {
-
-                wso2Count.incrementAndGet();
-            }
-
-            @Override
-            public String getTopic() {
-
-                return "WSO2";
-            }
-        };
-
-        InMemoryBroker.Subscriber subscriberIBM = new InMemoryBroker.Subscriber() {
-            @Override
-            public void onMessage(Object msg) {
-
-                ibmCount.incrementAndGet();
-            }
-
-            @Override
-            public String getTopic() {
-
-                return "IBM";
-            }
-        };
-
-        //subscribe to "inMemory" broker per topic
-        InMemoryBroker.subscribe(subscriberWSO2);
-        InMemoryBroker.subscribe(subscriberIBM);
-
-        String streams = "" +
-                "@App:name('TestSiddhiApp')" +
-                "define stream FooStream (symbol string, price float, volume long); " +
-                "@sink(type='inMemory', topic='{{symbol}}', @map(type='text' , event.grouping.enabled='false')) " +
-                "define stream BarStream (symbol string, price float, volume long); ";
-
-        String query = "" +
-                "from FooStream " +
-                "select * " +
-                "insert into BarStream; ";
-
-        SiddhiManager siddhiManager = new SiddhiManager();
-        siddhiManager.setExtension("sink:inMemory", InMemorySink.class);
-        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
-        InputHandler stockStream = siddhiAppRuntime.getInputHandler("FooStream");
-
-        siddhiAppRuntime.start();
-        List<org.wso2.siddhi.core.event.Event> arrayList = new ArrayList<>(100);
-        for (int j = 0; j < 5; j++) {
-            arrayList.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"WSO2", 55.6f, 10}));
-            arrayList.add(new org.wso2.siddhi.core.event
-                    .Event(System.currentTimeMillis(), new Object[]{"IBM", 75.6f, 10}));
-        }
-        stockStream.send(arrayList.toArray(new org.wso2.siddhi.core.event.Event[5]));
-
-        SiddhiTestHelper.waitForEvents(waitTime, 1, wso2Count, timeout);
-        SiddhiTestHelper.waitForEvents(waitTime, 1, ibmCount, timeout);
-
-        //assert event count
-        Assert.assertEquals(wso2Count.get(), 5);
-        Assert.assertEquals(ibmCount.get(), 5);
-        siddhiAppRuntime.shutdown();
-
-        //unsubscribe from "inMemory" broker per topic
-        InMemoryBroker.unsubscribe(subscriberWSO2);
-        InMemoryBroker.unsubscribe(subscriberIBM);
     }
 }

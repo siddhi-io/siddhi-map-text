@@ -43,11 +43,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
+
 /**
  * Test case for input text mapper.
  */
 public class TextDefaultSourceMapperTestCase {
-
     private static final Logger log = Logger.getLogger(TextDefaultSourceMapperTestCase.class);
     private int waitTime = 50;
     private int timeout = 30000;
@@ -55,18 +55,15 @@ public class TextDefaultSourceMapperTestCase {
 
     @BeforeMethod
     public void init() {
-
         count.set(0);
     }
 
     /**
      * DASC5-1113:Configure 'in-Memory' event receiver with default text mapping.
-     *
      * @throws InterruptedException the InterruptedException.
      */
     @Test
-    public void defaultTextMapping() throws Exception {
-
+    public void  defaultTextMapping() throws Exception {
         log.info("Test for default text mapping");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -86,7 +83,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -122,12 +118,10 @@ public class TextDefaultSourceMapperTestCase {
 
     /**
      * DASC5-1113:Configure 'in-Memory' event receiver with default text mapping.
-     *
      * @throws InterruptedException the InterruptedException.
      */
     @Test
-    public void defaultTextMappingAttributeOrderDifferent() throws Exception {
-
+    public void  defaultTextMappingAttributeOrderDifferent() throws Exception {
         log.info("Test for default text mapping with attribute oder of event is different.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -147,7 +141,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -180,15 +173,12 @@ public class TextDefaultSourceMapperTestCase {
         assertEquals(count.get(), 2);
         siddhiAppRuntime.shutdown();
     }
-
     /**
      * DASC5-1114:Configure event receiver with default text mapping when fail.on.missing.attribute=false.
-     *
      * @throws InterruptedException the InterruptedException.
      */
     @Test
     public void defaultTextMappingFallonMissingFalse() throws Exception {
-
         log.info("test for fail on missing attribute false");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -208,7 +198,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -244,7 +233,6 @@ public class TextDefaultSourceMapperTestCase {
 
     @Test
     public void testTextSourceMapperGroupedEvents() throws Exception {
-
         log.info("test for group of events");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -264,7 +252,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -310,10 +297,8 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-
     @Test
     public void testTextSourceMapperGroupedEventsCustom() throws Exception {
-
         log.info("Test gropup event with custom delimiter.");
         String streams =
                 "@App:name('TestSiddhiApp')" +
@@ -334,7 +319,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -383,7 +367,6 @@ public class TextDefaultSourceMapperTestCase {
 
     @Test
     public void testTextSourceMapperGroupedEventsCustomNewline() throws Exception {
-
         log.info("Test gropup event with custom delimiter.");
         String streams =
                 "@App:name('TestSiddhiApp')" +
@@ -404,7 +387,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     count.incrementAndGet();
@@ -436,10 +418,8 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-
     @Test
     public void testTextSourceMapperMissingAttribute() throws Exception {
-
         log.info("Test for missing attributes.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -460,7 +440,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -490,10 +469,8 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-
     @Test
     public void testTextSourceMapperExtraMapping() throws Exception {
-
         log.info("Test for extra mapping present.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -514,7 +491,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -567,10 +543,8 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-
     @Test
     public void testTextSourceMapperGroupedEventsWithoutEnable() throws Exception {
-
         log.info("test for present group of events with delimiter when event.grouping is false.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -590,7 +564,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
 
             }
@@ -619,10 +592,8 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-
     @Test
     public void testTextSourceMapperGroupedEventsWithoutEnable2() throws Exception {
-
         log.info("test for present group of events when event.grouping is false.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -642,7 +613,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -677,10 +647,8 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-
     @Test
     public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
-
         log.info("test testTextSourceMapperSingleEventForEventGroup");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -700,7 +668,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -732,10 +699,8 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-
     @Test
-    public void sampleTest() throws Exception {
-
+    public void  sampleTest() throws Exception {
         log.info("test default mapping for sample");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -755,7 +720,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -787,7 +751,6 @@ public class TextDefaultSourceMapperTestCase {
 
     @Test
     public void testTextSourceMapperAttributeSameName() throws Exception {
-
         log.info("test multiple time same attrbute is pressent.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -807,7 +770,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -845,7 +807,6 @@ public class TextDefaultSourceMapperTestCase {
 
     @Test
     public void testTextSourceMapperGroupedEventsLargeGroup() throws Exception {
-
         log.info("test for large event group.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -865,7 +826,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -998,7 +958,6 @@ public class TextDefaultSourceMapperTestCase {
 
     @Test
     public void testTextSourceMapperGroupedEventsLargeGroupOnbinaryMessage() throws Exception {
-
         log.info("test for large event group.");
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
@@ -1018,7 +977,6 @@ public class TextDefaultSourceMapperTestCase {
 
             @Override
             public void receive(Event[] events) {
-
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
@@ -1158,7 +1116,6 @@ public class TextDefaultSourceMapperTestCase {
      */
     @Test
     public void testTextMappingSingle() throws Exception {
-
         AtomicInteger eventCount = new AtomicInteger(0);
         int waitTime = 50;
         int timeout = 30000;
@@ -1184,7 +1141,6 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.addCallback("query", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
-
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     eventCount.incrementAndGet();
@@ -1218,7 +1174,6 @@ public class TextDefaultSourceMapperTestCase {
      */
     @Test
     public void testTextMappingMultiple() throws Exception {
-
         AtomicInteger eventCount = new AtomicInteger(0);
         int waitTime = 50;
         int timeout = 30000;
@@ -1244,7 +1199,6 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.addCallback("query", new QueryCallback() {
             @Override
             public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
-
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 for (Event event : inEvents) {
                     eventCount.incrementAndGet();

@@ -148,7 +148,6 @@ import java.util.regex.Pattern;
         }
 )
 public class TextSourceMapper extends SourceMapper {
-
     private static final Logger log = Logger.getLogger(TextSourceMapper.class);
     private static final String FAIL_ON_MISSING_ATTRIBUTE = "fail.on.missing.attribute";
     private static final String OPTION_GROUP_EVENTS = "event.grouping.enabled";
@@ -194,7 +193,6 @@ public class TextSourceMapper extends SourceMapper {
     public void init(StreamDefinition streamDefinition, OptionHolder optionHolder,
                      List<AttributeMapping> attributeMappingList,
                      ConfigReader configReader, SiddhiAppContext siddhiAppContext) {
-
         this.streamID = streamDefinition.getId();
         this.attributeMappingList = attributeMappingList;
         this.attributeConverter = new AttributeConverter();
@@ -241,7 +239,6 @@ public class TextSourceMapper extends SourceMapper {
      */
     @Override
     protected void mapAndProcess(Object eventObject, InputEventHandler inputEventHandler) throws InterruptedException {
-
         Object result = null;
 
         if (eventObject instanceof byte[]) {
@@ -273,13 +270,11 @@ public class TextSourceMapper extends SourceMapper {
 
     @Override
     protected boolean allowNullInTransportProperties() {
-
         return !failOnMissingAttribute;
     }
 
     @Override
     public Class[] getSupportedInputEventClasses() {
-
         return new Class[]{String.class, byte[].class};
     }
 
@@ -291,7 +286,6 @@ public class TextSourceMapper extends SourceMapper {
      * @param inputEventHandler input handler
      */
     private void onEventHandler(InputEventHandler inputEventHandler, Object eventObject) {
-
         Event[] result;
         try {
             if (isCustomMappingEnabled) {
@@ -315,7 +309,6 @@ public class TextSourceMapper extends SourceMapper {
      * @return matched output
      */
     private String match(String text, int groupIndex, String regex) {
-
         String matchedText;
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
@@ -334,7 +327,6 @@ public class TextSourceMapper extends SourceMapper {
      * @return the constructed {@link Event} object
      */
     private Event[] convertToCustomEvents(Object eventObject) {
-
         AtomicBoolean isValidEvent = new AtomicBoolean();
         isValidEvent.set(true);
         List<Event> eventList = new ArrayList<>();
@@ -409,7 +401,6 @@ public class TextSourceMapper extends SourceMapper {
     }
 
     private Event[] convertToDefaultEvents(String eventObject) {
-
         AtomicBoolean isValidEvent = new AtomicBoolean();
         isValidEvent.set(true);
         List<Event> eventList = new ArrayList<>();

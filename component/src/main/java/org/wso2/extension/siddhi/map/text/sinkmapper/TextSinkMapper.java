@@ -142,7 +142,6 @@ import java.util.Map;
         }
 )
 public class TextSinkMapper extends SinkMapper {
-
     private static final Logger log = Logger.getLogger(TextSinkMapper.class);
     private static final String EVENT_ATTRIBUTE_SEPARATOR = ",";
     private static final String STRING_ENCLOSING_ELEMENT = "\"";
@@ -196,20 +195,17 @@ public class TextSinkMapper extends SinkMapper {
 
     @Override
     public String[] getSupportedDynamicOptions() {
-
         return new String[0];
     }
 
     @Override
     public Class[] getOutputEventClasses() {
-
         return new Class[]{String.class};
     }
 
     @Override
     public void mapAndSend(Event[] events, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, SinkListener sinkListener) {
-
         if (!eventGroupEnabled) { //Event not grouping
             if (payloadTemplateBuilderMap != null) { //custom mapping case
                 for (Event event : events) {
@@ -248,7 +244,6 @@ public class TextSinkMapper extends SinkMapper {
     @Override
     public void mapAndSend(Event event, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, SinkListener sinkListener) {
-
         if (payloadTemplateBuilderMap != null) { //custom mapping case
             if (event != null) {
                 if (!eventGroupEnabled) { //event not grouping
@@ -275,7 +270,6 @@ public class TextSinkMapper extends SinkMapper {
      * @return the constructed TEXT string
      */
     private Object constructDefaultMapping(Event event, boolean isEventGroup) {
-
         StringBuilder eventText = new StringBuilder();
         Object[] data = event.getData();
         for (int i = 0; i < data.length; i++) {
@@ -306,7 +300,6 @@ public class TextSinkMapper extends SinkMapper {
      * @return the constructed TEXT string
      */
     private Object constructCustomMapping(Event event) {
-
         Writer writer = new StringWriter();
         Object[] data = event.getData();
         for (int i = 0; i < data.length; i++) {
@@ -325,7 +318,6 @@ public class TextSinkMapper extends SinkMapper {
      * @return the payloadString given by the user
      */
     private String getTemplateFromPayload(StreamDefinition streamDefinition) {
-
         List<Element> elements = null;
         for (Annotation sinkAnnotation : streamDefinition.getAnnotations()) {
             Annotation mapAnnotation = AnnotationHelper.getAnnotation(SiddhiConstants.ANNOTATION_MAP,
@@ -350,7 +342,6 @@ public class TextSinkMapper extends SinkMapper {
      * @return the custom template according to event grouping
      */
     private String createCustomTemplate(String customTemplate, boolean isEventGroup) {
-
         StringBuilder template = new StringBuilder();
         if (!isEventGroup) { //template for not grouping
             template.append(customTemplate);
