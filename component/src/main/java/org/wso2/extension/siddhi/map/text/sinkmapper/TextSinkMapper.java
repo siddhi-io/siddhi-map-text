@@ -57,7 +57,13 @@ import java.util.Map;
         description = "This extension is a Event to Text output mapper. Transports that publish text messages can" +
                 " utilize this extension to convert the Siddhi events to text messages. Users can use" +
                 " a pre-defined text format where event conversion is carried out without any additional " +
-                "configurations, or use custom placeholder(using '{{{' and '}}}') to map custom text messages.",
+                "configurations, or use custom placeholder(using `{{` and `}}` or `{{{` and `}}}`) to map custom text" +
+                " messages. All variables are HTML escaped by default.\n" +
+                "For example:\n`&` is replaced with `&amp;amp;`" + "\n" +
+                "`\"` is replaced with `&amp;quot;`\n" +
+                "`=` is replaced with `&amp;#61;`\n" +
+                "If you want to return unescaped HTML, use the triple mustache `{{{` instead of" +
+                " double `{{`.",
         parameters = {
                 @Parameter(name = "event.grouping.enabled",
                         description = "If this parameter is set to `true`, events are grouped via a delimiter when " +
@@ -111,13 +117,13 @@ import java.util.Map;
                 ),
                 @Example(
                         syntax = "@sink(type='inMemory', topic='stock', @map(type='text', " +
-                                " @payload(\"SensorID : {{{symbol}}}/{{{volume}}}, SensorPrice : Rs{{{price}}}/=," +
-                                "Value : {{{volume}}}ml\")))\n"
+                                " @payload(\"SensorID : {{symbol}}/{{volume}}, SensorPrice : Rs{{price}}/=, " +
+                                "Value : {{volume}}ml\")))\n"
                                 + "define stream FooStream (symbol string, price float, volume long);",
                         description = "This query performs a custom text mapping. The expected output is as follows:\n"
 
-                                + "SensorID : wso2/100,\n"
-                                + "SensorPrice : Rs1000/=,\n"
+                                + "SensorID : wso2/100, "
+                                + "SensorPrice : Rs1000/=, "
                                 + "Value : 100ml \n"
 
                                 + "for the following siddhi event.\n"
@@ -125,7 +131,7 @@ import java.util.Map;
                 ),
                 @Example(
                         syntax = "@sink(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled=" +
-                                "'true', @payload(\"Stock price of {{{symbol}}} is {{{price}}}\")))\n"
+                                "'true', @payload(\"Stock price of {{symbol}} is {{price}}\")))\n"
                                 + "define stream FooStream (symbol string, price float, volume long);",
                         description = "This query performs a custom text mapping with event grouping. The expected " +
                                 "output is as follows:\n"
@@ -137,7 +143,22 @@ import java.util.Map;
                                 + "Stock price of WSO2 is 55.6\n"
 
                                 + "for the following siddhi event.\n"
-                                + "{wso2,55.6,10}"
+                                + "{WSO2,55.6,10}"
+                ),
+                @Example(
+                        syntax = "@sink(type='inMemory', topic='stock', @map(type='text', " +
+                                " @payload(\"SensorID : {{{symbol}}}/{{{volume}}}, SensorPrice : Rs{{{price}}}/=, " +
+                                "Value : {{{volume}}}ml\")))\n"
+                                + "define stream FooStream (symbol string, price float, volume long);",
+                        description = "This query performs a custom text mapping to return unescaped HTML. " +
+                                "The expected output is as follows:\n"
+
+                                + "SensorID : a&b/100, "
+                                + "SensorPrice : Rs1000/=, "
+                                + "Value : 100ml \n"
+
+                                + "for the following siddhi event.\n"
+                                + "{a&b,1000,100}"
                 )
         }
 )

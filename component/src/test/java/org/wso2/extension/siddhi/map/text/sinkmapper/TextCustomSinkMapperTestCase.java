@@ -103,8 +103,8 @@ public class TextCustomSinkMapperTestCase {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
-                "@sink(type='inMemory', topic='{{symbol}}', @map(type='text', @payload(\"Stock price of {{{symbol}}} " +
-                "is {{{price}}}\"))) " +
+                "@sink(type='inMemory', topic='{{symbol}}', @map(type='text', @payload(\"Stock price of {{symbol}} " +
+                "is {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -174,7 +174,7 @@ public class TextCustomSinkMapperTestCase {
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
                 "@sink(type='inMemory', topic='{{symbol}}', @map(type='text' , event.grouping.enabled='true' , " +
-                "@payload(\"Stock price of {{{symbol}}} is {{{price}}}\"))) " +
+                "@payload(\"Stock price of {{symbol}} is {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -244,8 +244,8 @@ public class TextCustomSinkMapperTestCase {
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
                 "@sink(type='inMemory', topic='{{symbol}}', @map(type='text' , event.grouping.enabled='true'," +
-                "delimiter='#######' , @payload(\"Stock price of {{{symbol}}} is" +
-                " {{{price}}}\"))) " +
+                "delimiter='#######' , @payload(\"Stock price of {{symbol}} is" +
+                " {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -399,7 +399,7 @@ public class TextCustomSinkMapperTestCase {
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
                 "@sink(type='inMemory', topic='{{symbol}}', @map(type='text' , event.grouping.enabled='true' , " +
-                "@payload(\"Stock price of {{{symbol}}} is {{{price}}}\"))) " +
+                "@payload(\"Stock price of {{symbol}} is {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -466,8 +466,8 @@ public class TextCustomSinkMapperTestCase {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
-                "@sink(type='inMemory', topic='{{symbol}}', @map(type='text', @payload(\"Stock price of {{{id}}} is" +
-                " {{{price}}}\"))) " +
+                "@sink(type='inMemory', topic='{{symbol}}', @map(type='text', @payload(\"Stock price of {{id}} is" +
+                " {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -533,8 +533,8 @@ public class TextCustomSinkMapperTestCase {
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
                 "@sink(type='inMemory', topic='{{symbol}}', @map(type='text' , event.grouping.enabled='false'," +
-                "delimiter='#######' , @payload(\"Stock price of {{{symbol}}} is" +
-                " {{{price}}}\"))) " +
+                "delimiter='#######' , @payload(\"Stock price of {{symbol}} is" +
+                " {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -604,8 +604,8 @@ public class TextCustomSinkMapperTestCase {
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
                 "@sink(type='inMemory', topic='{{symbol}}', @map(type='text' , event.grouping.enabled='false'," +
-                "new.line.character='\\n' , @payload(\"Stock price of {{{symbol}}} is" +
-                " {{{price}}}\"))) " +
+                "new.line.character='\\n' , @payload(\"Stock price of {{symbol}} is" +
+                " {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -675,8 +675,8 @@ public class TextCustomSinkMapperTestCase {
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
                 "@sink(type='inMemory', topic='{{symbol}}', @map(type='text' , event.grouping.enabled='false'," +
-                "new.line.character='\\r' , @payload(\"Stock price of {{{symbol}}} is" +
-                " {{{price}}}\"))) " +
+                "new.line.character='\\r' , @payload(\"Stock price of {{symbol}} is" +
+                " {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -721,7 +721,7 @@ public class TextCustomSinkMapperTestCase {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
-                "@sink(type='file', @map(type='text' , @payload('Stock price of {{{symbol}}} is {{{price}}}')), " +
+                "@sink(type='file', @map(type='text' , @payload('Stock price of {{symbol}} is {{price}}')), " +
                 "append='false', " +
                 "file.uri='" + sinkUri + "/{{symbol}}.txt') " +
                 "define stream BarStream (symbol string, price float, volume long); ";
@@ -782,7 +782,7 @@ public class TextCustomSinkMapperTestCase {
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
                 "@sink(type='file', @map(type='text',event.grouping.enabled='true', @payload('Stock price of " +
-                "{{{symbol}}} is {{{price}}}')" +
+                "{{symbol}} is {{price}}')" +
                 "), append='false', " +
                 "file.uri='" + sinkUri + "/{{symbol}}.txt') " +
                 "define stream BarStream (symbol string, price float, volume long); ";
