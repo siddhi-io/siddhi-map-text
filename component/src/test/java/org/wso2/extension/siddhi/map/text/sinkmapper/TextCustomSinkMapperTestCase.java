@@ -103,8 +103,8 @@ public class TextCustomSinkMapperTestCase {
         String streams = "" +
                 "@App:name('TestSiddhiApp')" +
                 "define stream FooStream (symbol string, price float, volume long); " +
-                "@sink(type='inMemory', topic='{{symbol}}', @map(type='text', @payload(\"Stock price of {{symbol}} is" +
-                " {{price}}\"))) " +
+                "@sink(type='inMemory', topic='{{symbol}}', @map(type='text', @payload(\"Stock price of {{symbol}} " +
+                "is {{price}}\"))) " +
                 "define stream BarStream (symbol string, price float, volume long); ";
 
         String query = "" +
@@ -854,7 +854,7 @@ public class TextCustomSinkMapperTestCase {
         String inStreamDefinition = "Define stream FooStream (message String,method String,headers String);"
                 + "@sink(type='http',publisher.url='http://localhost:8005/abc',method='{{method}}',"
                 + "headers='{{headers}}',"
-                + "@map(type='text', @payload('{{message}}'))) "
+                + "@map(type='text', @payload('{{{message}}}'))) "
                 + "Define stream BarStream (message String,method String,headers String);";
         String query = ("@info(name = 'query1') " +
                 "from FooStream select message,method,headers insert into BarStream;");
@@ -884,7 +884,7 @@ public class TextCustomSinkMapperTestCase {
                 + "@sink(type='http',publisher.url='http://localhost:8005/abc',method='{{method}}',"
                 + "headers='{{headers}}',"
                 + "@map(type='text', event.grouping" +
-                ".enabled='true', @payload('{{message}}'))) "
+                ".enabled='true', @payload('{{{message}}}'))) "
                 + "Define stream BarStream (message String,method String,headers String);";
         String query = ("@info(name = 'query1') " +
                 "from FooStream select message,method,headers insert into BarStream;");

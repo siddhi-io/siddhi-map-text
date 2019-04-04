@@ -159,8 +159,8 @@ public class TextDefaultSourceMapperTestCase {
 
         siddhiAppRuntime.start();
         String event1 = "price:55.6,\n" +
-                        "symbol:\"WSO2\",\n" +
-                        "volume:100";
+                "symbol:\"WSO2\",\n" +
+                "volume:100";
 
         String event2 = "volume:10,\n" +
                 "symbol:\"IBM\",\n" +
@@ -302,15 +302,15 @@ public class TextDefaultSourceMapperTestCase {
         log.info("Test gropup event with custom delimiter.");
         String streams =
                 "@App:name('TestSiddhiApp')" +
-                "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true'" +
-                ",delimiter='####')) " +
-                "define stream FooStream (symbol string, price float, volume long); " +
-                "define stream BarStream (symbol string, price float, volume long); ";
+                        "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true'" +
+                        ",delimiter='####')) " +
+                        "define stream FooStream (symbol string, price float, volume long); " +
+                        "define stream BarStream (symbol string, price float, volume long); ";
 
         String query =
                 "from FooStream " +
-                "select * " +
-                "insert into BarStream; ";
+                        "select * " +
+                        "insert into BarStream; ";
 
         SiddhiManager siddhiManager = new SiddhiManager();
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
@@ -647,58 +647,58 @@ public class TextDefaultSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
 
     }
-@Test
-public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
-    log.info("test testTextSourceMapperSingleEventForEventGroup");
-    String streams = "" +
-            "@App:name('TestSiddhiApp')" +
-            "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true')) " +
-            "define stream FooStream (symbol string, price float, volume long); " +
-            "define stream BarStream (symbol string, price float, volume long); ";
+    @Test
+    public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
+        log.info("test testTextSourceMapperSingleEventForEventGroup");
+        String streams = "" +
+                "@App:name('TestSiddhiApp')" +
+                "@source(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true')) " +
+                "define stream FooStream (symbol string, price float, volume long); " +
+                "define stream BarStream (symbol string, price float, volume long); ";
 
-    String query = "" +
-            "from FooStream " +
-            "select * " +
-            "insert into BarStream; ";
+        String query = "" +
+                "from FooStream " +
+                "select * " +
+                "insert into BarStream; ";
 
-    SiddhiManager siddhiManager = new SiddhiManager();
-    SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
+        SiddhiManager siddhiManager = new SiddhiManager();
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(streams + query);
 
-    siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
+        siddhiAppRuntime.addCallback("BarStream", new StreamCallback() {
 
-        @Override
-        public void receive(Event[] events) {
-            EventPrinter.print(events);
-            for (Event event : events) {
-                switch (count.incrementAndGet()) {
-                    case 1:
-                        assertEquals(event.getData(1), 55.6f);
-                        break;
-                    case 2:
-                        assertEquals(event.getData(1), 50.6f);
-                        break;
-                    default:
-                        fail();
+            @Override
+            public void receive(Event[] events) {
+                EventPrinter.print(events);
+                for (Event event : events) {
+                    switch (count.incrementAndGet()) {
+                        case 1:
+                            assertEquals(event.getData(1), 55.6f);
+                            break;
+                        case 2:
+                            assertEquals(event.getData(1), 50.6f);
+                            break;
+                        default:
+                            fail();
+                    }
                 }
             }
-        }
-    });
+        });
 
-    siddhiAppRuntime.start();
-    String event1 = "symbol:\"wso2\",\n" +
-            "price:55.6,\n" +
-            "volume:200";
-    String event2 = "symbol:\"IFS\",\n" +
-            "price:50.6,\n" +
-            "volume:200";
-    InMemoryBroker.publish("stock", event1);
-    InMemoryBroker.publish("stock", event2);
-    SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
-    //assert event count
-    assertEquals(count.get(), 2);
-    siddhiAppRuntime.shutdown();
+        siddhiAppRuntime.start();
+        String event1 = "symbol:\"wso2\",\n" +
+                "price:55.6,\n" +
+                "volume:200";
+        String event2 = "symbol:\"IFS\",\n" +
+                "price:50.6,\n" +
+                "volume:200";
+        InMemoryBroker.publish("stock", event1);
+        InMemoryBroker.publish("stock", event2);
+        SiddhiTestHelper.waitForEvents(waitTime, 2, count, timeout);
+        //assert event count
+        assertEquals(count.get(), 2);
+        siddhiAppRuntime.shutdown();
 
-}
+    }
     @Test
     public void  sampleTest() throws Exception {
         log.info("test default mapping for sample");
@@ -980,56 +980,56 @@ public void testTextSourceMapperSingleEventForEventGroup() throws Exception {
                 EventPrinter.print(events);
                 for (Event event : events) {
                     switch (count.incrementAndGet()) {
-                    case 1:
-                        assertEquals(event.getData(0), "A");
-                        break;
-                    case 2:
-                        assertEquals(event.getData(0), "B");
-                        break;
-                    case 3:
-                        assertEquals(event.getData(0), "C");
-                        break;
-                    case 4:
-                        assertEquals(event.getData(0), "D");
-                        break;
-                    case 5:
-                        assertEquals(event.getData(0), "E");
-                        break;
-                    case 6:
-                        assertEquals(event.getData(0), "F");
-                        break;
-                    case 7:
-                        assertEquals(event.getData(0), "G");
-                        break;
-                    case 8:
-                        assertEquals(event.getData(0), "H");
-                        break;
-                    case 9:
-                        assertEquals(event.getData(0), "I");
-                        break;
-                    case 10:
-                        assertEquals(event.getData(0), "J");
-                        break;
-                    case 11:
-                        assertEquals(event.getData(0), "K");
-                        break;
-                    case 12:
-                        assertEquals(event.getData(0), "L");
-                        break;
-                    case 13:
-                        assertEquals(event.getData(0), "M");
-                        break;
-                    case 14:
-                        assertEquals(event.getData(0), "N");
-                        break;
-                    case 15:
-                        assertEquals(event.getData(0), "O");
-                        break;
-                    case 16:
-                        assertEquals(event.getData(0), "P");
-                        break;
-                    default:
-                        fail();
+                        case 1:
+                            assertEquals(event.getData(0), "A");
+                            break;
+                        case 2:
+                            assertEquals(event.getData(0), "B");
+                            break;
+                        case 3:
+                            assertEquals(event.getData(0), "C");
+                            break;
+                        case 4:
+                            assertEquals(event.getData(0), "D");
+                            break;
+                        case 5:
+                            assertEquals(event.getData(0), "E");
+                            break;
+                        case 6:
+                            assertEquals(event.getData(0), "F");
+                            break;
+                        case 7:
+                            assertEquals(event.getData(0), "G");
+                            break;
+                        case 8:
+                            assertEquals(event.getData(0), "H");
+                            break;
+                        case 9:
+                            assertEquals(event.getData(0), "I");
+                            break;
+                        case 10:
+                            assertEquals(event.getData(0), "J");
+                            break;
+                        case 11:
+                            assertEquals(event.getData(0), "K");
+                            break;
+                        case 12:
+                            assertEquals(event.getData(0), "L");
+                            break;
+                        case 13:
+                            assertEquals(event.getData(0), "M");
+                            break;
+                        case 14:
+                            assertEquals(event.getData(0), "N");
+                            break;
+                        case 15:
+                            assertEquals(event.getData(0), "O");
+                            break;
+                        case 16:
+                            assertEquals(event.getData(0), "P");
+                            break;
+                        default:
+                            fail();
                     }
                 }
             }
