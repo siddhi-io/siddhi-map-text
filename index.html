@@ -360,6 +360,18 @@
 
 
   <li class="md-nav__item">
+    <a href="api/1.1.1/" title="1.1.1" class="md-nav__link">
+      1.1.1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="api/1.1.0/" title="1.1.0" class="md-nav__link">
       1.1.0
     </a>
@@ -592,8 +604,7 @@
                 
                 
                 <h1 id="siddhi-map-text">siddhi-map-text<a class="headerlink" href="#siddhi-map-text" title="Permanent link">&para;</a></h1>
-<p>The <strong>siddhi-map-text extension</strong> is an extension to <a target="_blank" href="https://wso2.github
-.io/siddhi">Siddhi</a> that supports mapping incoming text messages to a stream at the source, and mapping a stream to text messages at the sink.</p>
+<p>The <strong>siddhi-map-text extension</strong> is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that supports mapping incoming text messages to a stream at the source, and mapping a stream to text messages at the sink.</p>
 <p>Find some useful links below:</p>
 <ul>
 <li><a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text">Source code</a></li>
@@ -601,7 +612,7 @@
 <li><a target="_blank" href="https://github.com/wso2-extensions/siddhi-map-text/issues">Issue tracker</a></li>
 </ul>
 <h2 id="latest-api-docs">Latest API Docs<a class="headerlink" href="#latest-api-docs" title="Permanent link">&para;</a></h2>
-<p>Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.1.0">1.1.0</a>.</p>
+<p>Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.1.1">1.1.1</a>.</p>
 <h2 id="how-to-use">How to use<a class="headerlink" href="#how-to-use" title="Permanent link">&para;</a></h2>
 <p><strong>Using the extension in <a target="_blank" href="https://github.com/wso2/product-sp">WSO2 Stream Processor</a></strong></p>
 <ul>
@@ -643,8 +654,8 @@
 <hr />
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.1.0/#text-sink-mapper">text</a> <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink-mapper">(Sink Mapper)</a></em><br><div style="padding-left: 1em;"><p>This extension is a Text to Event input mapper. Transports that accept text messages can utilize this extension to convert the incoming text messages to Siddhi events. Users can use a pre-defined text format where event conversion is carried out without any additional configurations, or use placeholders to map from a custom text message.</p></div></li>
-<li><a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.1.0/#text-source-mapper">text</a> <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source-mapper">(Source Mapper)</a></em><br><div style="padding-left: 1em;"><p>This extension is a text to Siddhi event source mapper. Transports that publish text messages can utilize this extension to convert the incoming text message to Siddhi events. Users can either use the <code>onEventHandler</code>which is a pre-defined text format where event conversion happens without any additional configurations, or specify a regex to map a text message using custom configurations.</p></div></li>
+<li><a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.1.1/#text-sink-mapper">text</a> <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#sink-mapper">(Sink Mapper)</a></em><br><div style="padding-left: 1em;"><p>This extension is a Event to Text output mapper. Transports that publish text messages can utilize this extension to convert the Siddhi events to text messages. Users can use a pre-defined text format where event conversion is carried out without any additional configurations, or use custom placeholder(using <code>{{</code> and <code>}}</code> or <code>{{{</code> and <code>}}}</code>) to map custom text messages. All variables are HTML escaped by default.<br>For example:<br><code>&amp;</code> is replaced with <code>&amp;amp;</code><br><code>"</code> is replaced with <code>&amp;quot;</code><br><code>=</code> is replaced with <code>&amp;#61;</code><br>If you want to return unescaped HTML, use the triple mustache <code>{{{</code> instead of double <code>{{</code>.</p></div></li>
+<li><a target="_blank" href="https://wso2-extensions.github.io/siddhi-map-text/api/1.1.1/#text-source-mapper">text</a> <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#source-mapper">(Source Mapper)</a></em><br><div style="padding-left: 1em;"><p>This extension is a text to Siddhi event input mapper. Transports that accept text messages can utilize this extension to convert the incoming text message to Siddhi event. Users can either use a pre-defined text format where event conversion happens without any additional configurations, or specify a regex to map a text message using custom configurations.</p></div></li>
 </ul>
 <h2 id="how-to-contribute">How to Contribute<a class="headerlink" href="#how-to-contribute" title="Permanent link">&para;</a></h2>
 <ul>
@@ -696,13 +707,13 @@
       <nav class="md-footer-nav__inner md-grid">
         
         
-          <a href="api/1.1.0/" title="1.1.0" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="api/1.1.1/" title="1.1.1" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                1.1.0
+                1.1.1
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
