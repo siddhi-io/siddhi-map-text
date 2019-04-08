@@ -122,6 +122,7 @@
 
     <properties>
         <siddhi.version>4.4.8</siddhi.version>
+        <siddhi.version.range>[4.0.0,5.0.0)</siddhi.version.range>
         <siddhi.extension.io.tcp.version>2.0.20</siddhi.extension.io.tcp.version>
         <siddhi.extension.io.http.version>1.0.36</siddhi.extension.io.http.version>
         <siddhi.extension.io.file.version>1.0.13</siddhi.extension.io.file.version>
