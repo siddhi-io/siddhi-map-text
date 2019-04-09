@@ -28,7 +28,7 @@
 
     <groupId>org.wso2.extension.siddhi.map.text</groupId>
     <artifactId>siddhi-map-text-parent</artifactId>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <name>Siddhi Text Map Extensions</name>
 
     <modules>       
@@ -38,17 +38,17 @@
     <dependencyManagement>
             <dependencies>
                 <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
+                    <groupId>io.siddhi</groupId>
                     <artifactId>siddhi-core</artifactId>
                     <version>${siddhi.version}</version>
                 </dependency>
                 <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
+                    <groupId>io.siddhi</groupId>
                     <artifactId>siddhi-query-api</artifactId>
                     <version>${siddhi.version}</version>
                 </dependency>
                 <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
+                    <groupId>io.siddhi</groupId>
                     <artifactId>siddhi-annotations</artifactId>
                     <version>${siddhi.version}</version>
                 </dependency>
@@ -121,8 +121,8 @@
     </build>
 
     <properties>
-        <siddhi.version>4.4.8</siddhi.version>
-        <siddhi.version.range>[4.0.0,5.0.0)</siddhi.version.range>
+        <siddhi.version>5.0.0-m7</siddhi.version>
+        <siddhi.version.range>[5.0.0, 6.0.0)</siddhi.version.range>
         <siddhi.extension.io.tcp.version>2.0.20</siddhi.extension.io.tcp.version>
         <siddhi.extension.io.http.version>1.0.36</siddhi.extension.io.http.version>
         <siddhi.extension.io.file.version>1.0.13</siddhi.extension.io.file.version>
