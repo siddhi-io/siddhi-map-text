@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-package org.wso2.extension.siddhi.map.text.sinkmapper.util;
+package io.siddhi.extension.map.text.sinkmapper.util;
 
 import com.sun.net.httpserver.HttpServer;
 import org.apache.log4j.Logger;

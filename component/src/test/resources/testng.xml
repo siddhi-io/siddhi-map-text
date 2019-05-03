@@ -17,10 +17,10 @@ limitations under the License.
 <suite name="Siddhi-map-text-Test-Suite">
     <test name="Siddhi-map-text-unit-tests" preserve-order="true" parallel="false">
         <classes>
-            <class name="org.wso2.extension.siddhi.map.text.sourcemapper.TextCustomSourceMapperTestCase"/>
-            <class name="org.wso2.extension.siddhi.map.text.sourcemapper.TextDefaultSourceMapperTestCase"/>
-            <class name="org.wso2.extension.siddhi.map.text.sinkmapper.TextCustomSinkMapperTestCase"/>
-            <class name="org.wso2.extension.siddhi.map.text.sinkmapper.TextDefaultSinkMapperTestCase"/>
+            <class name="io.siddhi.extension.map.text.sourcemapper.TextCustomSourceMapperTestCase"/>
+            <class name="io.siddhi.extension.map.text.sourcemapper.TextDefaultSourceMapperTestCase"/>
+            <class name="io.siddhi.extension.map.text.sinkmapper.TextCustomSinkMapperTestCase"/>
+            <class name="io.siddhi.extension.map.text.sinkmapper.TextDefaultSinkMapperTestCase"/>
         </classes>
     </test>
 </suite>
