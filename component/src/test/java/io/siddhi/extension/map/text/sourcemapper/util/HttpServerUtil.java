@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-package org.wso2.extension.siddhi.map.text.sourcemapper.util;
+package io.siddhi.extension.map.text.sourcemapper.util;
 
 import io.netty.handler.codec.http.HttpMethod;
 import org.slf4j.Logger;
