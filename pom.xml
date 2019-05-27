@@ -28,7 +28,7 @@
 
     <groupId>io.siddhi.extension.map.text</groupId>
     <artifactId>siddhi-map-text-parent</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.3-SNAPSHOT</version>
     <name>Siddhi Text Map Extensions</name>
 
     <modules>       
@@ -140,7 +140,7 @@
         <url>https://github.com/wso2-extensions/siddhi-map-text.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-map-text.git</developerConnection>
         <connection>scm:git:https://github.com/wso2-extensions/siddhi-map-text.git</connection>
-        <tag>v2.0.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
 </project>
