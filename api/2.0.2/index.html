@@ -1,0 +1,891 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Siddhi Map Text Extension">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.0">
+    
+    
+      
+        <title>2.0.2 - Siddhi Map Text</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.0284f74d.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.01803549.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#009688">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-103065-28", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#api-docs-v202" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="Siddhi Map Text" class="md-header-nav__button md-logo">
+          
+            <img src="../../images/siddhi-logo.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Siddhi Map Text
+            </span>
+            <span class="md-header-nav__topic">
+              
+                2.0.2
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/siddhi-io/siddhi-map-text/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Siddhi-Map-Text
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="Siddhi Map Text" class="md-nav__button md-logo">
+      
+        <img src="../../images/siddhi-logo.svg" width="48" height="48">
+      
+    </a>
+    Siddhi Map Text
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/siddhi-io/siddhi-map-text/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    Siddhi-Map-Text
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Information" class="md-nav__link">
+      Information
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      API Docs
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        API Docs
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../latest/" title="latest" class="md-nav__link">
+      latest
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        2.0.2
+      </label>
+    
+    <a href="./" title="2.0.2" class="md-nav__link md-nav__link--active">
+      2.0.2
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sinkmapper" title="Sinkmapper" class="md-nav__link">
+    Sinkmapper
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text-sink-mapper" title="text (Sink Mapper)" class="md-nav__link">
+    text (Sink Mapper)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sourcemapper" title="Sourcemapper" class="md-nav__link">
+    Sourcemapper
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text-source-mapper" title="text (Source Mapper)" class="md-nav__link">
+    text (Source Mapper)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2.0.1/" title="2.0.1" class="md-nav__link">
+      2.0.1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2.0.0/" title="2.0.0" class="md-nav__link">
+      2.0.0
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.1.2/" title="1.1.2" class="md-nav__link">
+      1.1.2
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.1.1/" title="1.1.1" class="md-nav__link">
+      1.1.1
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.1.0/" title="1.1.0" class="md-nav__link">
+      1.1.0
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.22/" title="1.0.22" class="md-nav__link">
+      1.0.22
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.21/" title="1.0.21" class="md-nav__link">
+      1.0.21
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.20/" title="1.0.20" class="md-nav__link">
+      1.0.20
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.19/" title="1.0.19" class="md-nav__link">
+      1.0.19
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.18/" title="1.0.18" class="md-nav__link">
+      1.0.18
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.17/" title="1.0.17" class="md-nav__link">
+      1.0.17
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.16/" title="1.0.16" class="md-nav__link">
+      1.0.16
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.15/" title="1.0.15" class="md-nav__link">
+      1.0.15
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.14/" title="1.0.14" class="md-nav__link">
+      1.0.14
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sinkmapper" title="Sinkmapper" class="md-nav__link">
+    Sinkmapper
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text-sink-mapper" title="text (Sink Mapper)" class="md-nav__link">
+    text (Sink Mapper)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sourcemapper" title="Sourcemapper" class="md-nav__link">
+    Sourcemapper
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text-source-mapper" title="text (Source Mapper)" class="md-nav__link">
+    text (Source Mapper)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/siddhi-io/siddhi-map-text/blob/master/api/2.0.2.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="api-docs-v202">API Docs - v2.0.2</h1>
+<div class="admonition info">
+<p class="admonition-title">Tested Siddhi Core version: <em><a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/">5.1.0</a></em></p>
+<p>It could also support other Siddhi Core minor versions.</p>
+</div>
+<h2 id="sinkmapper">Sinkmapper</h2>
+<h3 id="text-sink-mapper">text <em><a target="_blank" href="https://siddhi.io/en/v5.0/docs/query-guide/#sink-mapper">(Sink Mapper)</a></em></h3>
+<p style="word-wrap: break-word">This extension is a Event to Text output mapper. Transports that publish text messages can utilize this extension to convert the Siddhi events to text messages. Users can use a pre-defined text format where event conversion is carried out without any additional configurations, or use custom placeholder(using <code>{{</code> and <code>}}</code> or <code>{{{</code> and <code>}}}</code>) to map custom text messages. All variables are HTML escaped by default.<br>For example:<br><code>&</code> is replaced with <code>&amp;amp;</code><br><code>"</code> is replaced with <code>&amp;quot;</code><br><code>=</code> is replaced with <code>&amp;#61;</code><br>If you want to return unescaped HTML, use the triple mustache <code>{{{</code> instead of double <code>{{</code>.</p>
+
+<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<pre><code>@sink(..., @map(type=&quot;text&quot;, event.grouping.enabled=&quot;&lt;BOOL&gt;&quot;, delimiter=&quot;&lt;STRING&gt;&quot;, new.line.character=&quot;&lt;STRING&gt;&quot;)
+</code></pre>
+
+<p><span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">event.grouping.enabled</td>
+        <td style="vertical-align: top; word-wrap: break-word">If this parameter is set to <code>true</code>, events are grouped via a delimiter when multiple events are received. It is required to specify a value for the <code>delimiter</code> parameter when the value for this parameter is <code>true</code>.</td>
+        <td style="vertical-align: top">false</td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">delimiter</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies how events are separated when a grouped event is received. This must be a whole line and not a single character.</td>
+        <td style="vertical-align: top">~~~~~~~~~~</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">new.line.character</td>
+        <td style="vertical-align: top; word-wrap: break-word">This attribute indicates the new line character of the event that is expected to be received. This is used mostly when communication between 2 types of operating systems is expected. For example, Linux uses <code>\n</code> whereas Windows uses <code>\r\n</code> as the end of line character.</td>
+        <td style="vertical-align: top">\n</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table></p>
+<p><span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span></p>
+<pre><code>@sink(type='inMemory', topic='stock', @map(type='text'))
+define stream FooStream (symbol string, price float, volume long);
+</code></pre>
+
+<p style="word-wrap: break-word">This query performs a default text input mapping. The expected output is as follows:<br>symbol:"WSO2",<br>price:55.6,<br>volume:100</p>
+
+<p><span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span></p>
+<pre><code>@sink(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true'))
+define stream FooStream (symbol string, price float, volume long);
+</code></pre>
+
+<p style="word-wrap: break-word">This query performs a default text input mapping with event grouping. The expected output is as follows:<br>symbol:"WSO2",<br>price:55.6,<br>volume:100<br>~~~~~~~~~~<br>symbol:"WSO2",<br>price:55.6,<br>volume:100</p>
+
+<p><span id="example-3" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 3</span></p>
+<pre><code>@sink(type='inMemory', topic='stock', @map(type='text',  @payload(&quot;SensorID : {{symbol}}/{{volume}}, SensorPrice : Rs{{price}}/=, Value : {{volume}}ml&quot;)))
+define stream FooStream (symbol string, price float, volume long);
+</code></pre>
+
+<p style="word-wrap: break-word">This query performs a custom text mapping. The expected output is as follows:<br>SensorID : wso2/100, SensorPrice : Rs1000/=, Value : 100ml <br>for the following siddhi event.<br>{wso2,1000,100}</p>
+
+<p><span id="example-4" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 4</span></p>
+<pre><code>@sink(type='inMemory', topic='stock', @map(type='text', event.grouping.enabled='true', @payload(&quot;Stock price of {{symbol}} is {{price}}&quot;)))
+define stream FooStream (symbol string, price float, volume long);
+</code></pre>
+
+<p style="word-wrap: break-word">This query performs a custom text mapping with event grouping. The expected output is as follows:<br>Stock price of WSO2 is 55.6<br>~~~~~~~~~~<br>Stock price of WSO2 is 55.6<br>~~~~~~~~~~<br>Stock price of WSO2 is 55.6<br>for the following siddhi event.<br>{WSO2,55.6,10}</p>
+
+<p><span id="example-5" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 5</span></p>
+<pre><code>@sink(type='inMemory', topic='stock', @map(type='text',  @payload(&quot;SensorID : {{{symbol}}}/{{{volume}}}, SensorPrice : Rs{{{price}}}/=, Value : {{{volume}}}ml&quot;)))
+define stream FooStream (symbol string, price float, volume long);
+</code></pre>
+
+<p style="word-wrap: break-word">This query performs a custom text mapping to return unescaped HTML. The expected output is as follows:<br>SensorID : a&b/100, SensorPrice : Rs1000/=, Value : 100ml <br>for the following siddhi event.<br>{a&b,1000,100}</p>
+
+<h2 id="sourcemapper">Sourcemapper</h2>
+<h3 id="text-source-mapper">text <em><a target="_blank" href="https://siddhi.io/en/v5.0/docs/query-guide/#source-mapper">(Source Mapper)</a></em></h3>
+<p style="word-wrap: break-word">This extension is a text to Siddhi event input mapper. Transports that accept text messages can utilize this extension to convert the incoming text message to Siddhi event. Users can either use a pre-defined text format where event conversion happens without any additional configurations, or specify a regex to map a text message using custom configurations.</p>
+
+<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<pre><code>@source(..., @map(type=&quot;text&quot;, regex.groupid=&quot;&lt;STRING&gt;&quot;, fail.on.missing.attribute=&quot;&lt;BOOL&gt;&quot;, event.grouping.enabled=&quot;&lt;BOOL&gt;&quot;, delimiter=&quot;&lt;STRING&gt;&quot;, new.line.character=&quot;&lt;STRING&gt;&quot;)
+</code></pre>
+
+<p><span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">regex.groupid</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies a regular expression group. The <code>groupid</code> can be any capital letter (e.g., regex.A,regex.B .. etc). You can specify any number of regular expression groups. In the attribute annotation, you need to map all attributes to the regular expression group with the matching group index. If you need to to enable custom mapping, it is required to specifythe matching group for each and every attribute.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">fail.on.missing.attribute</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies how unknown attributes should be handled. If it is set to <code>true</code> a message is dropped if its execution fails, or if one or more attributes do not have values. If this parameter is set to <code>false</code>, null values are assigned to attributes with missing values, and messages with such attributes are not dropped.</td>
+        <td style="vertical-align: top">true</td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">event.grouping.enabled</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies whether event grouping is enabled or not. To receive a group of events together and generate multiple events, this parameter must be set to <code>true</code>.</td>
+        <td style="vertical-align: top">false</td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">delimiter</td>
+        <td style="vertical-align: top; word-wrap: break-word">This parameter specifies how events must be separated when multiple events are received. This must be whole line and not a single character.</td>
+        <td style="vertical-align: top">~~~~~~~~~~</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">new.line.character</td>
+        <td style="vertical-align: top; word-wrap: break-word">This attribute indicates the new line character of the event that is expected to be received. This is used mostly when communication between 2 types of operating systems is expected. For example, Linux uses <code>\n</code> as the end of line character whereas windows uses <code>\r\n</code>.</td>
+        <td style="vertical-align: top">\n</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table></p>
+<p><span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span></p>
+<pre><code>@source(type='inMemory', topic='stock', @map(type='text'))
+define stream FooStream (symbol string, price float, volume long);
+</code></pre>
+
+<p style="word-wrap: break-word">This query performs a default text input mapping. The expected input is as follows:<br>symbol:"WSO2",<br>price:55.6,<br>volume:100<br>OR<br>symbol:'WSO2',<br>price:55.6,<br>volume:100<br><br>If group events is enabled then input should be as follows: <br>symbol:"WSO2",<br>price:55.6,<br>volume:100<br>~~~~~~~~~~<br>symbol:"WSO2",<br>price:55.6,<br>volume:100</p>
+
+<p><span id="example-2" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 2</span></p>
+<pre><code>@source(type='inMemory', topic='stock', @map(type='text', fail.on.unknown.attribute = 'true', regex.A='(\w+)\s([-0-9]+)',regex.B='volume\s([-0-9]+)', @attributes(symbol = 'A[1]',price = 'A[2]',volume = 'B')))
+define stream FooStream (symbol string, price float, volume long);
+</code></pre>
+
+<p style="word-wrap: break-word">This query performs a custom text mapping. The expected input is as follows:<br>wos2 550 volume 100<br><br>If group events is enabled then input should be as follows: <br>wos2 550 volume 100<br>~~~~~~~~~~<br>wos2 550 volume 100<br>~~~~~~~~~~<br>wos2 550 volume 100<br></p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../latest/" title="latest" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                latest
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../2.0.1/" title="2.0.1" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                2.0.1
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Siddhi - Documentation
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/siddhi-io/siddhi" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://medium.com/siddhi-io" class="md-footer-social__link fa fa-medium"></a>
+    
+      <a href="https://twitter.com/siddhi_io" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://www.linkedin.com/groups/13553064" class="md-footer-social__link fa fa-linkedin"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.245445c6.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+        <script src="../../assets/javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>
