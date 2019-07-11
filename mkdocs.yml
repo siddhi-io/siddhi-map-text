@@ -1,51 +1,53 @@
 site_name: Siddhi Map Text
 site_description: Siddhi Map Text Extension
-site_author: WSO2
-site_url: https://wso2-extensions.github.io/siddhi-map-text/
-extra_css:
-- stylesheets/extra.css
-extra_javascript:
-- javascripts/extra.js
 repo_name: Siddhi-Map-Text
-repo_url: https://github.com/wso2-extensions/siddhi-map-text
-copyright: Copyright &copy; 2011 - 2018 WSO2
+repo_url: https://github.com/siddhi-io/siddhi-map-text/
+edit_uri: https://github.com/siddhi-io/siddhi-map-text/blob/master/
+copyright: Siddhi - Documentation
 theme:
   name: material
-  logo: images/siddhi-logo-w.svg
+  logo: images/siddhi-logo.svg
   favicon: images/favicon.ico
   palette:
     primary: teal
     accent: teal
-google_analytics:
-- UA-103065-28
-- auto
+extra_css:
+  - assets/stylesheets/extra.css
+extra_javascript:
+  - assets/javascripts/extra.js
 extra:
   social:
-  - type: github
-    link: https://github.com/wso2/siddhi
-  - type: linkedin
-    link: https://www.linkedin.com/groups/13553064
+    - type: github
+      link: https://github.com/siddhi-io/siddhi
+    - type: medium
+      link: https://medium.com/siddhi-io
+    - type: twitter
+      link: https://twitter.com/siddhi_io
+    - type: linkedin
+      link: https://www.linkedin.com/groups/13553064
+google_analytics:
+  - UA-103065-28
+  - auto
 markdown_extensions:
-- admonition
-- toc(permalink=true)
-- codehilite(guess_lang=false)
+  - markdown.extensions.admonition
 pages:
-- Welcome: index.md
-- API Docs:
-  - 2.0.2: api/2.0.2.md
-  - 2.0.1: api/2.0.1.md
-  - 2.0.0: api/2.0.0.md
-  - 1.1.2: api/1.1.2.md
-  - 1.1.1: api/1.1.1.md
-  - 1.1.0: api/1.1.0.md
-  - 1.0.22: api/1.0.22.md
-  - 1.0.21: api/1.0.21.md
-  - 1.0.20: api/1.0.20.md
-  - 1.0.19: api/1.0.19.md
-  - 1.0.18: api/1.0.18.md
-  - 1.0.17: api/1.0.17.md
-  - 1.0.16: api/1.0.16.md
-  - 1.0.15: api/1.0.15.md
-  - 1.0.14: api/1.0.14.md
-  - latest: api/latest.md
-- License: license.md
+  - Information: index.md
+  - API Docs:
+      - latest: api/latest.md
+      - 2.0.2: api/2.0.2.md
+      - 2.0.1: api/2.0.1.md
+      - 2.0.0: api/2.0.0.md
+      - 1.1.2: api/1.1.2.md
+      - 1.1.1: api/1.1.1.md
+      - 1.1.0: api/1.1.0.md
+      - 1.0.22: api/1.0.22.md
+      - 1.0.21: api/1.0.21.md
+      - 1.0.20: api/1.0.20.md
+      - 1.0.19: api/1.0.19.md
+      - 1.0.18: api/1.0.18.md
+      - 1.0.17: api/1.0.17.md
+      - 1.0.16: api/1.0.16.md
+      - 1.0.15: api/1.0.15.md
+      - 1.0.14: api/1.0.14.md
+  - License: license.md
+
