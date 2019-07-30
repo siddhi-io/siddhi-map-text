@@ -343,9 +343,12 @@ public class TextSinkMapper extends SinkMapper {
         for (Annotation sinkAnnotation : streamDefinition.getAnnotations()) {
             Annotation mapAnnotation = AnnotationHelper.getAnnotation(SiddhiConstants.ANNOTATION_MAP,
                     sinkAnnotation.getAnnotations());
-            List<Annotation> attributeAnnotations = mapAnnotation.getAnnotations(SiddhiConstants.ANNOTATION_PAYLOAD);
-            if (attributeAnnotations.size() == 1) {
-                elements = attributeAnnotations.get(0).getElements();
+            if (mapAnnotation != null) {
+                List<Annotation> attributeAnnotations = mapAnnotation.
+                        getAnnotations(SiddhiConstants.ANNOTATION_PAYLOAD);
+                if (attributeAnnotations.size() == 1) {
+                    elements = attributeAnnotations.get(0).getElements();
+                }
             }
         }
         if (elements != null) { //remove the start and end quotes and get the payload
