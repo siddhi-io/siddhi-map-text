@@ -114,7 +114,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#api-docs-v202" tabindex="1" class="md-skip">
+      <a href="#api-docs-v203" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -358,6 +358,18 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2.0.3/" title="2.0.3" class="md-nav__link">
+      2.0.3
+    </a>
   </li>
 
         
@@ -637,12 +649,15 @@
                   <a href="https://github.com/siddhi-io/siddhi-map-text/blob/master/api/latest.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="api-docs-v202">API Docs - v2.0.2</h1>
+                <h1 id="api-docs-v203">API Docs - v2.0.3</h1>
+<div class="admonition info">
+<p class="admonition-title">Tested Siddhi Core version: <em><a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/">5.1.0</a></em></p>
+<p>It could also support other Siddhi Core minor versions.</p>
+</div>
 <h2 id="sinkmapper">Sinkmapper</h2>
-<h3 id="text-sink-mapper">text <em><a target="_blank" href="https://siddhi.io/en/v5.0/docs/query-guide/#sink-mapper">(Sink Mapper)</a></em></h3>
-<p style="word-wrap: break-word">This extension is a Event to Text output mapper. Transports that publish text messages can utilize this extension to convert the Siddhi events to text messages. Users can use a pre-defined text format where event conversion is carried out without any additional configurations, or use custom placeholder(using <code>{{</code> and <code>}}</code> or <code>{{{</code> and <code>}}}</code>) to map custom text messages. All variables are HTML escaped by default.<br>For example:<br><code>&</code> is replaced with <code>&amp;amp;</code><br><code>"</code> is replaced with <code>&amp;quot;</code><br><code>=</code> is replaced with <code>&amp;#61;</code><br>If you want to return unescaped HTML, use the triple mustache <code>{{{</code> instead of double <code>{{</code>.</p>
-
-<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<h3 id="text-sink-mapper">text <em><a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/#sink-mapper">(Sink Mapper)</a></em></h3>
+<p><p style="word-wrap: break-word">This extension is a Event to Text output mapper. Transports that publish text messages can utilize this extension to convert the Siddhi events to text messages. Users can use a pre-defined text format where event conversion is carried out without any additional configurations, or use custom placeholder(using <code>{{</code> and <code>}}</code> or <code>{{{</code> and <code>}}}</code>) to map custom text messages. All variables are HTML escaped by default.<br>For example:<br><code>&amp;</code> is replaced with <code>&amp;amp;</code><br><code>"</code> is replaced with <code>&amp;quot;</code><br><code>=</code> is replaced with <code>&amp;#61;</code><br>If you want to return unescaped HTML, use the triple mustache <code>{{{</code> instead of double <code>{{</code>.</p>
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
 <pre><code>@sink(..., @map(type=&quot;text&quot;, event.grouping.enabled=&quot;&lt;BOOL&gt;&quot;, delimiter=&quot;&lt;STRING&gt;&quot;, new.line.character=&quot;&lt;STRING&gt;&quot;)
 </code></pre>
 
@@ -718,10 +733,9 @@ define stream FooStream (symbol string, price float, volume long);
 <p style="word-wrap: break-word">This query performs a custom text mapping to return unescaped HTML. The expected output is as follows:<br>SensorID : a&b/100, SensorPrice : Rs1000/=, Value : 100ml <br>for the following siddhi event.<br>{a&b,1000,100}</p>
 
 <h2 id="sourcemapper">Sourcemapper</h2>
-<h3 id="text-source-mapper">text <em><a target="_blank" href="https://siddhi.io/en/v5.0/docs/query-guide/#source-mapper">(Source Mapper)</a></em></h3>
-<p style="word-wrap: break-word">This extension is a text to Siddhi event input mapper. Transports that accept text messages can utilize this extension to convert the incoming text message to Siddhi event. Users can either use a pre-defined text format where event conversion happens without any additional configurations, or specify a regex to map a text message using custom configurations.</p>
-
-<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<h3 id="text-source-mapper">text <em><a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/#source-mapper">(Source Mapper)</a></em></h3>
+<p><p style="word-wrap: break-word">This extension is a text to Siddhi event input mapper. Transports that accept text messages can utilize this extension to convert the incoming text message to Siddhi event. Users can either use a pre-defined text format where event conversion happens without any additional configurations, or specify a regex to map a text message using custom configurations.</p>
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
 <pre><code>@source(..., @map(type=&quot;text&quot;, regex.groupid=&quot;&lt;STRING&gt;&quot;, fail.on.missing.attribute=&quot;&lt;BOOL&gt;&quot;, event.grouping.enabled=&quot;&lt;BOOL&gt;&quot;, delimiter=&quot;&lt;STRING&gt;&quot;, new.line.character=&quot;&lt;STRING&gt;&quot;)
 </code></pre>
 
@@ -825,13 +839,13 @@ define stream FooStream (symbol string, price float, volume long);
           </a>
         
         
-          <a href="../2.0.2/" title="2.0.2" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../2.0.3/" title="2.0.3" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                2.0.2
+                2.0.3
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
