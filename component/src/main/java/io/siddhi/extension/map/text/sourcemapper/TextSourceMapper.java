@@ -129,7 +129,7 @@ import java.util.regex.Pattern;
                                 + "volume:100"
                 ),
                 @Example(
-                        syntax = "@source(type='inMemory', topic='stock', @map(type='text', fail.on.unknown.attribute" +
+                        syntax = "@source(type='inMemory', topic='stock', @map(type='text', fail.on.missing.attribute" +
                                 " = 'true', regex.A='(\\w+)\\s([-0-9]+)',regex.B='volume\\s([-0-9]+)', @attributes(" +
                                 "symbol = 'A[1]'," +
                                 "price = 'A[2]'," +
