@@ -544,7 +544,7 @@ public class TextDefaultSinkMapperTestCase {
         InMemoryBroker.unsubscribe(subscriberIBM);
     }
 
-    @Test(enabled = false)
+    @Test
     public void fileSinkTestSingle() throws InterruptedException {
         log.info("test text default map with file io");
         AtomicInteger count = new AtomicInteger();
@@ -603,7 +603,7 @@ public class TextDefaultSinkMapperTestCase {
         }
     }
 
-    @Test(enabled = false)
+    @Test
     public void fileSinkTestGroup() throws InterruptedException {
         log.info("test text default map with file io");
         AtomicInteger count = new AtomicInteger();
@@ -669,7 +669,7 @@ public class TextDefaultSinkMapperTestCase {
         }
     }
 
-    @Test(enabled = false)
+    @Test
     public void fileSinkTestNewLineCharacter() throws InterruptedException {
         log.info("test text default map with file io");
         AtomicInteger count = new AtomicInteger();
@@ -735,7 +735,7 @@ public class TextDefaultSinkMapperTestCase {
      *
      * @throws Exception Interrupted exception
      */
-    @Test(enabled = false)
+    @Test
     public void testHTTPTextMappingText() throws Exception {
 
         log.info("Creating test for publishing events with TEXT mapping.");
@@ -766,7 +766,7 @@ public class TextDefaultSinkMapperTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(enabled = false)
+    @Test
     public void testTextSinkMapperEventGroupHTTP() throws InterruptedException {
         log.info("Test for default event delimiter and http.");
         String streams = "" +

@@ -42,7 +42,7 @@
             <artifactId>siddhi-query-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.extension.siddhi.io.file</groupId>
+            <groupId>io.siddhi.extension.io.file</groupId>
             <artifactId>siddhi-io-file</artifactId>
         </dependency>
         <dependency>
@@ -59,7 +59,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.extension.siddhi.io.http</groupId>
+            <groupId>io.siddhi.extension.io.http</groupId>
             <artifactId>siddhi-io-http</artifactId>
             <scope>test</scope>
         </dependency>
@@ -69,7 +69,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.extension.siddhi.io.tcp</groupId>
+            <groupId>io.siddhi.extension.io.tcp</groupId>
             <artifactId>siddhi-io-tcp</artifactId>
         </dependency>
         <dependency>
@@ -113,9 +113,9 @@
                             io.siddhi.extension.map.text*
                         </Export-Package>
                         <Import-Package>
-                            org.wso2.siddhi.core.*;version="${siddhi.version.range}",
-                            org.wso2.siddhi.annotation.*;version="${siddhi.version.range}",
-                            org.wso2.siddhi.query.api.*;version="${siddhi.version.range}",
+                            io.siddhi.core.*;version="${siddhi.version.range}",
+                            io.siddhi.annotation.*;version="${siddhi.version.range}",
+                            io.siddhi.query.api.*;version="${siddhi.version.range}",
                             *;resolution:=optional
                         </Import-Package>
                         <Private-Package>

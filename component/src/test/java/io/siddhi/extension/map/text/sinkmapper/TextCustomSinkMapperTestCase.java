@@ -711,7 +711,7 @@ public class TextCustomSinkMapperTestCase {
         InMemoryBroker.unsubscribe(subscriberIBM);
     }
 
-    @Test(enabled = false)
+    @Test
     public void fileSinkTest() throws InterruptedException {
         log.info("test text custom map with file io");
         AtomicInteger count = new AtomicInteger();
@@ -771,7 +771,7 @@ public class TextCustomSinkMapperTestCase {
         }
     }
 
-    @Test(enabled = false)
+    @Test
     public void fileSinkTestGroup() throws InterruptedException {
         log.info("test text default map with file io");
         AtomicInteger count = new AtomicInteger();
@@ -845,7 +845,7 @@ public class TextCustomSinkMapperTestCase {
      *
      * @throws Exception Interrupted exception
      */
-    @Test(enabled =  false)
+    @Test //(enabled =  false)
     public void testHTTPTextMappingText() throws Exception {
 
         log.info("Creating test for publishing events with TEXT mapping.");
@@ -854,7 +854,7 @@ public class TextCustomSinkMapperTestCase {
         String inStreamDefinition = "Define stream FooStream (message String,method String,headers String);"
                 + "@sink(type='http',publisher.url='http://localhost:8005/abc',method='{{method}}',"
                 + "headers='{{headers}}',"
-                + "@map(type='text', @payload('{{{message}}}'))) "
+                + "@map(type='text', mustache.enabled='true', @payload('{{{message}}}'))) "
                 + "Define stream BarStream (message String,method String,headers String);";
         String query = ("@info(name = 'query1') " +
                 "from FooStream select message,method,headers insert into BarStream;");
@@ -874,7 +874,7 @@ public class TextCustomSinkMapperTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(enabled = false)
+    @Test
     public void testHTTPTextMappingTextMultiple() throws Exception {
 
         log.info("Creating test for publishing events with TEXT mapping.");
@@ -883,7 +883,7 @@ public class TextCustomSinkMapperTestCase {
         String inStreamDefinition = "Define stream FooStream (message String,method String,headers String);"
                 + "@sink(type='http',publisher.url='http://localhost:8005/abc',method='{{method}}',"
                 + "headers='{{headers}}',"
-                + "@map(type='text', event.grouping" +
+                + "@map(type='text', mustache.enabled='true', event.grouping" +
                 ".enabled='true', @payload('{{{message}}}'))) "
                 + "Define stream BarStream (message String,method String,headers String);";
         String query = ("@info(name = 'query1') " +

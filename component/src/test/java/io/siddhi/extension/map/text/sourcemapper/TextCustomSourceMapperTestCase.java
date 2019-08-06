@@ -28,12 +28,12 @@ import io.siddhi.core.util.SiddhiTestHelper;
 import io.siddhi.core.util.persistence.InMemoryPersistenceStore;
 import io.siddhi.core.util.persistence.PersistenceStore;
 import io.siddhi.core.util.transport.InMemoryBroker;
+import io.siddhi.extension.io.tcp.transport.TCPNettyClient;
 import io.siddhi.extension.map.text.sourcemapper.util.HttpTestUtil;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.wso2.extension.siddhi.io.tcp.transport.TCPNettyClient;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -298,7 +298,7 @@ public class TextCustomSourceMapperTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(enabled = false)
+    @Test
     public void testTextCustomSourceMapperTcp() throws Exception {
         log.info("Test for events with special charaters.");
         String streams = "" +
@@ -767,7 +767,7 @@ public class TextCustomSourceMapperTestCase {
      *
      * @throws Exception Interrupted exception
      */
-    @Test(enabled = false)
+    @Test
     public void testTextMappingSingleCustom() throws Exception {
         AtomicInteger eventCount = new AtomicInteger(0);
         log.info("Creating test for publishing events with Text mapping through http.");
