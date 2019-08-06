@@ -27,18 +27,16 @@ import io.siddhi.annotation.Parameter;
 import io.siddhi.annotation.util.DataType;
 import io.siddhi.core.config.SiddhiAppContext;
 import io.siddhi.core.event.Event;
+import io.siddhi.core.exception.NoSuchAttributeException;
 import io.siddhi.core.exception.SiddhiAppCreationException;
 import io.siddhi.core.stream.output.sink.SinkListener;
 import io.siddhi.core.stream.output.sink.SinkMapper;
-import io.siddhi.core.util.SiddhiConstants;
 import io.siddhi.core.util.config.ConfigReader;
 import io.siddhi.core.util.transport.OptionHolder;
 import io.siddhi.core.util.transport.TemplateBuilder;
-import io.siddhi.query.api.annotation.Annotation;
 import io.siddhi.query.api.annotation.Element;
 import io.siddhi.query.api.definition.Attribute;
 import io.siddhi.query.api.definition.StreamDefinition;
-import io.siddhi.query.api.util.AnnotationHelper;
 import org.apache.log4j.Logger;
 
 import java.io.StringReader;
@@ -57,8 +55,10 @@ import java.util.Map;
         description = "This extension is a Event to Text output mapper. Transports that publish text messages can" +
                 " utilize this extension to convert the Siddhi events to text messages. Users can use" +
                 " a pre-defined text format where event conversion is carried out without any additional " +
-                "configurations, or use custom placeholder(using `{{` and `}}` or `{{{` and `}}}`) to map custom text" +
-                " messages. All variables are HTML escaped by default.\n" +
+                "configurations, or use custom placeholder(using `{{` and `}}`) to map custom text " +
+                "messages. Again, you can also enable mustache based custom mapping. In mustache based custom " +
+                "mapping you can use custom placeholder (using `{{` and `}}` or `{{{` and `}}}`) to map custom " +
+                "text. In mustache based custom mapping, all variables are HTML escaped by default.\n" +
                 "For example:\n`&` is replaced with `&amp;amp;`" + "\n" +
                 "`\"` is replaced with `&amp;quot;`\n" +
                 "`=` is replaced with `&amp;#61;`\n" +
@@ -87,7 +87,14 @@ import java.util.Map;
                                 " uses `\\r\\n` as the end of line character.",
                         type = {DataType.STRING},
                         optional = true,
-                        defaultValue = "\\n")
+                        defaultValue = "\\n"),
+
+                @Parameter(name = "mustache.enabled",
+                        description = "If this parameter is set to `true`, then mustache mapping gets enabled for" +
+                                "custom text mapping.",
+                        type = {DataType.BOOL},
+                        optional = true,
+                        defaultValue = "false"),
         },
         examples = {
                 @Example(
@@ -146,7 +153,7 @@ import java.util.Map;
                                 + "{WSO2,55.6,10}"
                 ),
                 @Example(
-                        syntax = "@sink(type='inMemory', topic='stock', @map(type='text', " +
+                        syntax = "@sink(type='inMemory', topic='stock', @map(type='text', mustache.enabled='true', " +
                                 " @payload(\"SensorID : {{{symbol}}}/{{{volume}}}, SensorPrice : Rs{{{price}}}/=, " +
                                 "Value : {{{volume}}}ml\")))\n"
                                 + "define stream FooStream (symbol string, price float, volume long);",
@@ -168,9 +175,11 @@ public class TextSinkMapper extends SinkMapper {
     private static final String STRING_ENCLOSING_ELEMENT = "\"";
     private static final String EVENT_ATTRIBUTE_VALUE_SEPARATOR = ":";
     private static final String OPTION_GROUP_EVENTS = "event.grouping.enabled";
+    private static final String OPTION_MUSTACHE_MAPPING_ENABLED = "mustache.enabled";
     private static final String OPTION_GROUP_EVENTS_DELIMITER = "delimiter";
     private static final String DEFAULT_EVENTS_DELIMITER = "~~~~~~~~~~";
     private static final String DEFAULT_GROUP_EVENTS = "false";
+    private static final String DEFAULT_MUSTACHE_MAPPING_ENABLED = "false";
     private static final String OPTION_NEW_LINE = "new.line.character";
     private static final String DEFAULT_NEW_LINE = "\n";
 
@@ -180,15 +189,21 @@ public class TextSinkMapper extends SinkMapper {
     private String endOfLine;
     private String streamID;
     private Mustache mustache;
-    private Map<String, Object> scopes;
+    private boolean mustacheMappingEnabled;
+    private Map<String, Object> scopes = new HashMap<String, Object>();
+    private List<Element> unmappedPayloadList;
+    private boolean customMappingEnabled;
 
     @Override
     public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, ConfigReader mapperConfigReader,
                      SiddhiAppContext siddhiAppContext) {
+        this.mustacheMappingEnabled = Boolean.valueOf(optionHolder
+                .validateAndGetStaticValue(OPTION_MUSTACHE_MAPPING_ENABLED, DEFAULT_MUSTACHE_MAPPING_ENABLED));
 
-        MustacheFactory mf = new DefaultMustacheFactory();
-        scopes = new HashMap<String, Object>();
+        if (!mustacheMappingEnabled) {
+            super.buildMapperTemplate(streamDefinition, unmappedPayloadList);
+        }
         this.streamID = streamDefinition.getId();
         this.attributeList = streamDefinition.getAttributeList();
         this.eventGroupEnabled = Boolean.valueOf(optionHolder
@@ -207,10 +222,24 @@ public class TextSinkMapper extends SinkMapper {
             throw new SiddhiAppCreationException("Text sink-mapper does not support object @payload mappings, " +
                     "error at the mapper of '" + streamDefinition.getId() + "'");
         }
+
         //if it is custom mapping, create the custom template and compile
-        if (payloadTemplateBuilderMap != null) {
+        if (mustacheMappingEnabled && unmappedPayloadList != null && unmappedPayloadList.size() > 0) {
+            MustacheFactory mf = new DefaultMustacheFactory();
             String customTemplate = createCustomTemplate(getTemplateFromPayload(streamDefinition), eventGroupEnabled);
             mustache = mf.compile(new StringReader(customTemplate), "customEvent");
+        }
+    }
+
+    /**
+     * Method to create mapper template.
+     * @param streamDefinition Stream definition corresponding to mapper
+     * @param unmappedPayloadList mapper payload template list
+     */
+    protected void buildMapperTemplate(StreamDefinition streamDefinition, List<Element> unmappedPayloadList) {
+        this.unmappedPayloadList = unmappedPayloadList;
+        if (unmappedPayloadList != null && unmappedPayloadList.size() > 0) {
+            this.customMappingEnabled = true;
         }
     }
 
@@ -228,10 +257,15 @@ public class TextSinkMapper extends SinkMapper {
     public void mapAndSend(Event[] events, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, SinkListener sinkListener) {
         if (!eventGroupEnabled) { //Event not grouping
-            if (payloadTemplateBuilderMap != null) { //custom mapping case
+            if (customMappingEnabled) { //custom mapping case
                 for (Event event : events) {
                     if (event != null) {
-                        sinkListener.publish(constructCustomMapping(event));
+                        if (!mustacheMappingEnabled) {
+                            sinkListener.publish(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet()
+                                    .iterator().next()).build(event));
+                        } else {
+                            sinkListener.publish(constructCustomMapping(event));
+                        }
                     }
                 }
             } else { //default mapping case
@@ -243,10 +277,15 @@ public class TextSinkMapper extends SinkMapper {
             }
         } else { //events group scenario
             StringBuilder eventData = new StringBuilder();
-            if (payloadTemplateBuilderMap != null) { //custom mapping case
+            if (customMappingEnabled) { //custom mapping case
                 for (Event event : events) {
                     if (event != null) {
-                        eventData.append(constructCustomMapping(event));
+                        if (!mustacheMappingEnabled) {
+                            eventData.append(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet().iterator()
+                                    .next()).build(event)).append(endOfLine).append(eventDelimiter);
+                        } else {
+                            eventData.append(constructCustomMapping(event));
+                        }
                     }
                 }
             } else { //default mapping case
@@ -265,16 +304,27 @@ public class TextSinkMapper extends SinkMapper {
     @Override
     public void mapAndSend(Event event, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, SinkListener sinkListener) {
-        if (payloadTemplateBuilderMap != null) { //custom mapping case
+        if (customMappingEnabled) { //custom mapping case
             if (event != null) {
-                if (!eventGroupEnabled) { //event not grouping
-                    sinkListener.publish(constructCustomMapping(event));
-                } else { //event grouping
-                    StringBuilder eventData = new StringBuilder();
-                    eventData.append(constructCustomMapping(event));
-                    int idx = eventData.lastIndexOf(eventDelimiter);
-                    eventData.delete(idx - endOfLine.length(), idx + eventDelimiter.length());
-                    sinkListener.publish(eventData.toString());
+                if (!mustacheMappingEnabled) {
+                    try {
+                        sinkListener.publish(payloadTemplateBuilderMap.get(payloadTemplateBuilderMap.keySet().iterator()
+                                .next()).build(event));
+                    } catch (NoSuchAttributeException e) {
+                        log.error("Malformed event " + event.toString() + ". Hence proceed with null values" +
+                                " in the stream " + streamID + " of siddhi text output mapper.");
+                        //drop the event
+                    }
+                } else {
+                    if (!eventGroupEnabled) { //event not grouping
+                        sinkListener.publish(constructCustomMapping(event));
+                    } else { //event grouping
+                        StringBuilder eventData = new StringBuilder();
+                        eventData.append(constructCustomMapping(event));
+                        int idx = eventData.lastIndexOf(eventDelimiter);
+                        eventData.delete(idx - endOfLine.length(), idx + eventDelimiter.length());
+                        sinkListener.publish(eventData.toString());
+                    }
                 }
             }
         } else { //default mapping case
@@ -339,23 +389,7 @@ public class TextSinkMapper extends SinkMapper {
      * @return the payloadString given by the user
      */
     private String getTemplateFromPayload(StreamDefinition streamDefinition) {
-        List<Element> elements = null;
-        for (Annotation sinkAnnotation : streamDefinition.getAnnotations()) {
-            Annotation mapAnnotation = AnnotationHelper.getAnnotation(SiddhiConstants.ANNOTATION_MAP,
-                    sinkAnnotation.getAnnotations());
-            if (mapAnnotation != null) {
-                List<Annotation> attributeAnnotations = mapAnnotation.
-                        getAnnotations(SiddhiConstants.ANNOTATION_PAYLOAD);
-                if (attributeAnnotations.size() == 1) {
-                    elements = attributeAnnotations.get(0).getElements();
-                }
-            }
-        }
-        if (elements != null) { //remove the start and end quotes and get the payload
-            return elements.get(0).toString().substring(1, elements.get(0).toString().length() - 1);
-        } else {
-            throw new SiddhiAppCreationException("There is no template given in the @payload in" + streamID);
-        }
+        return unmappedPayloadList.get(0).getValue();
     }
 
     /**

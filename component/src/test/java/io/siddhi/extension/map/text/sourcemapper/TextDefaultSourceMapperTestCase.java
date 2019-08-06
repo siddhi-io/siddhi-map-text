@@ -1114,7 +1114,7 @@ public class TextDefaultSourceMapperTestCase {
      *
      * @throws Exception Interrupted exception
      */
-    @Test(enabled = false)
+    @Test
     public void testTextMappingSingle() throws Exception {
         AtomicInteger eventCount = new AtomicInteger(0);
         int waitTime = 50;
@@ -1172,7 +1172,7 @@ public class TextDefaultSourceMapperTestCase {
      *
      * @throws Exception Interrupted exception
      */
-    @Test(enabled = false)
+    @Test
     public void testTextMappingMultiple() throws Exception {
         AtomicInteger eventCount = new AtomicInteger(0);
         int waitTime = 50;
