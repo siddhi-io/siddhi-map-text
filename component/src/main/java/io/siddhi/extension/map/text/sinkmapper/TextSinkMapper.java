@@ -198,7 +198,7 @@ public class TextSinkMapper extends SinkMapper {
     public void init(StreamDefinition streamDefinition, OptionHolder optionHolder, Map<String,
             TemplateBuilder> payloadTemplateBuilderMap, ConfigReader mapperConfigReader,
                      SiddhiAppContext siddhiAppContext) {
-        this.mustacheMappingEnabled = Boolean.valueOf(optionHolder
+        this.mustacheMappingEnabled = Boolean.parseBoolean(optionHolder
                 .validateAndGetStaticValue(OPTION_MUSTACHE_MAPPING_ENABLED, DEFAULT_MUSTACHE_MAPPING_ENABLED));
 
         if (!mustacheMappingEnabled) {
@@ -206,7 +206,7 @@ public class TextSinkMapper extends SinkMapper {
         }
         this.streamID = streamDefinition.getId();
         this.attributeList = streamDefinition.getAttributeList();
-        this.eventGroupEnabled = Boolean.valueOf(optionHolder
+        this.eventGroupEnabled = Boolean.parseBoolean(optionHolder
                 .validateAndGetStaticValue(OPTION_GROUP_EVENTS, DEFAULT_GROUP_EVENTS));
         this.endOfLine = optionHolder.validateAndGetStaticValue(OPTION_NEW_LINE, DEFAULT_NEW_LINE);
         this.eventDelimiter = optionHolder.validateAndGetStaticValue(OPTION_GROUP_EVENTS_DELIMITER,
