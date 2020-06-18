@@ -200,7 +200,7 @@ public class TextSourceMapper extends SourceMapper {
         this.attributeList = streamDefinition.getAttributeList();
         this.attributeTypeMap = new HashMap<>(attributeList.size());
         this.attributePositionMap = new HashMap<>(attributeList.size());
-        this.eventGroupEnabled = Boolean.valueOf(optionHolder
+        this.eventGroupEnabled = Boolean.parseBoolean(optionHolder
                 .validateAndGetStaticValue(OPTION_GROUP_EVENTS, DEFAULT_EVENT_GROUP));
         this.endOfLine = optionHolder.validateAndGetStaticValue(OPTION_NEW_LINE, DEFAULT_NEW_LINE);
         this.eventDelimiter = optionHolder.validateAndGetStaticValue(OPTION_GROUP_EVENTS_DELIMITER,
