@@ -23,12 +23,14 @@ import io.siddhi.annotation.Parameter;
 import io.siddhi.annotation.util.DataType;
 import io.siddhi.core.config.SiddhiAppContext;
 import io.siddhi.core.event.Event;
+import io.siddhi.core.exception.MappingFailedException;
 import io.siddhi.core.exception.SiddhiAppRuntimeException;
 import io.siddhi.core.stream.input.source.AttributeMapping;
 import io.siddhi.core.stream.input.source.InputEventHandler;
 import io.siddhi.core.stream.input.source.SourceMapper;
 import io.siddhi.core.util.AttributeConverter;
 import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.error.handler.model.ErroneousEvent;
 import io.siddhi.core.util.transport.OptionHolder;
 import io.siddhi.query.api.annotation.Element;
 import io.siddhi.query.api.definition.Attribute;
@@ -36,13 +38,12 @@ import io.siddhi.query.api.definition.StreamDefinition;
 import io.siddhi.query.api.exception.SiddhiAppValidationException;
 import org.apache.log4j.Logger;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -238,33 +239,42 @@ public class TextSourceMapper extends SourceMapper {
      * @param inputEventHandler input handler
      */
     @Override
-    protected void mapAndProcess(Object eventObject, InputEventHandler inputEventHandler) throws InterruptedException {
+    protected void mapAndProcess(Object eventObject, InputEventHandler inputEventHandler)
+            throws MappingFailedException, InterruptedException {
+        List<ErroneousEvent> failedEvents = new ArrayList<>(0);
         Object result = null;
-
         if (eventObject instanceof byte[]) {
-            try {
-                result = new String((byte[]) eventObject, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                log.error("Error is encountered while decoding the byte stream. Therefore, event is"
-                        + " dropped by the testSource mapper. Please note that only UTF-8 encoding is supported. "
-                        + e.getMessage(), e);
-            }
+            result = new String((byte[]) eventObject, StandardCharsets.UTF_8);
         } else {
             result = eventObject;
         }
-
         if (null != result) {
             if (!eventGroupEnabled) {
-                onEventHandler(inputEventHandler, result);
+                try {
+                    onEventHandler(inputEventHandler, result);
+                } catch (MappingFailedException e) {
+                    failedEvents.add(new ErroneousEvent(eventObject, e, e.getMessage()));
+                }
             } else {
                 String[] allEvents = String.valueOf(result).split(eventDelimiter);
                 int i;
                 for (i = 0; i < allEvents.length - 1; i++) {
-                    onEventHandler(inputEventHandler, allEvents[i].substring(0, allEvents[i].length()
-                            - endOfLine.length()));
+                    try {
+                        onEventHandler(inputEventHandler, allEvents[i].substring(0, allEvents[i].length()
+                                - endOfLine.length()));
+                    } catch (MappingFailedException e) {
+                        failedEvents.add(new ErroneousEvent(eventObject, e, e.getMessage()));
+                    }
                 }
-                onEventHandler(inputEventHandler, allEvents[i]);
+                try {
+                    onEventHandler(inputEventHandler, allEvents[i]);
+                } catch (MappingFailedException e) {
+                    failedEvents.add(new ErroneousEvent(eventObject, e, e.getMessage()));
+                }
             }
+        }
+        if (!failedEvents.isEmpty()) {
+            throw new MappingFailedException(failedEvents);
         }
     }
 
@@ -285,7 +295,7 @@ public class TextSourceMapper extends SourceMapper {
      * @param eventObject       the input event, given as an text string
      * @param inputEventHandler input handler
      */
-    private void onEventHandler(InputEventHandler inputEventHandler, Object eventObject) {
+    private void onEventHandler(InputEventHandler inputEventHandler, Object eventObject) throws MappingFailedException {
         Event[] result;
         try {
             if (isCustomMappingEnabled) {
@@ -297,8 +307,10 @@ public class TextSourceMapper extends SourceMapper {
                 inputEventHandler.sendEvents(result);
             }
         } catch (Throwable e) {
-            log.error("Exception occurred when converting Text message:" + eventObject + " to Siddhi Event " +
-                    "in the stream " + streamID + " of siddhi text input mapper.", e);
+            String errMsg = "Exception occurred when converting Text message:" + eventObject + " to Siddhi Event " +
+                    "in the stream " + streamID + " of siddhi text input mapper.";
+            log.error(errMsg, e);
+            throw new MappingFailedException(errMsg, e);
         }
     }
 
@@ -326,9 +338,7 @@ public class TextSourceMapper extends SourceMapper {
      * @param eventObject The input event, given as an text string
      * @return the constructed {@link Event} object
      */
-    private Event[] convertToCustomEvents(Object eventObject) {
-        AtomicBoolean isValidEvent = new AtomicBoolean();
-        isValidEvent.set(true);
+    private Event[] convertToCustomEvents(Object eventObject) throws MappingFailedException {
         List<Event> eventList = new ArrayList<>();
         Event event = new Event(this.streamDefinition.getAttributeList().size());
         Object[] data = event.getData();
@@ -348,15 +358,17 @@ public class TextSourceMapper extends SourceMapper {
                             matchText = match((String) eventObject,
                                     regexPosition, regexGroupMap.get(regexGroup));
                         } catch (IndexOutOfBoundsException e) {
-                            log.error("Could not find group for " + regexPosition + " in the stream "
-                                    + streamID + " of siddhi text input mapper.", e);
-                            isValidEvent.set(false);
+                            String errMsg = "Could not find group for " + regexPosition + " in the stream "
+                                    + streamID + " of siddhi text input mapper.";
+                            log.error(errMsg, e);
+                            throw new MappingFailedException(errMsg, e);
                         }
                     } else {
-                        log.error("Could not find machine regular expression group for " + regexGroup + " for " +
+                        String errMsg = "Could not find machine regular expression group for " + regexGroup + " for " +
                                 "attribute " + attributeMapping.getName() + " in the stream " + streamID +
-                                " of siddhi text input mapper.");
-                        isValidEvent.set(false);
+                                " of siddhi text input mapper.";
+                        log.error(errMsg);
+                        throw new MappingFailedException(errMsg);
                     }
                 } else { //symbol=B
                     String regex = regexGroupMap.get(attributeMapping.getMapping());
@@ -365,23 +377,26 @@ public class TextSourceMapper extends SourceMapper {
                             matchText = match((String) eventObject,
                                     1, regexGroupMap.get(attributeMapping.getMapping()));
                         } catch (IndexOutOfBoundsException e) {
-                            log.error("Could not find regular expression group index for " +
+                            String errMsg = "Could not find regular expression group index for " +
                                     attributeMapping.getMapping() + " in the stream " + streamID + " of siddhi text " +
-                                    "input mapper.", e);
-                            isValidEvent.set(false);
+                                    "input mapper.";
+                            log.error(errMsg, e);
+                            throw new MappingFailedException(errMsg, e);
                         }
                     } else {
-                        log.error("Could not find machine regular expression group for " +
+                        String errMsg = "Could not find machine regular expression group for " +
                                 attributeMapping.getMapping() + " for attribute " + attributeMapping.getMapping() +
-                                " in the stream " + streamID + " of siddhi text input mapper.");
-                        isValidEvent.set(false);
+                                " in the stream " + streamID + " of siddhi text input mapper.";
+                        log.error(errMsg);
+                        throw new MappingFailedException(errMsg);
                     }
                 }
                 if (failOnMissingAttribute && (matchText == null)) { //if fail on missing attribute is enabled
-                    log.error("Invalid format of event " + eventObject + " for " +
+                    String errMsg = "Invalid format of event " + eventObject + " for " +
                             "attribute " + attributeMapping.getName() + " could not find proper value while fail on" +
-                            " missing attribute is 'true' in the stream " + streamID + " of siddhi text input mapper.");
-                    isValidEvent.set(false);
+                            " missing attribute is 'true' in the stream " + streamID + " of siddhi text input mapper.";
+                    log.error(errMsg);
+                    throw new MappingFailedException(errMsg);
                 }
                 int position = attributePositionMap.get(attributeMapping.getName());
                 if ((Attribute.Type.STRING != attributeTypeMap.get(attributeMapping.getName()))
@@ -394,24 +409,21 @@ public class TextSourceMapper extends SourceMapper {
                 }
             }
         }
-        if (isValidEvent.get()) {
-            eventList.add(event);
-        }
+        eventList.add(event);
         return eventList.toArray(new Event[0]);
     }
 
-    private Event[] convertToDefaultEvents(String eventObject) {
-        AtomicBoolean isValidEvent = new AtomicBoolean();
-        isValidEvent.set(true);
+    private Event[] convertToDefaultEvents(String eventObject) throws MappingFailedException {
         List<Event> eventList = new ArrayList<>();
         Event event = new Event(this.streamDefinition.getAttributeList().size());
         Object[] data = event.getData();
         String[] events = eventObject.split(ATTRIBUTE_SEPARATOR + endOfLine);
         if ((events.length < attributeList.size()) && (failOnMissingAttribute)) {
-            log.error("Invalid format of event because some required attributes are missing in event " + eventObject
-                    + " while needed attributes are " + attributeList.toString() + " in the stream " + streamID +
-                    " of siddhi text input mapper.");
-            isValidEvent.set(false);
+            String errMsg = "Invalid format of event because some required attributes are missing in event " +
+                    eventObject + " while needed attributes are " + attributeList.toString() + " in the stream " +
+                    streamID + " of siddhi text input mapper.";
+            log.error(errMsg);
+            throw new MappingFailedException(errMsg);
         }
         for (String event1 : events) {
             String[] eventObjects = event1.split(KEY_VALUE_SEPARATOR, 2);
@@ -433,10 +445,11 @@ public class TextSourceMapper extends SourceMapper {
                                         +value.length() - STRING_ENCLOSING_ELEMENT.length());
                             }
                         } catch (ClassCastException | NumberFormatException | SiddhiAppRuntimeException e) {
-                            log.error("Incompatible data format. Because value is " + value + " and attribute type is "
-                                    + attributeTypeMap.get(key.trim()).name() + " in the stream " + streamID +
-                                    " of siddhi text input mapper.");
-                            isValidEvent.set(false);
+                            String errMsg = "Incompatible data format. Because value is " + value +
+                                    " and attribute type is " + attributeTypeMap.get(key.trim()).name() +
+                                    " in the stream " + streamID + " of siddhi text input mapper.";
+                            log.error(errMsg);
+                            throw new MappingFailedException(errMsg);
                         }
                         assignedPositionsBitSet.flip(position);
                     }
@@ -445,15 +458,14 @@ public class TextSourceMapper extends SourceMapper {
         }
         if ((events.length > assignedPositionsBitSet.length()) && (assignedPositionsBitSet.length()
                 < attributeList.size()) && (failOnMissingAttribute)) {
-            log.error("Invalid format of event because some required attributes are missing while some unnecessary " +
-                    "mappings are present" + eventObject + " in the stream " + streamID +
-                    " of siddhi text input mapper.");
-            isValidEvent.set(false);
+            String errMsg = "Invalid format of event because some required attributes are missing while some " +
+                    "unnecessary mappings are present" + eventObject + " in the stream " + streamID +
+                    " of siddhi text input mapper.";
+            log.error(errMsg);
+            throw new MappingFailedException(errMsg);
         }
         assignedPositionsBitSet.clear();
-        if (isValidEvent.get()) {
-            eventList.add(event);
-        }
+        eventList.add(event);
         return eventList.toArray(new Event[0]);
     }
 }
