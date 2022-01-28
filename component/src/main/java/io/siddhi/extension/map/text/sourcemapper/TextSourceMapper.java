@@ -36,7 +36,8 @@ import io.siddhi.query.api.annotation.Element;
 import io.siddhi.query.api.definition.Attribute;
 import io.siddhi.query.api.definition.StreamDefinition;
 import io.siddhi.query.api.exception.SiddhiAppValidationException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -149,7 +150,7 @@ import java.util.regex.Pattern;
         }
 )
 public class TextSourceMapper extends SourceMapper {
-    private static final Logger log = Logger.getLogger(TextSourceMapper.class);
+    private static final Logger log = LogManager.getLogger(TextSourceMapper.class);
     private static final String FAIL_ON_MISSING_ATTRIBUTE = "fail.on.missing.attribute";
     private static final String OPTION_GROUP_EVENTS = "event.grouping.enabled";
     private static final String OPTION_NEW_LINE = "new.line.character";

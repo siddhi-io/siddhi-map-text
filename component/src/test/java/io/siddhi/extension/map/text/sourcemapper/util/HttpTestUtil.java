@@ -18,6 +18,9 @@
  */
 package io.siddhi.extension.map.text.sourcemapper.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -25,7 +28,7 @@ import java.net.URI;
  * Util class for test cases.
  */
 public class HttpTestUtil {
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HttpTestUtil.class);
+    private static final Logger logger = LogManager.getLogger(HttpTestUtil.class);
 
     public static void httpPublishEvent(String event, URI baseURI) {
         try {
