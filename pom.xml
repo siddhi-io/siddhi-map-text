@@ -169,7 +169,7 @@
     </build>
 
     <properties>
-        <siddhi.version>5.1.21-SNAPSHOT</siddhi.version>
+        <siddhi.version>5.1.21</siddhi.version>
         <siddhi.version.range>[5.0.0, 6.0.0)</siddhi.version.range>
         <siddhi.extension.io.tcp.version>3.0.6-SNAPSHOT</siddhi.extension.io.tcp.version>
         <siddhi.extension.io.http.version>2.0.8</siddhi.extension.io.http.version>
