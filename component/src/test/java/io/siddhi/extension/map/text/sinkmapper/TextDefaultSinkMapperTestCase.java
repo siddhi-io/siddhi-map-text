@@ -35,7 +35,8 @@ import io.siddhi.query.api.execution.query.input.stream.InputStream;
 import io.siddhi.query.api.execution.query.selection.Selector;
 import io.siddhi.query.api.expression.Variable;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.TestException;
@@ -52,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Test Case for QLT type output text mapper.
  */
 public class TextDefaultSinkMapperTestCase {
-    private static final Logger log = Logger.getLogger(TextDefaultSinkMapperTestCase.class);
+    private static final Logger log = LogManager.getLogger(TextDefaultSinkMapperTestCase.class);
     private AtomicInteger wso2Count = new AtomicInteger(0);
     private AtomicInteger ibmCount = new AtomicInteger(0);
     private int waitTime = 50;

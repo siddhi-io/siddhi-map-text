@@ -30,7 +30,8 @@ import io.siddhi.core.util.persistence.PersistenceStore;
 import io.siddhi.core.util.transport.InMemoryBroker;
 import io.siddhi.extension.io.tcp.transport.TCPNettyClient;
 import io.siddhi.extension.map.text.sourcemapper.util.HttpTestUtil;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -49,7 +50,7 @@ import static org.testng.Assert.fail;
  * Test case for input text mapper.
  */
 public class TextCustomSourceMapperTestCase {
-    private static final Logger log = Logger.getLogger(TextCustomSourceMapperTestCase.class);
+    private static final Logger log = LogManager.getLogger(TextCustomSourceMapperTestCase.class);
     private int waitTime = 50;
     private int timeout = 30000;
     private AtomicInteger count = new AtomicInteger();
